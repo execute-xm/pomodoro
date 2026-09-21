@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>水豚电子木鱼 · 徐良歌词播放器版</title>
+  <title>水豚解压馆 · 投喂与烦恼粉碎</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,7 +14,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      background: radial-gradient(circle at center, #251B17 0%, #100C0A 100%);
+      background: radial-gradient(circle at center, #261D18 0%, #120E0C 100%);
       color: #E6D5C3;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
       min-height: 100vh;
@@ -27,7 +27,7 @@
       touch-action: manipulation;
     }
 
-    /* 顶部控制栏 */
+    /* 顶部控制与亲密度 */
     .top-bar {
       width: 100%;
       max-width: 420px;
@@ -35,7 +35,18 @@
       justify-content: space-between;
       align-items: center;
       gap: 6px;
+    }
+    .heart-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 138, 128, 0.3);
+      color: #FF8A80;
+      padding: 6px 12px;
+      border-radius: 20px;
       font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: bold;
     }
     .pill-btn {
       background: rgba(255, 255, 255, 0.08);
@@ -49,72 +60,46 @@
       align-items: center;
       gap: 4px;
       transition: 0.2s;
-      white-space: nowrap;
     }
     .pill-btn.active {
       background: #FFA726;
       color: #211510;
-      border-color: #FFA726;
       font-weight: bold;
+      border-color: #FFA726;
     }
 
-    /* 音乐播放控制器与歌词视窗 */
-    .player-card {
+    /* 烦恼粉碎输入条 */
+    .crush-bar {
       width: 100%;
-      max-width: 360px;
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 183, 77, 0.25);
-      border-radius: 14px;
-      padding: 10px 12px;
+      max-width: 380px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       gap: 6px;
       margin-top: 4px;
+      background: rgba(0,0,0,0.3);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
     }
-    .song-title-row {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
+    .crush-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #FFF;
       font-size: 13px;
-      color: #FFB74D;
-      font-weight: bold;
+      padding: 0 8px;
     }
-    .control-actions {
-      display: flex;
-      gap: 8px;
-    }
-    .text-link {
-      color: #BCAAA4;
-      font-size: 11px;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    /* 滚动歌词视窗 */
-    .lyrics-box {
-      width: 100%;
-      height: 48px;
-      overflow: hidden;
-      position: relative;
-      text-align: center;
-      mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
-    }
-    .lyrics-stream {
-      transition: transform 0.3s ease-out;
-    }
-    .lrc-line {
+    .crush-input::placeholder { color: #8D6E63; }
+    .crush-btn {
+      background: #E53935;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
       font-size: 12px;
-      line-height: 24px;
-      color: #8D6E63;
-      transition: all 0.2s;
-    }
-    .lrc-line.current {
-      font-size: 14px;
-      color: #FFE082;
       font-weight: bold;
-      transform: scale(1.05);
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     /* 计数面板 */
@@ -147,7 +132,7 @@
       transition: opacity 0.2s;
     }
 
-    /* 舞台区 */
+    /* 主舞台 */
     .stage-wrapper {
       position: relative;
       width: 300px;
@@ -159,8 +144,8 @@
     }
     .buddha-halo {
       position: absolute;
-      width: 260px;
-      height: 260px;
+      width: 250px;
+      height: 250px;
       border-radius: 50%;
       background: conic-gradient(from 0deg, rgba(255, 215, 0, 0.3) 0deg, transparent 40deg, rgba(255, 215, 0, 0.3) 90deg, transparent 130deg, rgba(255, 215, 0, 0.3) 180deg, transparent 220deg, rgba(255, 215, 0, 0.3) 270deg, transparent 310deg, rgba(255, 215, 0, 0.3) 360deg);
       opacity: 0;
@@ -176,19 +161,27 @@
     .stage-wrapper.high-combo .buddha-halo { opacity: 1; }
 
     .capy-svg {
-      width: 190px;
-      height: 175px;
+      width: 200px;
+      height: 180px;
       transform-origin: center bottom;
       transition: transform 0.08s cubic-bezier(0.2, 0.8, 0.2, 1);
       filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
     }
     .stage-wrapper.hit .capy-svg {
-      transform: scale(1.18, 0.74) translateY(20px);
+      transform: scale(1.18, 0.74) translateY(22px);
+    }
+    .stage-wrapper.chewing .capy-svg {
+      animation: chewAnim 0.35s ease infinite alternate;
+    }
+    @keyframes chewAnim {
+      0% { transform: scale(1, 1); }
+      100% { transform: scale(1.06, 0.94) translateY(4px); }
     }
 
+    /* 飘字与粒子 */
     .fly-text {
       position: absolute;
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 800;
       pointer-events: none;
       animation: floatUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -197,19 +190,41 @@
     }
     @keyframes floatUp {
       0% { opacity: 1; transform: translateY(0) scale(0.8); }
-      50% { opacity: 1; transform: translateY(-45px) scale(1.15); }
-      100% { opacity: 0; transform: translateY(-85px) scale(0.9); }
+      50% { opacity: 1; transform: translateY(-50px) scale(1.2); }
+      100% { opacity: 0; transform: translateY(-95px) scale(0.95); }
     }
 
-    /* 底部音效切换 */
+    /* 底部投喂食物坞 (Food Dock) */
+    .feed-dock {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 16px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 183, 77, 0.25);
+    }
+    .food-btn {
+      font-size: 24px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s;
+      position: relative;
+    }
+    .food-btn:active {
+      transform: scale(1.3) translateY(-6px);
+    }
+
+    /* 音效切换条 */
     .bottom-controls {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 8px;
       width: 100%;
-      max-width: 360px;
-      margin-bottom: 6px;
+      max-width: 380px;
+      margin-bottom: 4px;
     }
     .sound-row {
       display: flex;
@@ -229,44 +244,17 @@
       color: #FFA726;
     }
 
-    /* 模态框 */
-    .modal-backdrop {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 16px;
-    }
-    .modal-card {
-      background: #FFFDF9;
-      color: #3E2723;
-      width: 100%;
-      max-width: 340px;
-      border-radius: 16px;
-      padding: 20px 16px;
-      text-align: center;
-    }
-    .modal-btn {
-      background: #FF9800;
-      color: white;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 20px;
+    /* 碎纸碎片动画 */
+    .shred-piece {
+      position: absolute;
+      pointer-events: none;
       font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
+      animation: shredFall 1s ease-out forwards;
+      z-index: 100;
     }
-    .input-row {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #D7CCC8;
-      border-radius: 6px;
-      font-size: 12px;
-      margin: 6px 0;
-      outline: none;
+    @keyframes shredFall {
+      0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); }
     }
   </style>
 </head>
@@ -274,44 +262,33 @@
 
   <!-- 顶部控制条 -->
   <div class="top-bar">
-    <div class="pill-btn" id="music-btn" onclick="togglePlayMusic()">
-      <span>▶ 播放音乐</span>
-    </div>
-    <div class="pill-btn" id="next-btn" onclick="playNextSong()">
-      <span>⏭ 下一首</span>
+    <div class="heart-pill">
+      <span>❤️ 亲密度</span>
+      <span id="affinity-val">Lv.1 (0)</span>
     </div>
     <div class="pill-btn" id="auto-btn" onclick="toggleAutoTap()">
       <span>⚙️ 自动敲: 关</span>
     </div>
   </div>
 
-  <!-- 歌词与播放看板 -->
-  <div class="player-card">
-    <div class="song-title-row">
-      <span id="current-song-title">🎧 加载歌单中...</span>
-      <div class="control-actions">
-        <span class="text-link" onclick="openSongManager()">⚙️ 配置音源</span>
-      </div>
-    </div>
-    <!-- 动态滚屏歌词 -->
-    <div class="lyrics-box">
-      <div class="lyrics-stream" id="lrc-stream">
-        <div class="lrc-line current">等待播放音频以同步歌词...</div>
-      </div>
-    </div>
+  <!-- 烦恼粉碎机输入栏 -->
+  <div class="crush-bar">
+    <input type="text" id="worry-input" class="crush-input" placeholder="输入此刻烦恼（如：工作太累、赶ddl）..." maxlength="20" onkeydown="if(event.key==='Enter')shredWorry()">
+    <button class="crush-btn" onclick="shredWorry()">💥 彻底粉碎</button>
   </div>
 
   <!-- 计数面板 -->
   <div class="stats-panel">
     <div class="counter-title">今日累积功德</div>
     <div class="main-counter" id="total-val">0</div>
-    <div class="combo-badge" id="combo-pill">连击 x0</div>
+    <div class="combo-badge" id="combo-pill">连击 x0 佛光初现</div>
   </div>
 
   <!-- 主舞台 -->
   <div class="stage-wrapper" id="stage">
     <div class="buddha-halo"></div>
-    <svg class="capy-svg" viewBox="0 0 120 110">
+
+    <svg class="capy-svg" id="capy-actor" viewBox="0 0 120 110">
       <ellipse cx="32" cy="38" rx="5" ry="8" fill="#7A5445" stroke="#4E342E" stroke-width="1.8"/>
       <ellipse cx="88" cy="38" rx="5" ry="8" fill="#7A5445" stroke="#4E342E" stroke-width="1.8"/>
       <path d="M 34,34 Q 60,30 86,34 Q 102,46 102,74 Q 94,92 60,92 Q 26,92 18,74 Q 18,46 34,34 Z" 
@@ -319,11 +296,14 @@
       <ellipse cx="60" cy="70" rx="34" ry="16" fill="#B58169" stroke="#4E342E" stroke-width="1.8"/>
       <line x1="36" y1="56" x2="48" y2="56" stroke="#2D1E18" stroke-width="3" stroke-linecap="round"/>
       <line x1="72" y1="56" x2="84" y2="56" stroke="#2D1E18" stroke-width="3" stroke-linecap="round"/>
+      
       <ellipse cx="55" cy="69" rx="2.5" ry="3.5" fill="#3E2723"/>
       <ellipse cx="65" cy="69" rx="2.5" ry="3.5" fill="#3E2723"/>
       <line x1="60" y1="73" x2="60" y2="79" stroke="#3E2723" stroke-width="1.8"/>
       <ellipse cx="28" cy="66" rx="5" ry="4" fill="#E57373" opacity="0.85"/>
       <ellipse cx="92" cy="66" rx="5" ry="4" fill="#E57373" opacity="0.85"/>
+
+      <!-- 橘子 -->
       <g>
         <circle cx="60" cy="18" r="11" fill="#FFA000" stroke="#E65100" stroke-width="1.5"/>
         <polygon points="60,9 55,2 62,5" fill="#7CB342" stroke="#558B2F" stroke-width="1"/>
@@ -331,7 +311,16 @@
     </svg>
   </div>
 
-  <!-- 底部音效选择 -->
+  <!-- 投喂食物坞 -->
+  <div style="font-size:11px; color:#A1887F;">点击食物投喂水豚增加好感度：</div>
+  <div class="feed-dock">
+    <button class="food-btn" onclick="feedCapy('🍊', '橘子 +1 甜滋滋', 5)">🍊</button>
+    <button class="food-btn" onclick="feedCapy('🌿', '青草 +1 嚼嚼', 3)">🌿</button>
+    <button class="food-btn" onclick="feedCapy('🍜', '温泉拉面 +1 满足', 10)">🍜</button>
+    <button class="food-btn" onclick="feedCapy('🍉', '大西瓜 +1 畅爽', 15)">🍉</button>
+  </div>
+
+  <!-- 底部音效切换 -->
   <div class="bottom-controls">
     <div class="sound-row">
       <div class="sound-chip active" onclick="setSound('muyu', this)">🪵 经典木鱼</div>
@@ -340,139 +329,40 @@
     </div>
   </div>
 
-  <!-- 歌曲与歌词配置弹窗 -->
-  <div class="modal-backdrop" id="manager-modal" onclick="closeSongManager()">
-    <div class="modal-card" onclick="event.stopPropagation()">
-      <h3 style="color:#D84315; margin-bottom:8px;">🎵 自定义当前曲目</h3>
-      <p style="font-size:11px; color:#6D4C41; text-align:left;">填写歌曲直链（MP3）以及 LRC 歌词：</p>
-      <input type="text" id="cfg-title" class="input-row" placeholder="歌曲名 (如: 客官不可以)">
-      <input type="text" id="cfg-url" class="input-row" placeholder="音频 MP3 直链...">
-      <textarea id="cfg-lrc" class="input-row" rows="4" placeholder="粘贴带有时间轴的 [00:00.00] 格式歌词..."></textarea>
-      <button class="modal-btn" onclick="saveCurrentConfig()">保存并加载</button>
-      <button class="modal-btn" style="background:#8D6E63; margin-left:6px;" onclick="closeSongManager()">取消</button>
-    </div>
-  </div>
-
-  <audio id="core-player"></audio>
-
 <script>
-  let totalScore = parseInt(localStorage.getItem("capy_xl_merit") || "0");
+  let totalScore = parseInt(localStorage.getItem("capy_interact_merit") || "0");
+  let affinityScore = parseInt(localStorage.getItem("capy_affinity") || "0");
   let currentSound = "muyu";
   let combo = 0;
   let comboTimer = null;
   let autoTimer = null;
   let isAuto = false;
 
-  // 歌单配置列表
-  let playlist = [
-    {
-      title: "徐良 - 客官不可以",
-      src: "https://music.163.com/song/media/outer/url?id=167827.mp3",
-      lyrics: [
-        { time: 0, text: "徐良 / 小凌 - 客官不可以" },
-        { time: 3, text: "客官不可以 你小姐姐多美丽" },
-        { time: 7, text: "客官 客官 客官不可以" },
-        { time: 10, text: "你脸红红的 好调皮" }
-      ]
-    },
-    {
-      title: "徐良 - 后会无期",
-      src: "https://music.163.com/song/media/outer/url?id=167856.mp3",
-      lyrics: [
-        { time: 0, text: "徐良 / 汪苏泷 - 后会无期" },
-        { time: 4, text: "你陪我走过这一段路" },
-        { time: 8, text: "也许我们再也不会相遇" },
-        { time: 12, text: "后会无期" }
-      ]
-    }
+  const words = [
+    { text: "心平气和 +1 🍃", color: "#81C784" },
+    { text: "功德 +1 🪵", color: "#FFD54F" },
+    { text: "焦虑 -99 🫧", color: "#FF8A65" },
+    { text: "水豚保佑 🍊", color: "#FFB74D" },
+    { text: "精神稳定 +1 ✨", color: "#4DD0E1" }
   ];
 
-  let currentTrackIdx = 0;
-  let parsedLyrics = [];
-  const player = document.getElementById("core-player");
-  const lrcStream = document.getElementById("lrc-stream");
-
   document.getElementById("total-val").innerText = totalScore;
+  updateAffinityDisplay();
 
-  // 载入歌曲并准备歌词
-  function loadTrack(idx) {
-    currentTrackIdx = (idx + playlist.length) % playlist.length;
-    const track = playlist[currentTrackIdx];
-    document.getElementById("current-song-title").innerText = track.title;
-    player.src = track.src;
-    parsedLyrics = track.lyrics;
-    renderLyricsView();
-  }
-
-  function renderLyricsView() {
-    lrcStream.innerHTML = "";
-    parsedLyrics.forEach((line, i) => {
-      const div = document.createElement("div");
-      div.className = "lrc-line" + (i === 0 ? " current" : "");
-      div.innerText = line.text;
-      div.id = `lrc-${i}`;
-      lrcStream.appendChild(div);
-    });
-    lrcStream.style.transform = "translateY(12px)";
-  }
-
-  // 监听播放进度，同步滚动歌词
-  player.addEventListener("timeupdate", () => {
-    const curTime = player.currentTime;
-    for (let i = parsedLyrics.length - 1; i >= 0; i--) {
-      if (curTime >= parsedLyrics[i].time) {
-        document.querySelectorAll(".lrc-line").forEach(el => el.classList.remove("current"));
-        const activeLine = document.getElementById(`lrc-${i}`);
-        if (activeLine) {
-          activeLine.classList.add("current");
-          lrcStream.style.transform = `translateY(${12 - i * 24}px)`;
-        }
-        break;
-      }
-    }
-  });
-
-  // 播放结束后自动切下一首
-  player.addEventListener("ended", () => {
-    playNextSong();
-  });
-
-  function togglePlayMusic() {
-    const btn = document.getElementById("music-btn");
-    if (player.paused) {
-      player.play().then(() => {
-        btn.innerHTML = "<span>⏸ 暂停播放</span>";
-        btn.classList.add("active");
-      }).catch(() => {
-        alert("请先点击屏幕任意位置，再开启音乐播放哦！");
-      });
-    } else {
-      player.pause();
-      btn.innerHTML = "<span>▶ 播放音乐</span>";
-      btn.classList.remove("active");
-    }
-  }
-
-  function playNextSong() {
-    loadTrack(currentTrackIdx + 1);
-    player.play().then(() => {
-      const btn = document.getElementById("music-btn");
-      btn.innerHTML = "<span>⏸ 暂停播放</span>";
-      btn.classList.add("active");
-    }).catch(e => console.log(e));
-  }
-
-  // 基础音效引擎
+  /* --- Web Audio 声音合成 --- */
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let actx = null;
 
-  function ensureAudio() {
+  function ensureAudioUnlocked() {
     if (!actx) actx = new AudioCtx();
     if (actx.state === 'suspended') actx.resume();
   }
 
-  function playHitTone(type) {
-    ensureAudio();
+  window.addEventListener('click', ensureAudioUnlocked, { once: true });
+  window.addEventListener('touchstart', ensureAudioUnlocked, { once: true });
+
+  function playTone(type) {
+    ensureAudioUnlocked();
     if (!actx) return;
     const now = actx.currentTime;
     const osc = actx.createOscillator();
@@ -499,28 +389,46 @@
       gain.gain.setValueAtTime(1.0, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
       osc.start(now); osc.stop(now + 0.23);
+    } else if (type === 'crunch') {
+      // 投喂咀嚼音
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(180, now);
+      osc.frequency.exponentialRampToValueAtTime(90, now + 0.08);
+      gain.gain.setValueAtTime(0.8, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+      osc.start(now); osc.stop(now + 0.11);
+    } else if (type === 'boom') {
+      // 粉碎低音炮
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(240, now);
+      osc.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+      gain.gain.setValueAtTime(1.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.start(now); osc.stop(now + 0.36);
     }
 
     osc.connect(gain);
     gain.connect(actx.destination);
   }
 
-  // 交互与浮字
+  /* --- 敲击木鱼交互 --- */
   const stage = document.getElementById("stage");
-  const words = ["客官不可以 🙅‍♂️", "后会无期 🌸", "红装 +1 💄", "功德 +1 🪵", "青春 +1 ✨"];
 
   function executeHit() {
-    playHitTone(currentSound);
+    ensureAudioUnlocked();
     totalScore++;
     document.getElementById("total-val").innerText = totalScore;
-    localStorage.setItem("capy_xl_merit", totalScore);
+    localStorage.setItem("capy_interact_merit", totalScore);
+
+    playTone(currentSound);
+    if (navigator.vibrate) navigator.vibrate(12);
 
     stage.classList.add("hit");
     setTimeout(() => stage.classList.remove("hit"), 80);
 
     combo++;
     const comboEl = document.getElementById("combo-pill");
-    comboEl.innerText = `连击 x${combo}`;
+    comboEl.innerText = `连击 x${combo} ${combo >= 10 ? '✨ 佛光普照' : ''}`;
     comboEl.style.opacity = "1";
     if (combo >= 10) stage.classList.add("high-combo");
 
@@ -531,20 +439,87 @@
       stage.classList.remove("high-combo");
     }, 1400);
 
+    spawnText();
+  }
+
+  function spawnText(customText, customColor) {
+    const item = words[Math.floor(Math.random() * words.length)];
     const span = document.createElement("span");
     span.className = "fly-text";
-    span.innerText = words[Math.floor(Math.random() * words.length)];
-    span.style.color = "#FFB74D";
+    span.innerText = customText || item.text;
+    span.style.color = customColor || item.color;
     const offset = (Math.random() - 0.5) * 80;
     span.style.left = `${150 + offset - 40}px`;
-    span.style.top = "30px";
+    span.style.top = "36px";
     stage.appendChild(span);
     setTimeout(() => span.remove(), 850);
   }
 
   stage.addEventListener("pointerdown", executeHit);
 
+  /* --- 互动机制 1：投喂水豚 --- */
+  function feedCapy(icon, note, heartAdd) {
+    ensureAudioUnlocked();
+    playTone('crunch');
+    if (navigator.vibrate) navigator.vibrate([15, 30, 15]);
+
+    affinityScore += heartAdd;
+    localStorage.setItem("capy_affinity", affinityScore);
+    updateAffinityDisplay();
+
+    // 咀嚼动画
+    stage.classList.add("chewing");
+    setTimeout(() => stage.classList.remove("chewing"), 700);
+
+    spawnText(`${icon} ${note}`, "#FF8A80");
+  }
+
+  function updateAffinityDisplay() {
+    const level = Math.floor(affinityScore / 50) + 1;
+    document.getElementById("affinity-val").innerText = `Lv.${level} (${affinityScore})`;
+  }
+
+  /* --- 互动机制 2：烦恼粉碎机 --- */
+  function shredWorry() {
+    const input = document.getElementById("worry-input");
+    const val = input.value.trim();
+    if (!val) return;
+
+    ensureAudioUnlocked();
+    playTone('boom');
+    if (navigator.vibrate) navigator.vibrate([40, 80, 40]);
+
+    // 产生爆破粉碎文字碎片
+    const chars = val.split("");
+    const stageRect = stage.getBoundingClientRect();
+
+    chars.forEach((c) => {
+      const piece = document.createElement("div");
+      piece.className = "shred-piece";
+      piece.innerText = c;
+      piece.style.left = `${stageRect.width / 2}px`;
+      piece.style.top = `${stageRect.height / 2}px`;
+      piece.style.color = "#FF5252";
+      piece.style.fontSize = `${16 + Math.random() * 12}px`;
+
+      const dx = (Math.random() - 0.5) * 260 + "px";
+      const dy = (Math.random() - 0.5) * 220 + "px";
+      const rot = (Math.random() - 0.5) * 720 + "deg";
+      piece.style.setProperty("--dx", dx);
+      piece.style.setProperty("--dy", dy);
+      piece.style.setProperty("--rot", rot);
+
+      stage.appendChild(piece);
+      setTimeout(() => piece.remove(), 1000);
+    });
+
+    spawnText(`🔥 “${val}” 已被粉碎！`, "#FF5252");
+    input.value = "";
+  }
+
+  /* --- 自动敲与音效切换 --- */
   function toggleAutoTap() {
+    ensureAudioUnlocked();
     isAuto = !isAuto;
     const btn = document.getElementById("auto-btn");
     if (isAuto) {
@@ -559,48 +534,12 @@
   }
 
   function setSound(type, el) {
+    ensureAudioUnlocked();
     currentSound = type;
     document.querySelectorAll(".sound-chip").forEach(c => c.classList.remove("active"));
     el.classList.add("active");
-    playHitTone(type);
+    playTone(type);
   }
-
-  function openSongManager() {
-    document.getElementById("manager-modal").style.display = "flex";
-  }
-  function closeSongManager() {
-    document.getElementById("manager-modal").style.display = "none";
-  }
-
-  function saveCurrentConfig() {
-    const title = document.getElementById("cfg-title").value.trim() || "自定义歌曲";
-    const src = document.getElementById("cfg-url").value.trim();
-    const lrcRaw = document.getElementById("cfg-lrc").value.trim();
-
-    if (src) {
-      const customTrack = { title: title, src: src, lyrics: [] };
-      if (lrcRaw) {
-        const lines = lrcRaw.split("\n");
-        const reg = /\[(\d{2}):(\d{2}(?:\.\d+)?)\](.*)/;
-        lines.forEach(line => {
-          const match = reg.exec(line);
-          if (match) {
-            const sec = parseInt(match[1]) * 60 + parseFloat(match[2]);
-            customTrack.lyrics.push({ time: sec, text: match[3].trim() });
-          }
-        });
-      } else {
-        customTrack.lyrics.push({ time: 0, text: title });
-      }
-      playlist.unshift(customTrack);
-      closeSongManager();
-      loadTrack(0);
-      togglePlayMusic();
-    }
-  }
-
-  // 初始化第一首歌
-  loadTrack(0);
 </script>
 </body>
 </html>
