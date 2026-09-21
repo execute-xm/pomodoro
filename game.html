@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>水豚电子木鱼 · 徐良专属音乐版</title>
+  <title>水豚电子木鱼 · 徐良歌词播放器版</title>
   <style>
     * {
       box-sizing: border-box;
@@ -22,11 +22,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 16px;
+      padding: 14px;
       overflow: hidden;
       touch-action: manipulation;
     }
 
+    /* 顶部控制栏 */
     .top-bar {
       width: 100%;
       max-width: 420px;
@@ -40,7 +41,7 @@
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: #D7CCC8;
-      padding: 8px 12px;
+      padding: 6px 12px;
       border-radius: 20px;
       cursor: pointer;
       font-size: 12px;
@@ -57,34 +58,79 @@
       font-weight: bold;
     }
 
-    .song-banner {
-      font-size: 11px;
-      color: #FFB74D;
-      background: rgba(255, 183, 77, 0.1);
-      border: 1px dashed rgba(255, 183, 77, 0.3);
-      padding: 5px 14px;
-      border-radius: 12px;
-      margin-top: 6px;
+    /* 音乐播放控制器与歌词视窗 */
+    .player-card {
+      width: 100%;
+      max-width: 360px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 183, 77, 0.25);
+      border-radius: 14px;
+      padding: 10px 12px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 6px;
+      margin-top: 4px;
+    }
+    .song-title-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 13px;
+      color: #FFB74D;
+      font-weight: bold;
+    }
+    .control-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .text-link {
+      color: #BCAAA4;
+      font-size: 11px;
       cursor: pointer;
+      text-decoration: underline;
     }
 
+    /* 滚动歌词视窗 */
+    .lyrics-box {
+      width: 100%;
+      height: 48px;
+      overflow: hidden;
+      position: relative;
+      text-align: center;
+      mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+    }
+    .lyrics-stream {
+      transition: transform 0.3s ease-out;
+    }
+    .lrc-line {
+      font-size: 12px;
+      line-height: 24px;
+      color: #8D6E63;
+      transition: all 0.2s;
+    }
+    .lrc-line.current {
+      font-size: 14px;
+      color: #FFE082;
+      font-weight: bold;
+      transform: scale(1.05);
+    }
+
+    /* 计数面板 */
     .stats-panel {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      margin-top: 2px;
+      gap: 2px;
     }
     .counter-title {
-      font-size: 13px;
+      font-size: 12px;
       letter-spacing: 2px;
       color: #A1887F;
     }
     .main-counter {
-      font-size: 48px;
+      font-size: 46px;
       font-weight: 900;
       color: #FFB74D;
       text-shadow: 0 0 25px rgba(255, 183, 77, 0.45);
@@ -98,13 +144,14 @@
       padding: 2px 10px;
       border-radius: 12px;
       opacity: 0;
-      transition: opacity 0.2s, transform 0.1s;
+      transition: opacity 0.2s;
     }
 
+    /* 舞台区 */
     .stage-wrapper {
       position: relative;
-      width: 320px;
-      height: 280px;
+      width: 300px;
+      height: 250px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -112,8 +159,8 @@
     }
     .buddha-halo {
       position: absolute;
-      width: 280px;
-      height: 280px;
+      width: 260px;
+      height: 260px;
       border-radius: 50%;
       background: conic-gradient(from 0deg, rgba(255, 215, 0, 0.3) 0deg, transparent 40deg, rgba(255, 215, 0, 0.3) 90deg, transparent 130deg, rgba(255, 215, 0, 0.3) 180deg, transparent 220deg, rgba(255, 215, 0, 0.3) 270deg, transparent 310deg, rgba(255, 215, 0, 0.3) 360deg);
       opacity: 0;
@@ -129,23 +176,19 @@
     .stage-wrapper.high-combo .buddha-halo { opacity: 1; }
 
     .capy-svg {
-      width: 210px;
-      height: 190px;
+      width: 190px;
+      height: 175px;
       transform-origin: center bottom;
       transition: transform 0.08s cubic-bezier(0.2, 0.8, 0.2, 1);
       filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
     }
     .stage-wrapper.hit .capy-svg {
-      transform: scale(1.18, 0.74) translateY(22px);
-    }
-    .stage-wrapper.charging .capy-svg {
-      transform: scale(1.3, 0.55) translateY(36px);
-      filter: drop-shadow(0 0 20px rgba(255, 152, 0, 0.8));
+      transform: scale(1.18, 0.74) translateY(20px);
     }
 
     .fly-text {
       position: absolute;
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 800;
       pointer-events: none;
       animation: floatUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -154,41 +197,18 @@
     }
     @keyframes floatUp {
       0% { opacity: 1; transform: translateY(0) scale(0.8); }
-      50% { opacity: 1; transform: translateY(-50px) scale(1.2); }
-      100% { opacity: 0; transform: translateY(-95px) scale(0.95); }
+      50% { opacity: 1; transform: translateY(-45px) scale(1.15); }
+      100% { opacity: 0; transform: translateY(-85px) scale(0.9); }
     }
 
-    .skin-bar {
-      display: flex;
-      gap: 8px;
-      background: rgba(0,0,0,0.35);
-      padding: 6px 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-    .skin-item {
-      font-size: 18px;
-      padding: 4px 8px;
-      border-radius: 12px;
-      cursor: pointer;
-      opacity: 0.35;
-      transition: 0.2s;
-    }
-    .skin-item.unlocked { opacity: 0.8; }
-    .skin-item.active {
-      opacity: 1;
-      background: rgba(255, 179, 0, 0.25);
-      border: 1px solid #FFB300;
-      transform: scale(1.1);
-    }
-
+    /* 底部音效切换 */
     .bottom-controls {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 8px;
       width: 100%;
-      max-width: 380px;
+      max-width: 360px;
       margin-bottom: 6px;
     }
     .sound-row {
@@ -199,7 +219,7 @@
     .sound-chip {
       background: #1D1614;
       border: 1px solid #3E2D27;
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 14px;
       color: #A1887F;
       cursor: pointer;
@@ -209,6 +229,7 @@
       color: #FFA726;
     }
 
+    /* 模态框 */
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -217,35 +238,34 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      padding: 20px;
+      padding: 16px;
     }
     .modal-card {
       background: #FFFDF9;
       color: #3E2723;
       width: 100%;
-      max-width: 320px;
+      max-width: 340px;
       border-radius: 16px;
-      padding: 22px 18px;
+      padding: 20px 16px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     .modal-btn {
       background: #FF9800;
       color: white;
       border: none;
-      padding: 8px 20px;
+      padding: 8px 18px;
       border-radius: 20px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 12px;
+      margin-top: 10px;
     }
-    .url-input {
+    .input-row {
       width: 100%;
       padding: 8px 10px;
       border: 1px solid #D7CCC8;
-      border-radius: 8px;
-      font-size: 13px;
-      margin: 10px 0;
+      border-radius: 6px;
+      font-size: 12px;
+      margin: 6px 0;
       outline: none;
     }
   </style>
@@ -254,37 +274,44 @@
 
   <!-- 顶部控制条 -->
   <div class="top-bar">
-    <div class="pill-btn" id="music-btn" onclick="toggleMusic()">
-      <span>🎵 徐良BGM: 关</span>
+    <div class="pill-btn" id="music-btn" onclick="togglePlayMusic()">
+      <span>▶ 播放音乐</span>
+    </div>
+    <div class="pill-btn" id="next-btn" onclick="playNextSong()">
+      <span>⏭ 下一首</span>
     </div>
     <div class="pill-btn" id="auto-btn" onclick="toggleAutoTap()">
-      <span>⚙️ 自动念经: 关</span>
-    </div>
-    <div class="pill-btn" onclick="openCertModal()">
-      <span>📜 证书</span>
+      <span>⚙️ 自动敲: 关</span>
     </div>
   </div>
 
-  <!-- 歌曲小标识 -->
-  <div class="song-banner" onclick="openSongModal()">
-    <span>🎧 当前曲目: <strong id="song-title">《客官不可以》经典旋律</strong> ⚙️换歌</span>
+  <!-- 歌词与播放看板 -->
+  <div class="player-card">
+    <div class="song-title-row">
+      <span id="current-song-title">🎧 加载歌单中...</span>
+      <div class="control-actions">
+        <span class="text-link" onclick="openSongManager()">⚙️ 配置音源</span>
+      </div>
+    </div>
+    <!-- 动态滚屏歌词 -->
+    <div class="lyrics-box">
+      <div class="lyrics-stream" id="lrc-stream">
+        <div class="lrc-line current">等待播放音频以同步歌词...</div>
+      </div>
+    </div>
   </div>
 
   <!-- 计数面板 -->
   <div class="stats-panel">
     <div class="counter-title">今日累积功德</div>
     <div class="main-counter" id="total-val">0</div>
-    <div class="combo-badge" id="combo-pill">连击 x0 佛光初现</div>
+    <div class="combo-badge" id="combo-pill">连击 x0</div>
   </div>
 
   <!-- 主舞台 -->
   <div class="stage-wrapper" id="stage">
     <div class="buddha-halo"></div>
-
     <svg class="capy-svg" viewBox="0 0 120 110">
-      <g id="skin-halo" style="display: none;">
-        <circle cx="60" cy="54" r="48" fill="none" stroke="#FFD54F" stroke-width="3" stroke-dasharray="4,4"/>
-      </g>
       <ellipse cx="32" cy="38" rx="5" ry="8" fill="#7A5445" stroke="#4E342E" stroke-width="1.8"/>
       <ellipse cx="88" cy="38" rx="5" ry="8" fill="#7A5445" stroke="#4E342E" stroke-width="1.8"/>
       <path d="M 34,34 Q 60,30 86,34 Q 102,46 102,74 Q 94,92 60,92 Q 26,92 18,74 Q 18,46 34,34 Z" 
@@ -292,39 +319,19 @@
       <ellipse cx="60" cy="70" rx="34" ry="16" fill="#B58169" stroke="#4E342E" stroke-width="1.8"/>
       <line x1="36" y1="56" x2="48" y2="56" stroke="#2D1E18" stroke-width="3" stroke-linecap="round"/>
       <line x1="72" y1="56" x2="84" y2="56" stroke="#2D1E18" stroke-width="3" stroke-linecap="round"/>
-      
-      <g id="skin-glasses" style="display: none;">
-        <rect x="32" y="50" width="20" height="13" rx="2" fill="#1A1A1A"/>
-        <rect x="68" y="50" width="20" height="13" rx="2" fill="#1A1A1A"/>
-        <line x1="52" y1="56" x2="68" y2="56" stroke="#1A1A1A" stroke-width="2.5"/>
-      </g>
-
       <ellipse cx="55" cy="69" rx="2.5" ry="3.5" fill="#3E2723"/>
       <ellipse cx="65" cy="69" rx="2.5" ry="3.5" fill="#3E2723"/>
       <line x1="60" y1="73" x2="60" y2="79" stroke="#3E2723" stroke-width="1.8"/>
       <ellipse cx="28" cy="66" rx="5" ry="4" fill="#E57373" opacity="0.85"/>
       <ellipse cx="92" cy="66" rx="5" ry="4" fill="#E57373" opacity="0.85"/>
-
-      <g id="skin-orange">
+      <g>
         <circle cx="60" cy="18" r="11" fill="#FFA000" stroke="#E65100" stroke-width="1.5"/>
         <polygon points="60,9 55,2 62,5" fill="#7CB342" stroke="#558B2F" stroke-width="1"/>
-      </g>
-      <g id="skin-towel" style="display: none;">
-        <rect x="42" y="18" width="36" height="12" rx="4" fill="#ECEFF1" stroke="#90A4AE" stroke-width="1.5"/>
-        <line x1="48" y1="24" x2="72" y2="24" stroke="#CFD8DC" stroke-width="2"/>
       </g>
     </svg>
   </div>
 
-  <!-- 装扮选择 -->
-  <div class="skin-bar">
-    <div class="skin-item active unlocked" onclick="switchSkin('orange', 0, this)">🍊</div>
-    <div class="skin-item" id="item-towel" onclick="switchSkin('towel', 100, this)">♨️</div>
-    <div class="skin-item" id="item-glasses" onclick="switchSkin('glasses', 300, this)">😎</div>
-    <div class="skin-item" id="item-halo" onclick="switchSkin('halo', 800, this)">🪷</div>
-  </div>
-
-  <!-- 底部音效 -->
+  <!-- 底部音效选择 -->
   <div class="bottom-controls">
     <div class="sound-row">
       <div class="sound-chip active" onclick="setSound('muyu', this)">🪵 经典木鱼</div>
@@ -333,29 +340,20 @@
     </div>
   </div>
 
-  <!-- 自定义音乐弹窗 -->
-  <div class="modal-backdrop" id="song-modal" onclick="closeSongModal()">
+  <!-- 歌曲与歌词配置弹窗 -->
+  <div class="modal-backdrop" id="manager-modal" onclick="closeSongManager()">
     <div class="modal-card" onclick="event.stopPropagation()">
-      <h3 style="color:#D84315; margin-bottom:8px;">🎵 换一首徐良的歌</h3>
-      <p style="font-size:12px; color:#6D4C41; text-align:left;">可以粘贴任何网易云/QQ音乐转链的徐良歌曲 MP3 直链，也可以使用内置的《客官不可以》：</p>
-      <input type="text" id="custom-audio-url" class="url-input" placeholder="输入音频 mp3 网址...">
-      <button class="modal-btn" onclick="saveCustomSong()">保存并播放</button>
-      <button class="modal-btn" style="background:#BCAAA4; margin-left:6px;" onclick="resetToSynth()">恢复旋律版</button>
+      <h3 style="color:#D84315; margin-bottom:8px;">🎵 自定义当前曲目</h3>
+      <p style="font-size:11px; color:#6D4C41; text-align:left;">填写歌曲直链（MP3）以及 LRC 歌词：</p>
+      <input type="text" id="cfg-title" class="input-row" placeholder="歌曲名 (如: 客官不可以)">
+      <input type="text" id="cfg-url" class="input-row" placeholder="音频 MP3 直链...">
+      <textarea id="cfg-lrc" class="input-row" rows="4" placeholder="粘贴带有时间轴的 [00:00.00] 格式歌词..."></textarea>
+      <button class="modal-btn" onclick="saveCurrentConfig()">保存并加载</button>
+      <button class="modal-btn" style="background:#8D6E63; margin-left:6px;" onclick="closeSongManager()">取消</button>
     </div>
   </div>
 
-  <!-- 证书弹窗 -->
-  <div class="modal-backdrop" id="cert-modal" onclick="closeCertModal()">
-    <div class="modal-card" onclick="event.stopPropagation()">
-      <h3 style="color:#BF360C; font-size: 20px;">📜 功德修成证书</h3>
-      <p style="font-size: 12px; color: #8D6E63; margin-top:4px;">边听徐良边积德 · 烦恼皆随风</p>
-      <div style="font-size:36px; font-weight:900; color:#E65100; margin: 12px 0;" id="cert-num">0</div>
-      <p style="font-size: 13px; color: #5D4037; line-height: 1.6;" id="cert-comment"></p>
-      <button class="modal-btn" onclick="closeCertModal()">领旨归位</button>
-    </div>
-  </div>
-
-  <audio id="bg-audio" loop preload="auto"></audio>
+  <audio id="core-player"></audio>
 
 <script>
   let totalScore = parseInt(localStorage.getItem("capy_xl_merit") || "0");
@@ -365,49 +363,122 @@
   let autoTimer = null;
   let isAuto = false;
 
-  let chargeTimer = null;
-  let isCharged = false;
-
-  const words = [
-    { text: "客官不可以 🙅‍♂️", color: "#FF8A80" },
-    { text: "后会无期 🌸", color: "#EA80FC" },
-    { text: "红装 +1 💄", color: "#FF5252" },
-    { text: "坏女孩 👧", color: "#B388FF" },
-    { text: "功德 +1 🪵", color: "#FFD54F" },
-    { text: "头发 +1 💇", color: "#AED581" },
-    { text: "青春回来了 ✨", color: "#4DD0E1" }
+  // 歌单配置列表
+  let playlist = [
+    {
+      title: "徐良 - 客官不可以",
+      src: "https://music.163.com/song/media/outer/url?id=167827.mp3",
+      lyrics: [
+        { time: 0, text: "徐良 / 小凌 - 客官不可以" },
+        { time: 3, text: "客官不可以 你小姐姐多美丽" },
+        { time: 7, text: "客官 客官 客官不可以" },
+        { time: 10, text: "你脸红红的 好调皮" }
+      ]
+    },
+    {
+      title: "徐良 - 后会无期",
+      src: "https://music.163.com/song/media/outer/url?id=167856.mp3",
+      lyrics: [
+        { time: 0, text: "徐良 / 汪苏泷 - 后会无期" },
+        { time: 4, text: "你陪我走过这一段路" },
+        { time: 8, text: "也许我们再也不会相遇" },
+        { time: 12, text: "后会无期" }
+      ]
+    }
   ];
 
+  let currentTrackIdx = 0;
+  let parsedLyrics = [];
+  const player = document.getElementById("core-player");
+  const lrcStream = document.getElementById("lrc-stream");
+
   document.getElementById("total-val").innerText = totalScore;
-  checkSkinUnlocks();
 
-  /* --- 强力解锁的 Web Audio 引擎 --- */
-  const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  let actx = null;
+  // 载入歌曲并准备歌词
+  function loadTrack(idx) {
+    currentTrackIdx = (idx + playlist.length) % playlist.length;
+    const track = playlist[currentTrackIdx];
+    document.getElementById("current-song-title").innerText = track.title;
+    player.src = track.src;
+    parsedLyrics = track.lyrics;
+    renderLyricsView();
+  }
 
-  function ensureAudioUnlocked() {
-    if (!actx) {
-      actx = new AudioCtx();
+  function renderLyricsView() {
+    lrcStream.innerHTML = "";
+    parsedLyrics.forEach((line, i) => {
+      const div = document.createElement("div");
+      div.className = "lrc-line" + (i === 0 ? " current" : "");
+      div.innerText = line.text;
+      div.id = `lrc-${i}`;
+      lrcStream.appendChild(div);
+    });
+    lrcStream.style.transform = "translateY(12px)";
+  }
+
+  // 监听播放进度，同步滚动歌词
+  player.addEventListener("timeupdate", () => {
+    const curTime = player.currentTime;
+    for (let i = parsedLyrics.length - 1; i >= 0; i--) {
+      if (curTime >= parsedLyrics[i].time) {
+        document.querySelectorAll(".lrc-line").forEach(el => el.classList.remove("current"));
+        const activeLine = document.getElementById(`lrc-${i}`);
+        if (activeLine) {
+          activeLine.classList.add("current");
+          lrcStream.style.transform = `translateY(${12 - i * 24}px)`;
+        }
+        break;
+      }
     }
-    if (actx.state === 'suspended') {
-      actx.resume();
+  });
+
+  // 播放结束后自动切下一首
+  player.addEventListener("ended", () => {
+    playNextSong();
+  });
+
+  function togglePlayMusic() {
+    const btn = document.getElementById("music-btn");
+    if (player.paused) {
+      player.play().then(() => {
+        btn.innerHTML = "<span>⏸ 暂停播放</span>";
+        btn.classList.add("active");
+      }).catch(() => {
+        alert("请先点击屏幕任意位置，再开启音乐播放哦！");
+      });
+    } else {
+      player.pause();
+      btn.innerHTML = "<span>▶ 播放音乐</span>";
+      btn.classList.remove("active");
     }
   }
 
-  // 只要用户在屏幕任何地方点一下，立刻激活浏览器的音频通道
-  window.addEventListener('click', ensureAudioUnlocked, { once: true });
-  window.addEventListener('touchstart', ensureAudioUnlocked, { once: true });
-  window.addEventListener('pointerdown', ensureAudioUnlocked, { once: true });
+  function playNextSong() {
+    loadTrack(currentTrackIdx + 1);
+    player.play().then(() => {
+      const btn = document.getElementById("music-btn");
+      btn.innerHTML = "<span>⏸ 暂停播放</span>";
+      btn.classList.add("active");
+    }).catch(e => console.log(e));
+  }
 
-  function playTone(type) {
-    ensureAudioUnlocked();
+  // 基础音效引擎
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let actx = null;
+
+  function ensureAudio() {
+    if (!actx) actx = new AudioCtx();
+    if (actx.state === 'suspended') actx.resume();
+  }
+
+  function playHitTone(type) {
+    ensureAudio();
     if (!actx) return;
     const now = actx.currentTime;
     const osc = actx.createOscillator();
     const gain = actx.createGain();
 
     if (type === 'muyu') {
-      // 放大后的木鱼敲击声
       osc.type = 'sine';
       osc.frequency.setValueAtTime(650, now);
       osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
@@ -428,107 +499,28 @@
       gain.gain.setValueAtTime(1.0, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
       osc.start(now); osc.stop(now + 0.23);
-    } else if (type === 'mega') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(320, now);
-      osc.frequency.exponentialRampToValueAtTime(90, now + 0.35);
-      gain.gain.setValueAtTime(2.0, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-      osc.start(now); osc.stop(now + 0.42);
     }
 
     osc.connect(gain);
     gain.connect(actx.destination);
   }
 
-  /* --- 《客官不可以》经典主旋律（音量放大、波形饱满） --- */
-  const N_G4 = 392.00, N_A4 = 440.00, N_C5 = 523.25, N_D5 = 587.33, N_E5 = 659.25;
-  // "客官不可以，你小姐姐还在呢..." 完整经典段落
-  const kgMelody = [
-    { f: N_E5, d: 240 }, { f: N_D5, d: 240 }, { f: N_C5, d: 240 }, { f: N_A4, d: 240 },
-    { f: N_G4, d: 360 }, { f: 0, d: 140 },    { f: N_G4, d: 240 }, { f: N_A4, d: 240 },
-    { f: N_C5, d: 360 }, { f: N_D5, d: 240 }, { f: N_E5, d: 480 }, { f: 0, d: 240 }
-  ];
-
-  let isPlayingMusic = false;
-  let melodyStep = 0;
-  let melodyTimer = null;
-  const bgAudio = document.getElementById("bg-audio");
-  let customUrl = localStorage.getItem("xl_custom_mp3") || "";
-
-  function playSynthMelody() {
-    if (!isPlayingMusic || customUrl) return;
-    ensureAudioUnlocked();
-    const note = kgMelody[melodyStep % kgMelody.length];
-    if (note.f > 0 && actx) {
-      const now = actx.currentTime;
-      const osc = actx.createOscillator();
-      const gain = actx.createGain();
-      osc.type = 'triangle'; // 温暖明亮的八音盒琴音
-      osc.frequency.setValueAtTime(note.f, now);
-      gain.gain.setValueAtTime(0.28, now); // 音量提高，确保清晰可闻
-      gain.gain.exponentialRampToValueAtTime(0.001, now + (note.d / 1000));
-      osc.connect(gain);
-      gain.connect(actx.destination);
-      osc.start(now);
-      osc.stop(now + (note.d / 1000));
-    }
-    melodyStep++;
-    melodyTimer = setTimeout(playSynthMelody, note.d);
-  }
-
-  function toggleMusic() {
-    ensureAudioUnlocked();
-    isPlayingMusic = !isPlayingMusic;
-    const btn = document.getElementById("music-btn");
-    
-    if (isPlayingMusic) {
-      btn.innerHTML = "<span>🎵 徐良BGM: 开</span>";
-      btn.classList.add("active");
-
-      if (customUrl) {
-        bgAudio.src = customUrl;
-        bgAudio.play().catch(e => console.log(e));
-      } else {
-        clearTimeout(melodyTimer);
-        melodyStep = 0;
-        playSynthMelody();
-      }
-    } else {
-      btn.innerHTML = "<span>🎵 徐良BGM: 关</span>";
-      btn.classList.remove("active");
-      clearTimeout(melodyTimer);
-      bgAudio.pause();
-    }
-  }
-
+  // 交互与浮字
   const stage = document.getElementById("stage");
+  const words = ["客官不可以 🙅‍♂️", "后会无期 🌸", "红装 +1 💄", "功德 +1 🪵", "青春 +1 ✨"];
 
-  function executeHit(isMega = false) {
-    ensureAudioUnlocked();
-    const addScore = isMega ? 100 : 1;
-    totalScore += addScore;
+  function executeHit() {
+    playHitTone(currentSound);
+    totalScore++;
     document.getElementById("total-val").innerText = totalScore;
     localStorage.setItem("capy_xl_merit", totalScore);
-    checkSkinUnlocks();
 
-    if (isMega) {
-      playTone('mega');
-      if (navigator.vibrate) navigator.vibrate([40, 60, 80]);
-      spawnText("🔥 极限大功德 +100！", "#FF3D00", true);
-    } else {
-      playTone(currentSound);
-      if (navigator.vibrate) navigator.vibrate(12);
-      spawnText();
-    }
-
-    stage.classList.remove("charging");
     stage.classList.add("hit");
     setTimeout(() => stage.classList.remove("hit"), 80);
 
     combo++;
     const comboEl = document.getElementById("combo-pill");
-    comboEl.innerText = `连击 x${combo} ${combo >= 10 ? '✨ 佛光普照' : ''}`;
+    comboEl.innerText = `连击 x${combo}`;
     comboEl.style.opacity = "1";
     if (combo >= 10) stage.classList.add("high-combo");
 
@@ -538,146 +530,77 @@
       comboEl.style.opacity = "0";
       stage.classList.remove("high-combo");
     }, 1400);
-  }
 
-  function spawnText(customText, customColor, isBig = false) {
-    const item = words[Math.floor(Math.random() * words.length)];
     const span = document.createElement("span");
     span.className = "fly-text";
-    span.innerText = customText || item.text;
-    span.style.color = customColor || item.color;
-    if (isBig) {
-      span.style.fontSize = "26px";
-      span.style.zIndex = "100";
-    }
+    span.innerText = words[Math.floor(Math.random() * words.length)];
+    span.style.color = "#FFB74D";
     const offset = (Math.random() - 0.5) * 80;
-    span.style.left = `${160 + offset - 40}px`;
-    span.style.top = "40px";
+    span.style.left = `${150 + offset - 40}px`;
+    span.style.top = "30px";
     stage.appendChild(span);
     setTimeout(() => span.remove(), 850);
   }
 
-  stage.addEventListener("pointerdown", () => {
-    ensureAudioUnlocked();
-    isCharged = false;
-    chargeTimer = setTimeout(() => {
-      isCharged = true;
-      stage.classList.add("charging");
-      if (navigator.vibrate) navigator.vibrate(30);
-    }, 450);
-  });
-
-  stage.addEventListener("pointerup", () => {
-    clearTimeout(chargeTimer);
-    if (isCharged) {
-      executeHit(true);
-    } else {
-      executeHit(false);
-    }
-    stage.classList.remove("charging");
-  });
+  stage.addEventListener("pointerdown", executeHit);
 
   function toggleAutoTap() {
-    ensureAudioUnlocked();
     isAuto = !isAuto;
     const btn = document.getElementById("auto-btn");
     if (isAuto) {
-      btn.innerHTML = "<span>⚙️ 自动念经: 开</span>";
+      btn.innerHTML = "<span>⚙️ 自动敲: 开</span>";
       btn.classList.add("active");
-      autoTimer = setInterval(() => executeHit(false), 800);
+      autoTimer = setInterval(executeHit, 800);
     } else {
-      btn.innerHTML = "<span>⚙️ 自动念经: 关</span>";
+      btn.innerHTML = "<span>⚙️ 自动敲: 关</span>";
       btn.classList.remove("active");
       clearInterval(autoTimer);
     }
   }
 
   function setSound(type, el) {
-    ensureAudioUnlocked();
     currentSound = type;
     document.querySelectorAll(".sound-chip").forEach(c => c.classList.remove("active"));
     el.classList.add("active");
-    playTone(type);
+    playHitTone(type);
   }
 
-  function checkSkinUnlocks() {
-    if (totalScore >= 100) document.getElementById("item-towel").classList.add("unlocked");
-    if (totalScore >= 300) document.getElementById("item-glasses").classList.add("unlocked");
-    if (totalScore >= 800) document.getElementById("item-halo").classList.add("unlocked");
+  function openSongManager() {
+    document.getElementById("manager-modal").style.display = "flex";
+  }
+  function closeSongManager() {
+    document.getElementById("manager-modal").style.display = "none";
   }
 
-  function switchSkin(skin, needScore, el) {
-    if (totalScore < needScore) {
-      alert(`功德需达到 ${needScore} 才能解锁该装扮，当前功德: ${totalScore}`);
-      return;
-    }
-    document.querySelectorAll(".skin-item").forEach(s => s.classList.remove("active"));
-    el.classList.add("active");
+  function saveCurrentConfig() {
+    const title = document.getElementById("cfg-title").value.trim() || "自定义歌曲";
+    const src = document.getElementById("cfg-url").value.trim();
+    const lrcRaw = document.getElementById("cfg-lrc").value.trim();
 
-    document.getElementById("skin-orange").style.display = "none";
-    document.getElementById("skin-towel").style.display = "none";
-    document.getElementById("skin-glasses").style.display = "none";
-    document.getElementById("skin-halo").style.display = "none";
-
-    if (skin === 'orange') document.getElementById("skin-orange").style.display = "block";
-    if (skin === 'towel') document.getElementById("skin-towel").style.display = "block";
-    if (skin === 'glasses') {
-      document.getElementById("skin-orange").style.display = "block";
-      document.getElementById("skin-glasses").style.display = "block";
-    }
-    if (skin === 'halo') {
-      document.getElementById("skin-orange").style.display = "block";
-      document.getElementById("skin-halo").style.display = "block";
-    }
-  }
-
-  function openSongModal() {
-    document.getElementById("custom-audio-url").value = customUrl;
-    document.getElementById("song-modal").style.display = "flex";
-  }
-  function closeSongModal() {
-    document.getElementById("song-modal").style.display = "none";
-  }
-
-  function saveCustomSong() {
-    const url = document.getElementById("custom-audio-url").value.trim();
-    if (url) {
-      customUrl = url;
-      localStorage.setItem("xl_custom_mp3", url);
-      document.getElementById("song-title").innerText = "《自定义徐良原声》";
-      closeSongModal();
-      if (isPlayingMusic) {
-        clearTimeout(melodyTimer);
-        bgAudio.src = customUrl;
-        bgAudio.play();
+    if (src) {
+      const customTrack = { title: title, src: src, lyrics: [] };
+      if (lrcRaw) {
+        const lines = lrcRaw.split("\n");
+        const reg = /\[(\d{2}):(\d{2}(?:\.\d+)?)\](.*)/;
+        lines.forEach(line => {
+          const match = reg.exec(line);
+          if (match) {
+            const sec = parseInt(match[1]) * 60 + parseFloat(match[2]);
+            customTrack.lyrics.push({ time: sec, text: match[3].trim() });
+          }
+        });
+      } else {
+        customTrack.lyrics.push({ time: 0, text: title });
       }
+      playlist.unshift(customTrack);
+      closeSongManager();
+      loadTrack(0);
+      togglePlayMusic();
     }
   }
 
-  function resetToSynth() {
-    customUrl = "";
-    localStorage.removeItem("xl_custom_mp3");
-    document.getElementById("song-title").innerText = "《客官不可以》经典旋律";
-    closeSongModal();
-    if (isPlayingMusic) {
-      bgAudio.pause();
-      playSynthMelody();
-    }
-  }
-
-  function openCertModal() {
-    document.getElementById("cert-num").innerText = totalScore;
-    const comments = [
-      "客官不可以，但功德可以！今日焦虑已彻底清空。",
-      "耳机里是徐良，手上是水豚木鱼，青春与佛性在此刻圆满。",
-      "情绪稳定，如同当年听徐良的小小少年。"
-    ];
-    document.getElementById("cert-comment").innerText = comments[Math.floor(Math.random() * comments.length)];
-    document.getElementById("cert-modal").style.display = "flex";
-  }
-  function closeCertModal() {
-    document.getElementById("cert-modal").style.display = "none";
-  }
+  // 初始化第一首歌
+  loadTrack(0);
 </script>
 </body>
 </html>
