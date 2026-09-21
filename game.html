@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>水豚电子木鱼 · 捏捏乐</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background: radial-gradient(circle at center, #2C221E 0%, #161210 100%);
+      color: #E6D5C3;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 16px;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+    
+    /* 顶部计数区域 */
+    .top-stats {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .main-counter-title {
+      font-size: 14px;
+      letter-spacing: 2px;
+      color: #BCAAA4;
+    }
+    .main-counter {
+      font-size: 48px;
+      font-weight: 800;
+      color: #FFB74D;
+      text-shadow: 0 0 20px rgba(255, 183, 77, 0.4);
+      font-variant-numeric: tabular-nums;
+    }
+    .combo-badge {
+      font-size: 13px;
+      color: #FFCC80;
+      background: rgba(255, 167, 38, 0.15);
+      border: 1px solid rgba(255, 167, 38, 0.3);
+      padding: 2px 10px;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* 中间水豚捏捏交互区 */
+    .stage-container {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .capy-actor {
+      width: 220px;
+      height: 200px;
+      transition: transform 0.08s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform-origin: center bottom;
+      filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.5));
+    }
+    /* 捏扁弹跳效果 */
+    .stage-container.pressed .capy-actor {
+      transform: scale(1.18, 0.72) translateY(24px);
+    }
+    .stage-container.pressed .orange-top {
+      transform: translateY(-8px) rotate(-8deg);
+    }
+    .orange-top {
+      transition: transform 0.1s ease;
+      transform-origin: center center;
+    }
+
+    /* 飘起的功德/减压字符 */
+    .fly-text {
+      position: absolute;
+      font-size: 20px;
+      font-weight: bold;
+      pointer-events: none;
+      animation: floatUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      z-index: 100;
+    }
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(0.8);
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(-50px) scale(1.2);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(1);
+      }
+    }
+
+    /* 底部辅助与控制 */
+    .bottom-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .hint-text {
+      font-size: 13px;
+      color: #8D6E63;
+      letter-spacing: 1px;
+    }
+    .mode-switch {
+      display: flex;
+      gap: 8px;
+      background: #1E1715;
+      padding: 4px;
+      border-radius: 20px;
+      border: 1px solid #3E2723;
+    }
+    .mode-btn {
+      padding: 6px 14px;
+      font-size: 12px;
+      border-radius: 16px;
+      border: none;
+      background: transparent;
+      color: #A1887F;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+    .mode-btn.active {
+      background: #FF9800;
+      color: #1A120B;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部统计 -->
+  <div class="top-stats">
+    <div class="main-counter-title" id="counter-title">今日累积功德</div>
+    <div class="main-counter" id="total-counter">0</div>
+    <div class="combo-badge" id="combo-badge">连击 x0</div>
+  </div>
+
+  <!-- 主体舞台 -->
+  <div class="stage-container" id="capy-stage">
+    <svg class="capy-actor" viewBox="0 0 120 110">
+      <!-- 头顶橘子 -->
+      <g class="orange-top" id="orange-el">
+        <circle cx="60" cy="18" r="11" fill="#FFA000" stroke="#E65100" stroke-width="1.5"/>
+        <polygon points="60,9 55,2 62,5" fill="#7CB342" stroke="#558B2F" stroke-width="1"/>
+      </g>
+      <!-- 耳朵 -->
+      <ellipse cx="32" cy="38" rx="5" ry="8" fill="#7A5445" stroke="#4E342E" stroke-width="1.8"/>
+      <ellipse cx="88" cy="38" rx="5" ry="8" fill="#7A5445" stroke="#4E342E" stroke-width="1.8"/>
+      <!-- 身体轮廓 -->
+      <path d="M 34,34 Q 60,30 86,34 Q 102,46 102,74 Q 94,92 60,92 Q 26,92 18,74 Q 18,46 34,34 Z" 
+            fill="#9C6B53" stroke="#4E342E" stroke-width="2.5"/>
+      <!-- 大鼻吻 -->
+      <ellipse cx="60" cy="70" rx="34" ry="16" fill="#B58169" stroke="#4E342E" stroke-width="1.8"/>
+      <!-- 眯眯眼 -->
+      <line x1="36" y1="56" x2="48" y2="56" stroke="#2D1E18" stroke-width="3" stroke-linecap="round"/>
+      <line x1="72" y1="56" x2="84" y2="56" stroke="#2D1E18" stroke-width="3" stroke-linecap="round"/>
+      <!-- 鼻孔与嘴巴 -->
+      <ellipse cx="55" cy="69" rx="2.5" ry="3.5" fill="#3E2723"/>
+      <ellipse cx="65" cy="69" rx="2.5" ry="3.5" fill="#3E2723"/>
+      <line x1="60" y1="73" x2="60" y2="79" stroke="#3E2723" stroke-width="1.8"/>
+      <!-- 腮红 -->
+      <ellipse cx="28" cy="66" rx="5" ry="4" fill="#E57373" opacity="0.85"/>
+      <ellipse cx="92" cy="66" rx="5" ry="4" fill="#E57373" opacity="0.85"/>
+    </svg>
+  </div>
+
+  <!-- 底部模式与提示 -->
+  <div class="bottom-bar">
+    <div class="mode-switch">
+      <button class="mode-btn active" onclick="setMode('merit', this)">🪵 电子木鱼</button>
+      <button class="mode-btn" onclick="setMode('stress', this)">💆 疯狂解压</button>
+    </div>
+    <div class="hint-text">点击或敲击水豚 · 烦恼皆空</div>
+  </div>
+
+<script>
+  let totalClicks = parseInt(localStorage.getItem("capy_merit_score") || "0");
+  let currentMode = "merit"; // merit(功德) 或 stress(解压)
+  let combo = 0;
+  let comboTimer = null;
+
+  const meritWords = [
+    { text: "功德 +1", color: "#FFD54F" },
+    { text: "心平气和 +1", color: "#81C784" },
+    { text: "水豚保佑 🍊", color: "#FFB74D" },
+    { text: "精神稳定 +1", color: "#4DD0E1" },
+    { text: "顿悟 +1", color: "#FFF176" }
+  ];
+
+  const stressWords = [
+    { text: "焦虑 -1", color: "#FF8A65" },
+    { text: "压力 -99", color: "#FF5252" },
+    { text: "头发 +1 💇", color: "#AED581" },
+    { text: "暴富 +100 💰", color: "#FFD700" },
+    { text: "今晚好梦 💤", color: "#BA68C8" },
+    { text: "万事顺心 ✨", color: "#FF80AB" }
+  ];
+
+  // 初始化总数显示
+  document.getElementById("total-counter").innerText = totalClicks;
+
+  // Web Audio API 动态合成真实的木鱼声（纯代码，无任何外部音频文件依赖）
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  let audioCtx = null;
+
+  function playMuyuSound() {
+    if (!audioCtx) {
+      audioCtx = new AudioContext();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    // 经典木鱼谐振频段（基频约 600Hz ~ 180Hz 快速衰减）
+    const now = audioCtx.currentTime;
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(580, now);
+    osc.frequency.exponentialRampToValueAtTime(140, now + 0.08);
+
+    // 强冲击瞬态打击包络
+    gain.gain.setValueAtTime(1.0, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.13);
+  }
+
+  const stage = document.getElementById("capy-stage");
+
+  function triggerHit(e) {
+    // 1. 播放木鱼声
+    playMuyuSound();
+
+    // 2. 手机轻微触感震动反馈（支持的机型）
+    if (navigator.vibrate) {
+      navigator.vibrate(15);
+    }
+
+    // 3. 压扁形变动画
+    stage.classList.add("pressed");
+    setTimeout(() => stage.classList.remove("pressed"), 90);
+
+    // 4. 计数累加
+    totalClicks++;
+    document.getElementById("total-counter").innerText = totalClicks;
+    localStorage.setItem("capy_merit_score", totalClicks);
+
+    // 5. 连击判定
+    combo++;
+    const comboEl = document.getElementById("combo-badge");
+    comboEl.innerText = `连击 x${combo}`;
+    comboEl.style.opacity = "1";
+    clearTimeout(comboTimer);
+    comboTimer = setTimeout(() => {
+      combo = 0;
+      comboEl.style.opacity = "0";
+    }, 1200);
+
+    // 6. 随机飘字
+    spawnFlyText(e);
+  }
+
+  function spawnFlyText(e) {
+    const wordList = currentMode === "merit" ? meritWords : stressWords;
+    const item = wordList[Math.floor(Math.random() * wordList.length)];
+
+    const span = document.createElement("span");
+    span.className = "fly-text";
+    span.innerText = item.text;
+    span.style.color = item.color;
+
+    // 随机散射位置
+    const rect = stage.getBoundingClientRect();
+    const randomOffset = (Math.random() - 0.5) * 80;
+    span.style.left = `${rect.width / 2 + randomOffset - 30}px`;
+    span.style.top = `30px`;
+
+    stage.appendChild(span);
+    setTimeout(() => span.remove(), 900);
+  }
+
+  function setMode(mode, btn) {
+    currentMode = mode;
+    document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("counter-title").innerText = mode === "merit" ? "今日累积功德" : "今日释放压力";
+  }
+
+  // 绑定点击与触摸事件
+  stage.addEventListener("pointerdown", (e) => {
+    triggerHit(e);
+  });
+</script>
+</body>
+</html>
