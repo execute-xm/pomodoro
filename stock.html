@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>极简实时股票看板</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background: #121417;
+      color: #E0E3EB;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+    .stock-app {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    /* 顶部导航 */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 2px;
+    }
+    .top-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .refresh-badge {
+      font-size: 12px;
+      color: #8C96A5;
+      background: #1F242C;
+      padding: 4px 8px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .refresh-badge.active {
+      color: #00E676;
+      border: 1px solid rgba(0, 230, 118, 0.3);
+    }
+    /* 搜索栏 */
+    .search-box {
+      display: flex;
+      gap: 8px;
+      background: #1B2028;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid #282E3A;
+    }
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #FFFFFF;
+      font-size: 15px;
+      padding: 6px 8px;
+    }
+    .search-input::placeholder { color: #586376; }
+    .search-btn {
+      background: #FF9800;
+      color: #121417;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      padding: 0 14px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    /* 股票卡片列表 */
+    .stock-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .stock-card {
+      background: #1B2028;
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid #282E3A;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .stock-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: #FFFFFF;
+    }
+    .stock-code {
+      font-size: 12px;
+      color: #6F7B8F;
+      margin-left: 6px;
+    }
+    .del-btn {
+      color: #586376;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+    .card-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .current-price {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .change-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .card-foot {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #6F7B8F;
+      border-top: 1px solid #232936;
+      padding-top: 8px;
+      margin-top: 2px;
+    }
+    /* 红涨绿跌色彩 */
+    .up { color: #FF4D4F !important; }
+    .up-bg { background: rgba(255, 77, 79, 0.15); color: #FF4D4F; }
+    .down { color: #00E676 !important; }
+    .down-bg { background: rgba(0, 230, 118, 0.15); color: #00E676; }
+    .flat { color: #A0AEC0 !important; }
+    .flat-bg { background: #282E3A; color: #A0AEC0; }
+  </style>
+</head>
+<body>
+
+<div class="stock-app">
+  <div class="top-header">
+    <div class="top-title">📈 实时股票看板</div>
+    <div class="refresh-badge active" id="auto-btn" onclick="toggleAutoRefresh()">● 自动刷新中 (3s)</div>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="code-input" class="search-input" placeholder="输入代码如 600519、000001、00700..." onkeydown="if(event.key==='Enter')addStock()">
+    <button class="search-btn" onclick="addStock()">添加</button>
+  </div>
+
+  <div class="stock-list" id="stock-list"></div>
+</div>
+
+<script>
+  // 默认自选股（贵州茅台、宁德时代、腾讯控股）
+  let watchList = JSON.parse(localStorage.getItem("my_stocks") || '["sh600519", "sz300750", "hk00700"]');
+  let autoTimer = null;
+  let isAuto = true;
+
+  // 代码自动识别市场前缀
+  function formatCode(code) {
+    code = code.trim().toLowerCase();
+    if (code.startsWith("sh") || code.startsWith("sz") || code.startsWith("hk") || code.startsWith("us")) {
+      return code;
+    }
+    if (code.length === 5) return "hk" + code; // 港股5位
+    if (code.startsWith("6") || code.startsWith("9") || code.startsWith("5")) return "sh" + code; // 沪市/ETF
+    if (code.startsWith("0") || code.startsWith("3") || code.startsWith("1")) return "sz" + code; // 深市/创业板
+    return "sh" + code;
+  }
+
+  // 腾讯 JSONP 动态请求
+  function fetchQuotes(codes, callback) {
+    if (!codes.length) return;
+    const oldScript = document.getElementById("quote-script");
+    if (oldScript) oldScript.remove();
+
+    const script = document.createElement("script");
+    script.id = "quote-script";
+    script.charset = "gbk";
+    script.src = `https://qt.gtimg.cn/q=${codes.join(",")}&_=${Date.now()}`;
+    script.onload = () => {
+      const dataMap = {};
+      codes.forEach(c => {
+        const raw = window["v_" + c];
+        if (raw) {
+          const parts = raw.split("~");
+          if (parts.length > 30) {
+            dataMap[c] = {
+              name: parts[1],
+              code: parts[2],
+              price: parseFloat(parts[3]).toFixed(2),
+              change: (parseFloat(parts[3]) - parseFloat(parts[4])).toFixed(2),
+              pctChange: parseFloat(parts[32]).toFixed(2),
+              high: parseFloat(parts[33]).toFixed(2),
+              low: parseFloat(parts[34]).toFixed(2),
+              volume: parts[36], // 成交量(手)
+              time: parts[30]
+            };
+          }
+        }
+      });
+      callback(dataMap);
+    };
+    document.body.appendChild(script);
+  }
+
+  function renderList() {
+    fetchQuotes(watchList, (data) => {
+      const listEl = document.getElementById("stock-list");
+      listEl.innerHTML = "";
+
+      watchList.forEach(code => {
+        const item = data[code];
+        if (!item) return;
+
+        const isUp = item.pctChange > 0;
+        const isDown = item.pctChange < 0;
+        const colorCls = isUp ? "up" : (isDown ? "down" : "flat");
+        const bgCls = isUp ? "up-bg" : (isDown ? "down-bg" : "flat-bg");
+        const sign = isUp ? "+" : "";
+
+        const card = document.createElement("div");
+        card.className = "stock-card";
+        card.innerHTML = `
+          <div class="card-head">
+            <div>
+              <span class="stock-name">${item.name}</span>
+              <span class="stock-code">${code.toUpperCase()}</span>
+            </div>
+            <span class="del-btn" onclick="deleteStock('${code}')">✕</span>
+          </div>
+          <div class="card-body">
+            <div class="current-price ${colorCls}">${item.price}</div>
+            <div class="change-badge ${bgCls}">
+              <span>${sign}${item.pctChange}%</span>
+              <span style="font-size:11px; font-weight:normal;">${sign}${item.change}</span>
+            </div>
+          </div>
+          <div class="card-foot">
+            <span>高: ${item.high} / 低: ${item.low}</span>
+            <span>更新: ${item.time.slice(8, 10)}:${item.time.slice(10, 12)}:${item.time.slice(12, 14)}</span>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    });
+  }
+
+  function addStock() {
+    const input = document.getElementById("code-input");
+    const val = input.value.trim();
+    if (!val) return;
+    const formatted = formatCode(val);
+    if (!watchList.includes(formatted)) {
+      watchList.unshift(formatted);
+      localStorage.setItem("my_stocks", JSON.stringify(watchList));
+      input.value = "";
+      renderList();
+    }
+  }
+
+  function deleteStock(code) {
+    watchList = watchList.filter(c => c !== code);
+    localStorage.setItem("my_stocks", JSON.stringify(watchList));
+    renderList();
+  }
+
+  function toggleAutoRefresh() {
+    isAuto = !isAuto;
+    const btn = document.getElementById("auto-btn");
+    if (isAuto) {
+      btn.innerText = "● 自动刷新中 (3s)";
+      btn.className = "refresh-badge active";
+      startAuto();
+    } else {
+      btn.innerText = "○ 已暂停自动刷新";
+      btn.className = "refresh-badge";
+      clearInterval(autoTimer);
+    }
+  }
+
+  function startAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(renderList, 3000);
+  }
+
+  // 初始化启动
+  renderList();
+  startAuto();
+</script>
+</body>
+</html>
