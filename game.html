@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>水豚电子木鱼 · 终极解压版</title>
+  <title>水豚电子木鱼 · 徐良专属音乐版</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,7 +14,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      background: radial-gradient(circle at center, #231B17 0%, #110D0B 100%);
+      background: radial-gradient(circle at center, #251B17 0%, #100C0A 100%);
       color: #E6D5C3;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
       min-height: 100vh;
@@ -27,20 +27,21 @@
       touch-action: manipulation;
     }
 
-    /* 顶部控制栏 */
+    /* 顶部导航 */
     .top-bar {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 13px;
+      gap: 6px;
+      font-size: 12px;
     }
     .pill-btn {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: #D7CCC8;
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 20px;
       cursor: pointer;
       font-size: 12px;
@@ -48,6 +49,7 @@
       align-items: center;
       gap: 4px;
       transition: 0.2s;
+      white-space: nowrap;
     }
     .pill-btn.active {
       background: #FFA726;
@@ -56,13 +58,28 @@
       font-weight: bold;
     }
 
+    /* 歌曲信息跑马灯条 */
+    .song-banner {
+      font-size: 11px;
+      color: #FFB74D;
+      background: rgba(255, 183, 77, 0.1);
+      border: 1px dashed rgba(255, 183, 77, 0.3);
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
     /* 计数仪表盘 */
     .stats-panel {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      margin-top: 6px;
+      margin-top: 2px;
     }
     .counter-title {
       font-size: 13px;
@@ -70,7 +87,7 @@
       color: #A1887F;
     }
     .main-counter {
-      font-size: 52px;
+      font-size: 48px;
       font-weight: 900;
       color: #FFB74D;
       text-shadow: 0 0 25px rgba(255, 183, 77, 0.45);
@@ -87,17 +104,16 @@
       transition: opacity 0.2s, transform 0.1s;
     }
 
-    /* 主舞台与佛光光晕 */
+    /* 舞台区 */
     .stage-wrapper {
       position: relative;
       width: 320px;
-      height: 300px;
+      height: 280px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
     }
-    /* 旋转金色佛光 */
     .buddha-halo {
       position: absolute;
       width: 280px;
@@ -114,31 +130,27 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-    .stage-wrapper.high-combo .buddha-halo {
-      opacity: 1;
-    }
+    .stage-wrapper.high-combo .buddha-halo { opacity: 1; }
 
     .capy-svg {
-      width: 220px;
-      height: 200px;
+      width: 210px;
+      height: 190px;
       transform-origin: center bottom;
       transition: transform 0.08s cubic-bezier(0.2, 0.8, 0.2, 1);
       filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
     }
-    /* 普通点击形变 */
     .stage-wrapper.hit .capy-svg {
       transform: scale(1.18, 0.74) translateY(22px);
     }
-    /* 蓄力长按压缩 */
     .stage-wrapper.charging .capy-svg {
       transform: scale(1.3, 0.55) translateY(36px);
       filter: drop-shadow(0 0 20px rgba(255, 152, 0, 0.8));
     }
 
-    /* 飘起的符咒文字 */
+    /* 飘字 */
     .fly-text {
       position: absolute;
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       pointer-events: none;
       animation: floatUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -151,7 +163,7 @@
       100% { opacity: 0; transform: translateY(-95px) scale(0.95); }
     }
 
-    /* 装扮选择条 */
+    /* 装扮条 */
     .skin-bar {
       display: flex;
       gap: 8px;
@@ -167,7 +179,6 @@
       cursor: pointer;
       opacity: 0.35;
       transition: 0.2s;
-      position: relative;
     }
     .skin-item.unlocked { opacity: 0.8; }
     .skin-item.active {
@@ -177,15 +188,15 @@
       transform: scale(1.1);
     }
 
-    /* 底部功能区 */
+    /* 底部音效 */
     .bottom-controls {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       width: 100%;
       max-width: 380px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .sound-row {
       display: flex;
@@ -204,12 +215,8 @@
       border-color: #FFA726;
       color: #FFA726;
     }
-    .hint-sub {
-      font-size: 11px;
-      color: #6D4C41;
-    }
 
-    /* 功德战报弹窗 */
+    /* 换歌与证书弹窗通用样式 */
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -220,29 +227,34 @@
       z-index: 1000;
       padding: 20px;
     }
-    .cert-card {
+    .modal-card {
       background: #FFFDF9;
       color: #3E2723;
       width: 100%;
       max-width: 320px;
       border-radius: 16px;
-      padding: 24px 20px;
+      padding: 22px 18px;
       text-align: center;
-      border: 4px double #8D6E63;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      position: relative;
     }
-    .cert-title { font-size: 20px; font-weight: bold; color: #E65100; margin-bottom: 8px; }
-    .cert-score { font-size: 36px; font-weight: 900; color: #BF360C; margin: 12px 0; }
-    .cert-desc { font-size: 13px; color: #5D4037; line-height: 1.6; margin-bottom: 16px; }
-    .cert-btn {
+    .modal-btn {
       background: #FF9800;
       color: white;
       border: none;
-      padding: 8px 24px;
+      padding: 8px 20px;
       border-radius: 20px;
       font-weight: bold;
       cursor: pointer;
+      margin-top: 12px;
+    }
+    .url-input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #D7CCC8;
+      border-radius: 8px;
+      font-size: 13px;
+      margin: 10px 0;
+      outline: none;
     }
   </style>
 </head>
@@ -250,12 +262,20 @@
 
   <!-- 顶部控制条 -->
   <div class="top-bar">
+    <div class="pill-btn" id="music-btn" onclick="toggleMusic()">
+      <span>🎵 徐良BGM: 关</span>
+    </div>
     <div class="pill-btn" id="auto-btn" onclick="toggleAutoTap()">
       <span>⚙️ 自动念经: 关</span>
     </div>
     <div class="pill-btn" onclick="openCertModal()">
-      <span>📜 功德证书</span>
+      <span>📜 证书</span>
     </div>
+  </div>
+
+  <!-- 歌曲小标识 -->
+  <div class="song-banner" onclick="openSongModal()">
+    <span>🎧 当前曲目: <strong id="song-title">《客官不可以》纯音旋律</strong> ⚙️换歌</span>
   </div>
 
   <!-- 计数面板 -->
@@ -270,42 +290,33 @@
     <div class="buddha-halo"></div>
 
     <svg class="capy-svg" viewBox="0 0 120 110">
-      <!-- 佛光装扮头环 (800分) -->
       <g id="skin-halo" style="display: none;">
         <circle cx="60" cy="54" r="48" fill="none" stroke="#FFD54F" stroke-width="3" stroke-dasharray="4,4"/>
       </g>
-      <!-- 耳朵 -->
       <ellipse cx="32" cy="38" rx="5" ry="8" fill="#7A5445" stroke="#4E342E" stroke-width="1.8"/>
       <ellipse cx="88" cy="38" rx="5" ry="8" fill="#7A5445" stroke="#4E342E" stroke-width="1.8"/>
-      <!-- 身体轮廓 -->
       <path d="M 34,34 Q 60,30 86,34 Q 102,46 102,74 Q 94,92 60,92 Q 26,92 18,74 Q 18,46 34,34 Z" 
             fill="#9C6B53" stroke="#4E342E" stroke-width="2.5"/>
-      <!-- 大鼻吻 -->
       <ellipse cx="60" cy="70" rx="34" ry="16" fill="#B58169" stroke="#4E342E" stroke-width="1.8"/>
-      <!-- 眯眯眼 -->
       <line x1="36" y1="56" x2="48" y2="56" stroke="#2D1E18" stroke-width="3" stroke-linecap="round"/>
       <line x1="72" y1="56" x2="84" y2="56" stroke="#2D1E18" stroke-width="3" stroke-linecap="round"/>
       
-      <!-- 墨镜装扮 (300分) -->
       <g id="skin-glasses" style="display: none;">
         <rect x="32" y="50" width="20" height="13" rx="2" fill="#1A1A1A"/>
         <rect x="68" y="50" width="20" height="13" rx="2" fill="#1A1A1A"/>
         <line x1="52" y1="56" x2="68" y2="56" stroke="#1A1A1A" stroke-width="2.5"/>
       </g>
 
-      <!-- 鼻孔嘴巴 -->
       <ellipse cx="55" cy="69" rx="2.5" ry="3.5" fill="#3E2723"/>
       <ellipse cx="65" cy="69" rx="2.5" ry="3.5" fill="#3E2723"/>
       <line x1="60" y1="73" x2="60" y2="79" stroke="#3E2723" stroke-width="1.8"/>
       <ellipse cx="28" cy="66" rx="5" ry="4" fill="#E57373" opacity="0.85"/>
       <ellipse cx="92" cy="66" rx="5" ry="4" fill="#E57373" opacity="0.85"/>
 
-      <!-- 头部装扮：橘子 (0分) -->
       <g id="skin-orange">
         <circle cx="60" cy="18" r="11" fill="#FFA000" stroke="#E65100" stroke-width="1.5"/>
         <polygon points="60,9 55,2 62,5" fill="#7CB342" stroke="#558B2F" stroke-width="1"/>
       </g>
-      <!-- 头部装扮：温泉毛巾 (100分) -->
       <g id="skin-towel" style="display: none;">
         <rect x="42" y="18" width="36" height="12" rx="4" fill="#ECEFF1" stroke="#90A4AE" stroke-width="1.5"/>
         <line x1="48" y1="24" x2="72" y2="24" stroke="#CFD8DC" stroke-width="2"/>
@@ -321,67 +332,82 @@
     <div class="skin-item" id="item-halo" onclick="switchSkin('halo', 800, this)">🪷</div>
   </div>
 
-  <!-- 底部选项 -->
+  <!-- 底部音效 -->
   <div class="bottom-controls">
     <div class="sound-row">
       <div class="sound-chip active" onclick="setSound('muyu', this)">🪵 经典木鱼</div>
       <div class="sound-chip" onclick="setSound('pop', this)">🫧 捏捏气泡</div>
       <div class="sound-chip" onclick="setSound('water', this)">💧 空灵水滴</div>
     </div>
-    <div class="hint-sub">长按可蓄力“大功德+100” · 连续快敲召唤佛光</div>
+  </div>
+
+  <!-- 自定义音乐弹窗 -->
+  <div class="modal-backdrop" id="song-modal" onclick="closeSongModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h3 style="color:#D84315; margin-bottom:8px;">🎵 换一首徐良的歌</h3>
+      <p style="font-size:12px; color:#6D4C41; text-align:left;">可以粘贴任何网易云/QQ音乐转链的徐良歌曲 MP3 直链，默认已为你配置好经典的《客官不可以》：</p>
+      <input type="text" id="custom-audio-url" class="url-input" placeholder="输入音频 mp3 网址...">
+      <button class="modal-btn" onclick="saveCustomSong()">保存并播放</button>
+      <button class="modal-btn" style="background:#BCAAA4; margin-left:6px;" onclick="resetToSynth()">恢复旋律版</button>
+    </div>
   </div>
 
   <!-- 证书弹窗 -->
   <div class="modal-backdrop" id="cert-modal" onclick="closeCertModal()">
-    <div class="cert-card" onclick="event.stopPropagation()">
-      <div class="cert-title">📜 功德修成证书</div>
-      <p style="font-size: 12px; color: #8D6E63;">兹证明豚门弟子今日虔诚敲木鱼</p>
-      <div class="cert-score" id="cert-num">0</div>
-      <div class="cert-desc" id="cert-comment">已达成“情绪稳定，天塌不慌”最高境界。</div>
-      <button class="cert-btn" onclick="closeCertModal()">领旨归位</button>
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h3 style="color:#BF360C; font-size: 20px;">📜 功德修成证书</h3>
+      <p style="font-size: 12px; color: #8D6E63; margin-top:4px;">边听徐良边积德 · 烦恼皆随风</p>
+      <div style="font-size:36px; font-weight:900; color:#E65100; margin: 12px 0;" id="cert-num">0</div>
+      <p style="font-size: 13px; color: #5D4037; line-height: 1.6;" id="cert-comment"></p>
+      <button class="modal-btn" onclick="closeCertModal()">领旨归位</button>
     </div>
   </div>
 
+  <!-- 原生 Audio 标签（支持外链播放） -->
+  <audio id="bg-audio" loop preload="auto"></audio>
+
 <script>
-  let totalScore = parseInt(localStorage.getItem("capy_mega_merit") || "0");
+  let totalScore = parseInt(localStorage.getItem("capy_xl_merit") || "0");
   let currentSound = "muyu";
-  let activeSkin = "orange";
   let combo = 0;
   let comboTimer = null;
   let autoTimer = null;
   let isAuto = false;
 
-  // 长按蓄力系统
-  let pressStartTime = 0;
+  // 蓄力参数
   let chargeTimer = null;
   let isCharged = false;
 
+  // 专属徐良金句浮字
   const words = [
-    { text: "功德 +1", color: "#FFD54F" },
-    { text: "心平气和 +1", color: "#81C784" },
-    { text: "水豚保佑 🍊", color: "#FFB74D" },
-    { text: "精神稳定 +1", color: "#4DD0E1" },
-    { text: "焦虑 -99", color: "#FF8A65" },
+    { text: "客官不可以 🙅‍♂️", color: "#FF8A80" },
+    { text: "后会无期 🌸", color: "#EA80FC" },
+    { text: "红装 +1 💄", color: "#FF5252" },
+    { text: "坏女孩 👧", color: "#B388FF" },
+    { text: "功德 +1 🪵", color: "#FFD54F" },
     { text: "头发 +1 💇", color: "#AED581" },
-    { text: "暴富 +100 💰", color: "#FFD700" }
+    { text: "青春回来了 ✨", color: "#4DD0E1" }
   ];
 
   document.getElementById("total-val").innerText = totalScore;
   checkSkinUnlocks();
 
-  // Web Audio 原生多音色合成器
+  /* --- Web Audio 音效系统 --- */
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let actx = null;
 
-  function playTone(type) {
+  function initAudio() {
     if (!actx) actx = new AudioCtx();
     if (actx.state === 'suspended') actx.resume();
+  }
+
+  function playTone(type) {
+    initAudio();
     const now = actx.currentTime;
     const osc = actx.createOscillator();
     const gain = actx.createGain();
 
     if (type === 'muyu') {
-      // 经典木鱼
       osc.type = 'sine';
       osc.frequency.setValueAtTime(600, now);
       osc.frequency.exponentialRampToValueAtTime(140, now + 0.08);
@@ -389,7 +415,6 @@
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
       osc.start(now); osc.stop(now + 0.13);
     } else if (type === 'pop') {
-      // 软萌气泡 Pop
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(300, now);
       osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
@@ -397,7 +422,6 @@
       gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
       osc.start(now); osc.stop(now + 0.09);
     } else if (type === 'water') {
-      // 空灵水滴
       osc.type = 'sine';
       osc.frequency.setValueAtTime(1200, now);
       osc.frequency.exponentialRampToValueAtTime(400, now + 0.18);
@@ -405,7 +429,6 @@
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
       osc.start(now); osc.stop(now + 0.23);
     } else if (type === 'mega') {
-      // 大招重音
       osc.type = 'sine';
       osc.frequency.setValueAtTime(300, now);
       osc.frequency.exponentialRampToValueAtTime(80, now + 0.35);
@@ -418,14 +441,73 @@
     gain.connect(actx.destination);
   }
 
+  /* --- 《客官不可以》经典主歌前奏旋律（纯代码生成，免加载） --- */
+  // 简谱音高转频率: 1=C
+  const N_E4 = 329.63, N_F4 = 349.23, N_G4 = 392.00, N_A4 = 440.00, N_B4 = 493.88, N_C5 = 523.25, N_D5 = 587.33, N_E5 = 659.25;
+  // "客官不可以，你小姐姐还在呢..." 经典旋律段
+  const kgMelody = [
+    { f: N_E5, d: 250 }, { f: N_D5, d: 250 }, { f: N_C5, d: 250 }, { f: N_A4, d: 250 },
+    { f: N_G4, d: 350 }, { f: 0, d: 150 },    { f: N_G4, d: 250 }, { f: N_A4, d: 250 },
+    { f: N_C5, d: 350 }, { f: N_D5, d: 250 }, { f: N_E5, d: 450 }, { f: 0, d: 250 }
+  ];
+
+  let isPlayingMusic = false;
+  let melodyStep = 0;
+  let melodyTimer = null;
+  const bgAudio = document.getElementById("bg-audio");
+  let customUrl = localStorage.getItem("xl_custom_mp3") || "";
+
+  function playSynthMelody() {
+    if (!isPlayingMusic || customUrl) return;
+    const note = kgMelody[melodyStep % kgMelody.length];
+    if (note.f > 0 && actx) {
+      const now = actx.currentTime;
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(note.f, now);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + (note.d / 1000));
+      osc.connect(gain);
+      gain.connect(actx.destination);
+      osc.start(now);
+      osc.stop(now + (note.d / 1000));
+    }
+    melodyStep++;
+    melodyTimer = setTimeout(playSynthMelody, note.d);
+  }
+
+  function toggleMusic() {
+    initAudio();
+    isPlayingMusic = !isPlayingMusic;
+    const btn = document.getElementById("music-btn");
+    
+    if (isPlayingMusic) {
+      btn.innerHTML = "<span>🎵 徐良BGM: 开</span>";
+      btn.classList.add("active");
+
+      if (customUrl) {
+        bgAudio.src = customUrl;
+        bgAudio.play().catch(e => console.log("等待交互播放"));
+      } else {
+        playSynthMelody();
+      }
+    } else {
+      btn.innerHTML = "<span>🎵 徐良BGM: 关</span>";
+      btn.classList.remove("active");
+      clearTimeout(melodyTimer);
+      bgAudio.pause();
+    }
+  }
+
+  // 舞台交互
   const stage = document.getElementById("stage");
 
-  // 单击触发
   function executeHit(isMega = false) {
     const addScore = isMega ? 100 : 1;
     totalScore += addScore;
     document.getElementById("total-val").innerText = totalScore;
-    localStorage.setItem("capy_mega_merit", totalScore);
+    localStorage.setItem("capy_xl_merit", totalScore);
     checkSkinUnlocks();
 
     if (isMega) {
@@ -438,12 +520,10 @@
       spawnText();
     }
 
-    // 动画
     stage.classList.remove("charging");
     stage.classList.add("hit");
     setTimeout(() => stage.classList.remove("hit"), 80);
 
-    // 连击佛光判定
     combo++;
     const comboEl = document.getElementById("combo-pill");
     comboEl.innerText = `连击 x${combo} ${combo >= 10 ? '✨ 佛光普照' : ''}`;
@@ -458,7 +538,6 @@
     }, 1400);
   }
 
-  // 浮字动画
   function spawnText(customText, customColor, isBig = false) {
     const item = words[Math.floor(Math.random() * words.length)];
     const span = document.createElement("span");
@@ -476,9 +555,7 @@
     setTimeout(() => span.remove(), 850);
   }
 
-  // 鼠标与触摸交互（支持长按蓄力）
   stage.addEventListener("pointerdown", () => {
-    pressStartTime = Date.now();
     isCharged = false;
     chargeTimer = setTimeout(() => {
       isCharged = true;
@@ -497,8 +574,8 @@
     stage.classList.remove("charging");
   });
 
-  // 自动念经
   function toggleAutoTap() {
+    initAudio();
     isAuto = !isAuto;
     const btn = document.getElementById("auto-btn");
     if (isAuto) {
@@ -512,7 +589,6 @@
     }
   }
 
-  // 音效切换
   function setSound(type, el) {
     currentSound = type;
     document.querySelectorAll(".sound-chip").forEach(c => c.classList.remove("active"));
@@ -520,7 +596,6 @@
     playTone(type);
   }
 
-  // 装扮切换与解锁检查
   function checkSkinUnlocks() {
     if (totalScore >= 100) document.getElementById("item-towel").classList.add("unlocked");
     if (totalScore >= 300) document.getElementById("item-glasses").classList.add("unlocked");
@@ -535,13 +610,11 @@
     document.querySelectorAll(".skin-item").forEach(s => s.classList.remove("active"));
     el.classList.add("active");
 
-    // 隐藏所有装扮
     document.getElementById("skin-orange").style.display = "none";
     document.getElementById("skin-towel").style.display = "none";
     document.getElementById("skin-glasses").style.display = "none";
     document.getElementById("skin-halo").style.display = "none";
 
-    // 启用所选装扮
     if (skin === 'orange') document.getElementById("skin-orange").style.display = "block";
     if (skin === 'towel') document.getElementById("skin-towel").style.display = "block";
     if (skin === 'glasses') {
@@ -554,13 +627,47 @@
     }
   }
 
-  // 功德证书弹窗
+  // 弹窗逻辑
+  function openSongModal() {
+    document.getElementById("custom-audio-url").value = customUrl;
+    document.getElementById("song-modal").style.display = "flex";
+  }
+  function closeSongModal() {
+    document.getElementById("song-modal").style.display = "none";
+  }
+
+  function saveCustomSong() {
+    const url = document.getElementById("custom-audio-url").value.trim();
+    if (url) {
+      customUrl = url;
+      localStorage.setItem("xl_custom_mp3", url);
+      document.getElementById("song-title").innerText = "《自定义徐良原声》";
+      closeSongModal();
+      if (isPlayingMusic) {
+        clearTimeout(melodyTimer);
+        bgAudio.src = customUrl;
+        bgAudio.play();
+      }
+    }
+  }
+
+  function resetToSynth() {
+    customUrl = "";
+    localStorage.removeItem("xl_custom_mp3");
+    document.getElementById("song-title").innerText = "《客官不可以》纯音旋律";
+    closeSongModal();
+    if (isPlayingMusic) {
+      bgAudio.pause();
+      playSynthMelody();
+    }
+  }
+
   function openCertModal() {
     document.getElementById("cert-num").innerText = totalScore;
     const comments = [
-      "今日情绪极度稳定，看破红尘，诸邪不退自消。",
-      "心如止水，波澜不惊，豚门优秀接班人。",
-      "焦虑清空，烦恼全无，建议今晚泡个热水澡。"
+      "客官不可以，但功德可以！今日焦虑已彻底清空。",
+      "耳机里是徐良，手上是水豚木鱼，青春与佛性在此刻圆满。",
+      "情绪稳定，如同当年听徐良的小小少年。"
     ];
     document.getElementById("cert-comment").innerText = comments[Math.floor(Math.random() * comments.length)];
     document.getElementById("cert-modal").style.display = "flex";
