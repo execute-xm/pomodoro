@@ -27,7 +27,6 @@
       touch-action: manipulation;
     }
 
-    /* 顶部导航 */
     .top-bar {
       width: 100%;
       max-width: 420px;
@@ -41,7 +40,7 @@
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: #D7CCC8;
-      padding: 6px 10px;
+      padding: 8px 12px;
       border-radius: 20px;
       cursor: pointer;
       font-size: 12px;
@@ -58,13 +57,12 @@
       font-weight: bold;
     }
 
-    /* 歌曲信息跑马灯条 */
     .song-banner {
       font-size: 11px;
       color: #FFB74D;
       background: rgba(255, 183, 77, 0.1);
       border: 1px dashed rgba(255, 183, 77, 0.3);
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: 12px;
       margin-top: 6px;
       display: flex;
@@ -73,7 +71,6 @@
       cursor: pointer;
     }
 
-    /* 计数仪表盘 */
     .stats-panel {
       display: flex;
       flex-direction: column;
@@ -104,7 +101,6 @@
       transition: opacity 0.2s, transform 0.1s;
     }
 
-    /* 舞台区 */
     .stage-wrapper {
       position: relative;
       width: 320px;
@@ -147,7 +143,6 @@
       filter: drop-shadow(0 0 20px rgba(255, 152, 0, 0.8));
     }
 
-    /* 飘字 */
     .fly-text {
       position: absolute;
       font-size: 19px;
@@ -163,7 +158,6 @@
       100% { opacity: 0; transform: translateY(-95px) scale(0.95); }
     }
 
-    /* 装扮条 */
     .skin-bar {
       display: flex;
       gap: 8px;
@@ -188,7 +182,6 @@
       transform: scale(1.1);
     }
 
-    /* 底部音效 */
     .bottom-controls {
       display: flex;
       flex-direction: column;
@@ -206,7 +199,7 @@
     .sound-chip {
       background: #1D1614;
       border: 1px solid #3E2D27;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 14px;
       color: #A1887F;
       cursor: pointer;
@@ -216,7 +209,6 @@
       color: #FFA726;
     }
 
-    /* 换歌与证书弹窗通用样式 */
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -275,7 +267,7 @@
 
   <!-- 歌曲小标识 -->
   <div class="song-banner" onclick="openSongModal()">
-    <span>🎧 当前曲目: <strong id="song-title">《客官不可以》纯音旋律</strong> ⚙️换歌</span>
+    <span>🎧 当前曲目: <strong id="song-title">《客官不可以》经典旋律</strong> ⚙️换歌</span>
   </div>
 
   <!-- 计数面板 -->
@@ -345,7 +337,7 @@
   <div class="modal-backdrop" id="song-modal" onclick="closeSongModal()">
     <div class="modal-card" onclick="event.stopPropagation()">
       <h3 style="color:#D84315; margin-bottom:8px;">🎵 换一首徐良的歌</h3>
-      <p style="font-size:12px; color:#6D4C41; text-align:left;">可以粘贴任何网易云/QQ音乐转链的徐良歌曲 MP3 直链，默认已为你配置好经典的《客官不可以》：</p>
+      <p style="font-size:12px; color:#6D4C41; text-align:left;">可以粘贴任何网易云/QQ音乐转链的徐良歌曲 MP3 直链，也可以使用内置的《客官不可以》：</p>
       <input type="text" id="custom-audio-url" class="url-input" placeholder="输入音频 mp3 网址...">
       <button class="modal-btn" onclick="saveCustomSong()">保存并播放</button>
       <button class="modal-btn" style="background:#BCAAA4; margin-left:6px;" onclick="resetToSynth()">恢复旋律版</button>
@@ -363,7 +355,6 @@
     </div>
   </div>
 
-  <!-- 原生 Audio 标签（支持外链播放） -->
   <audio id="bg-audio" loop preload="auto"></audio>
 
 <script>
@@ -374,11 +365,9 @@
   let autoTimer = null;
   let isAuto = false;
 
-  // 蓄力参数
   let chargeTimer = null;
   let isCharged = false;
 
-  // 专属徐良金句浮字
   const words = [
     { text: "客官不可以 🙅‍♂️", color: "#FF8A80" },
     { text: "后会无期 🌸", color: "#EA80FC" },
@@ -392,47 +381,58 @@
   document.getElementById("total-val").innerText = totalScore;
   checkSkinUnlocks();
 
-  /* --- Web Audio 音效系统 --- */
+  /* --- 强力解锁的 Web Audio 引擎 --- */
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let actx = null;
 
-  function initAudio() {
-    if (!actx) actx = new AudioCtx();
-    if (actx.state === 'suspended') actx.resume();
+  function ensureAudioUnlocked() {
+    if (!actx) {
+      actx = new AudioCtx();
+    }
+    if (actx.state === 'suspended') {
+      actx.resume();
+    }
   }
 
+  // 只要用户在屏幕任何地方点一下，立刻激活浏览器的音频通道
+  window.addEventListener('click', ensureAudioUnlocked, { once: true });
+  window.addEventListener('touchstart', ensureAudioUnlocked, { once: true });
+  window.addEventListener('pointerdown', ensureAudioUnlocked, { once: true });
+
   function playTone(type) {
-    initAudio();
+    ensureAudioUnlocked();
+    if (!actx) return;
     const now = actx.currentTime;
     const osc = actx.createOscillator();
     const gain = actx.createGain();
 
     if (type === 'muyu') {
+      // 放大后的木鱼敲击声
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(600, now);
-      osc.frequency.exponentialRampToValueAtTime(140, now + 0.08);
-      gain.gain.setValueAtTime(1.0, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-      osc.start(now); osc.stop(now + 0.13);
+      osc.frequency.setValueAtTime(650, now);
+      osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+      gain.gain.setValueAtTime(1.5, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      osc.start(now); osc.stop(now + 0.15);
     } else if (type === 'pop') {
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(300, now);
-      osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
-      gain.gain.setValueAtTime(0.8, now);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-      osc.start(now); osc.stop(now + 0.09);
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(850, now + 0.05);
+      gain.gain.setValueAtTime(1.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+      osc.start(now); osc.stop(now + 0.1);
     } else if (type === 'water') {
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(1200, now);
-      osc.frequency.exponentialRampToValueAtTime(400, now + 0.18);
-      gain.gain.setValueAtTime(0.6, now);
+      osc.frequency.setValueAtTime(1300, now);
+      osc.frequency.exponentialRampToValueAtTime(420, now + 0.18);
+      gain.gain.setValueAtTime(1.0, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
       osc.start(now); osc.stop(now + 0.23);
     } else if (type === 'mega') {
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(300, now);
-      osc.frequency.exponentialRampToValueAtTime(80, now + 0.35);
-      gain.gain.setValueAtTime(1.5, now);
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(90, now + 0.35);
+      gain.gain.setValueAtTime(2.0, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
       osc.start(now); osc.stop(now + 0.42);
     }
@@ -441,14 +441,13 @@
     gain.connect(actx.destination);
   }
 
-  /* --- 《客官不可以》经典主歌前奏旋律（纯代码生成，免加载） --- */
-  // 简谱音高转频率: 1=C
-  const N_E4 = 329.63, N_F4 = 349.23, N_G4 = 392.00, N_A4 = 440.00, N_B4 = 493.88, N_C5 = 523.25, N_D5 = 587.33, N_E5 = 659.25;
-  // "客官不可以，你小姐姐还在呢..." 经典旋律段
+  /* --- 《客官不可以》经典主旋律（音量放大、波形饱满） --- */
+  const N_G4 = 392.00, N_A4 = 440.00, N_C5 = 523.25, N_D5 = 587.33, N_E5 = 659.25;
+  // "客官不可以，你小姐姐还在呢..." 完整经典段落
   const kgMelody = [
-    { f: N_E5, d: 250 }, { f: N_D5, d: 250 }, { f: N_C5, d: 250 }, { f: N_A4, d: 250 },
-    { f: N_G4, d: 350 }, { f: 0, d: 150 },    { f: N_G4, d: 250 }, { f: N_A4, d: 250 },
-    { f: N_C5, d: 350 }, { f: N_D5, d: 250 }, { f: N_E5, d: 450 }, { f: 0, d: 250 }
+    { f: N_E5, d: 240 }, { f: N_D5, d: 240 }, { f: N_C5, d: 240 }, { f: N_A4, d: 240 },
+    { f: N_G4, d: 360 }, { f: 0, d: 140 },    { f: N_G4, d: 240 }, { f: N_A4, d: 240 },
+    { f: N_C5, d: 360 }, { f: N_D5, d: 240 }, { f: N_E5, d: 480 }, { f: 0, d: 240 }
   ];
 
   let isPlayingMusic = false;
@@ -459,14 +458,15 @@
 
   function playSynthMelody() {
     if (!isPlayingMusic || customUrl) return;
+    ensureAudioUnlocked();
     const note = kgMelody[melodyStep % kgMelody.length];
     if (note.f > 0 && actx) {
       const now = actx.currentTime;
       const osc = actx.createOscillator();
       const gain = actx.createGain();
-      osc.type = 'triangle';
+      osc.type = 'triangle'; // 温暖明亮的八音盒琴音
       osc.frequency.setValueAtTime(note.f, now);
-      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.setValueAtTime(0.28, now); // 音量提高，确保清晰可闻
       gain.gain.exponentialRampToValueAtTime(0.001, now + (note.d / 1000));
       osc.connect(gain);
       gain.connect(actx.destination);
@@ -478,7 +478,7 @@
   }
 
   function toggleMusic() {
-    initAudio();
+    ensureAudioUnlocked();
     isPlayingMusic = !isPlayingMusic;
     const btn = document.getElementById("music-btn");
     
@@ -488,8 +488,10 @@
 
       if (customUrl) {
         bgAudio.src = customUrl;
-        bgAudio.play().catch(e => console.log("等待交互播放"));
+        bgAudio.play().catch(e => console.log(e));
       } else {
+        clearTimeout(melodyTimer);
+        melodyStep = 0;
         playSynthMelody();
       }
     } else {
@@ -500,10 +502,10 @@
     }
   }
 
-  // 舞台交互
   const stage = document.getElementById("stage");
 
   function executeHit(isMega = false) {
+    ensureAudioUnlocked();
     const addScore = isMega ? 100 : 1;
     totalScore += addScore;
     document.getElementById("total-val").innerText = totalScore;
@@ -556,6 +558,7 @@
   }
 
   stage.addEventListener("pointerdown", () => {
+    ensureAudioUnlocked();
     isCharged = false;
     chargeTimer = setTimeout(() => {
       isCharged = true;
@@ -575,7 +578,7 @@
   });
 
   function toggleAutoTap() {
-    initAudio();
+    ensureAudioUnlocked();
     isAuto = !isAuto;
     const btn = document.getElementById("auto-btn");
     if (isAuto) {
@@ -590,6 +593,7 @@
   }
 
   function setSound(type, el) {
+    ensureAudioUnlocked();
     currentSound = type;
     document.querySelectorAll(".sound-chip").forEach(c => c.classList.remove("active"));
     el.classList.add("active");
@@ -627,7 +631,6 @@
     }
   }
 
-  // 弹窗逻辑
   function openSongModal() {
     document.getElementById("custom-audio-url").value = customUrl;
     document.getElementById("song-modal").style.display = "flex";
@@ -654,7 +657,7 @@
   function resetToSynth() {
     customUrl = "";
     localStorage.removeItem("xl_custom_mp3");
-    document.getElementById("song-title").innerText = "《客官不可以》纯音旋律";
+    document.getElementById("song-title").innerText = "《客官不可以》经典旋律";
     closeSongModal();
     if (isPlayingMusic) {
       bgAudio.pause();
