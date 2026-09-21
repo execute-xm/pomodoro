@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>水豚噜噜便签</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    body {
+      background-color: #F6EFE9;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #4E342E;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .widget-card {
+      width: 100%;
+      max-width: 360px;
+      background: #F6EFE9;
+      display: flex;
+      flex-direction: column;
+      height: 94vh;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #A89485;
+      padding-bottom: 4px;
+    }
+    .capy-canvas-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    svg { overflow: visible; }
+    .slogan {
+      font-size: 13px;
+      font-weight: bold;
+      color: #8D6E63;
+      margin-top: 4px;
+      transition: all 0.2s;
+    }
+    .cat-bar {
+      display: flex;
+      gap: 6px;
+      margin: 10px 0;
+    }
+    .cat-pill {
+      flex: 1;
+      text-align: center;
+      padding: 6px 0;
+      font-size: 12px;
+      border-radius: 12px;
+      background: #EAE0D5;
+      color: #8D6E63;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+    .cat-pill.active {
+      background: #FFFFFF;
+      color: #4E342E;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      font-weight: bold;
+    }
+    .input-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .task-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #E2D6CB;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #FFFFFF;
+      color: #4E342E;
+      outline: none;
+    }
+    .task-input:focus { border-color: #FFA726; }
+    .add-btn {
+      width: 40px;
+      height: 38px;
+      background: #FF9800;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .list-box {
+      flex: 1;
+      background: #FFFCF8;
+      border: 1px solid #E8DCD1;
+      border-radius: 10px;
+      padding: 8px;
+      overflow-y: auto;
+      list-style: none;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-bottom: 1px dashed #F1E6DA;
+      font-size: 14px;
+      border-radius: 6px;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-content {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      cursor: pointer;
+    }
+    .task-item.done .task-content {
+      color: #BCAAA4;
+      text-decoration: line-through;
+    }
+    .del-btn {
+      color: #B0A093;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 2px 0;
+      font-size: 12px;
+      color: #8D6E63;
+    }
+  </style>
+</head>
+<body>
+
+<div class="widget-card">
+  <div class="header-bar">
+    <span>📌 水豚便签</span>
+    <span>情绪稳定</span>
+  </div>
+
+  <!-- 水豚矢量头像交互区 -->
+  <div class="capy-canvas-box" onclick="triggerMoodChange()">
+    <svg width="100" height="90" viewBox="0 0 100 90">
+      <!-- 橘子与绿叶 -->
+      <circle cx="50" cy="16" r="9" fill="#FFA000" stroke="#E65100" stroke-width="1.2"/>
+      <polygon points="50,9 46,3 52,5" fill="#7CB342" stroke="#558B2F" stroke-width="0.8"/>
+      <!-- 耳朵 -->
+      <ellipse cx="28" cy="30" rx="4" ry="6" fill="#7A5445" stroke="#4E342E" stroke-width="1.2"/>
+      <ellipse cx="72" cy="30" rx="4" ry="6" fill="#7A5445" stroke="#4E342E" stroke-width="1.2"/>
+      <!-- 脑袋轮廓 -->
+      <path d="M 30,26 Q 50,23 70,26 Q 80,36 80,56 Q 74,68 50,68 Q 26,68 20,56 Q 20,36 30,26 Z" 
+            fill="#9C6B53" stroke="#4E342E" stroke-width="1.5"/>
+      <!-- 大鼻吻 -->
+      <ellipse cx="50" cy="54" rx="26" ry="12" fill="#B58169" stroke="#4E342E" stroke-width="1.2"/>
+      
+      <!-- 动态眼睛表情 -->
+      <g id="capy-eyes">
+        <line x1="32" y1="44" x2="42" y2="44" stroke="#2D1E18" stroke-width="2" stroke-linecap="round"/>
+        <line x1="58" y1="44" x2="68" y2="44" stroke="#2D1E18" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      
+      <!-- 鼻孔与嘴巴 -->
+      <ellipse cx="46" cy="53" rx="2" ry="3" fill="#3E2723"/>
+      <ellipse cx="54" cy="53" rx="2" ry="3" fill="#3E2723"/>
+      <line x1="50" y1="56" x2="50" y2="60" stroke="#3E2723" stroke-width="1.2"/>
+      <!-- 腮红 -->
+      <ellipse cx="26" cy="52" rx="4" ry="3" fill="#E57373"/>
+      <ellipse cx="74" cy="52" rx="4" ry="3" fill="#E57373"/>
+    </svg>
+    <div class="slogan" id="slogan-text">保持松弛 · 情绪稳定</div>
+  </div>
+
+  <!-- 分类标签 -->
+  <div class="cat-bar">
+    <div class="cat-pill active" onclick="setCategory(this, '头顶橘子')">🍊 头顶橘子</div>
+    <div class="cat-pill" onclick="setCategory(this, '温泉发呆')">♨️ 温泉发呆</div>
+    <div class="cat-pill" onclick="setCategory(this, '嚼嚼草叶')">🌿 嚼嚼草叶</div>
+  </div>
+
+  <!-- 输入栏 -->
+  <div class="input-bar">
+    <input type="text" class="task-input" id="task-input" placeholder="输入待办，做完就去泡温泉..." onkeydown="if(event.key==='Enter')addTask()">
+    <button class="add-btn" onclick="addTask()">＋</button>
+  </div>
+
+  <!-- 待办列表 -->
+  <ul class="list-box" id="task-list"></ul>
+
+  <!-- 底部状态 -->
+  <div class="footer-bar">
+    <span id="pending-count">待办: 0 件</span>
+    <span style="font-size: 11px; color:#A89485;">戳小脸变表情 · 点击划掉</span>
+  </div>
+</div>
+
+<script>
+  const QUOTES = [
+    "保持松弛 · 情绪稳定",
+    "头顶橘子，万事不慌 🍊",
+    "大不了就去泡温泉 ♨️",
+    "慢慢来，也是一种快",
+    "嚼口青草，放轻松 🌿",
+    "天塌下来，水豚先睡",
+    "今天也是合格的豚门弟子",
+    "万事皆有定数，先发个呆",
+    "小事不慌，大事泡澡",
+    "深呼吸～呼——吸——",
+    "只要我不焦虑，焦虑的就是别人"
+  ];
+
+  let currentCat = "头顶橘子";
+  let tasks = JSON.parse(localStorage.getItem("capy_interactive_tasks") || "[]");
+  const catIcons = { "头顶橘子": "🍊", "温泉发呆": "♨️", "嚼嚼草叶": "🌿" };
+
+  function renderEyes(mood) {
+    const eyeGroup = document.getElementById("capy-eyes");
+    if (mood === 'happy') {
+      // 弯弯笑眼 (^_^)
+      eyeGroup.innerHTML = `
+        <path d="M 32,46 Q 37,39 42,46" fill="none" stroke="#2D1E18" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 58,46 Q 63,39 68,46" fill="none" stroke="#2D1E18" stroke-width="2" stroke-linecap="round"/>
+      `;
+    } else if (mood === 'derp') {
+      // 呆萌圆眼 (• _ •)
+      eyeGroup.innerHTML = `
+        <circle cx="37" cy="44" r="2.5" fill="#2D1E18"/>
+        <circle cx="63" cy="44" r="2.5" fill="#2D1E18"/>
+      `;
+    } else if (mood === 'cozy') {
+      // 极度享受惬意眼 (>_<)
+      eyeGroup.innerHTML = `
+        <path d="M 33,41 L 41,44 L 33,47" fill="none" stroke="#2D1E18" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 67,41 L 59,44 L 67,47" fill="none" stroke="#2D1E18" stroke-width="2" stroke-linecap="round"/>
+      `;
+    } else {
+      // 经典眯眯眼
+      eyeGroup.innerHTML = `
+        <line x1="32" y1="44" x2="42" y2="44" stroke="#2D1E18" stroke-width="2" stroke-linecap="round"/>
+        <line x1="58" y1="44" x2="68" y2="44" stroke="#2D1E18" stroke-width="2" stroke-linecap="round"/>
+      `;
+    }
+  }
+
+  function triggerMoodChange(targetMood) {
+    const moods = ['relaxed', 'happy', 'derp', 'cozy'];
+    const mood = targetMood || moods[Math.floor(Math.random() * moods.length)];
+    renderEyes(mood);
+
+    const slogan = document.getElementById("slogan-text");
+    slogan.innerText = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+
+    if (targetMood) {
+      setTimeout(() => renderEyes('relaxed'), 1000);
+    }
+  }
+
+  function setCategory(el, cat) {
+    document.querySelectorAll(".cat-pill").forEach(p => p.classList.remove("active"));
+    el.classList.add("active");
+    currentCat = cat;
+  }
+
+  function renderTasks() {
+    const listEl = document.getElementById("task-list");
+    listEl.innerHTML = "";
+    let pending = 0;
+
+    tasks.forEach((t, i) => {
+      if (!t.done) pending++;
+      const li = document.createElement("li");
+      li.className = `task-item ${t.done ? 'done' : ''}`;
+      li.innerHTML = `
+        <div class="task-content" onclick="toggleTask(${i})">
+          <span>${t.done ? '✓' : '•'}</span>
+          <span>[${catIcons[t.cat] || '🍊'}]</span>
+          <span>${t.text}</span>
+        </div>
+        <span class="del-btn" onclick="deleteTask(${i})">✕</span>
+      `;
+      listEl.appendChild(li);
+    });
+
+    document.getElementById("pending-count").innerText = `待办: ${pending} 件`;
+    localStorage.setItem("capy_interactive_tasks", JSON.stringify(tasks));
+  }
+
+  function addTask() {
+    const input = document.getElementById("task-input");
+    const val = input.value.trim();
+    if (!val) return;
+    tasks.unshift({ text: val, cat: currentCat, done: false });
+    input.value = "";
+    renderTasks();
+    triggerMoodChange('happy');
+  }
+
+  function toggleTask(i) {
+    tasks[i].done = !tasks[i].done;
+    renderTasks();
+    if (tasks[i].done) triggerMoodChange('cozy');
+  }
+
+  function deleteTask(i) {
+    tasks.splice(i, 1);
+    renderTasks();
+  }
+
+  renderTasks();
+</script>
+</body>
+</html>
