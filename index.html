@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>【帝皇铠甲暴龙金刚兽的工作台】</title>
+  <title>【(🌳) 的工作台】</title>
   <style>
     :root {
       --bg-pink: #FFF0F4;
@@ -15,7 +15,7 @@
       --text-sub: #9E7D88;
       --accent-bow: #FF3B69;
       --border-pink: #FFE2EB;
-      --radius-card: 18px;
+      --radius-card: 16px;
     }
 
     * {
@@ -26,59 +26,38 @@
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
     }
 
+    /* 手机和电脑统一：左侧栏 + 右侧内容并排 */
     body {
       background: linear-gradient(135deg, #FFF0F4 0%, #FFE6EC 50%, #FFDCE6 100%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
-      justify-content: center;
-      padding: 12px;
+      flex-direction: row;
+      justify-content: flex-start;
+      overflow-x: hidden;
+      width: 100vw;
     }
 
-    /* 整体容器：彻底解决空白问题 */
-    .app-layout {
-      width: 100%;
-      max-width: 720px;
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-
-    @media (max-width: 640px) {
-      .app-layout {
-        flex-direction: column;
-      }
-    }
-
-    /* 垂直侧边导航栏 (Hello Kitty风格) */
+    /* 左侧固定垂直侧边导航栏 (移动端与PC端完全一致保持在左侧) */
     .sidebar {
-      width: 70px;
+      width: 58px;
       flex-shrink: 0;
       background: rgba(255, 255, 255, 0.95);
-      border: 1.5px solid var(--border-pink);
-      border-radius: 20px;
+      border-right: 1.5px solid var(--border-pink);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px 0;
-      box-shadow: 0 4px 14px rgba(255, 133, 161, 0.15);
-    }
-
-    @media (max-width: 640px) {
-      .sidebar {
-        width: 100%;
-        flex-direction: row;
-        justify-content: space-around;
-        padding: 8px 10px;
-      }
-      .brand-avatar {
-        display: none !important;
-      }
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 100;
+      box-shadow: 2px 0 10px rgba(255, 133, 161, 0.12);
     }
 
     .brand-avatar {
-      width: 44px;
-      height: 44px;
+      width: 38px;
+      height: 38px;
       background: #FFE8EF;
       border-radius: 50%;
       display: flex;
@@ -86,41 +65,35 @@
       justify-content: center;
       margin-bottom: 12px;
       border: 1.5px solid var(--primary-pink);
+      flex-shrink: 0;
     }
 
     .nav-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       width: 100%;
       align-items: center;
     }
 
-    @media (max-width: 640px) {
-      .nav-list {
-        flex-direction: row;
-        justify-content: space-around;
-      }
-    }
-
     .nav-item {
-      width: 54px;
-      height: 50px;
-      border-radius: 14px;
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       color: var(--text-sub);
-      gap: 2px;
+      gap: 1px;
       transition: all 0.2s;
     }
 
     .nav-item.active {
       background: linear-gradient(135deg, #FFA3BA 0%, #FF7597 100%);
       color: #FFFFFF;
-      box-shadow: 0 4px 10px rgba(255, 117, 151, 0.35);
+      box-shadow: 0 4px 8px rgba(255, 117, 151, 0.35);
     }
 
     .nav-icon {
@@ -130,25 +103,25 @@
     }
 
     .nav-label {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
     }
 
-    /* 右侧视口主区 */
+    /* 右侧主视口内容区 */
     .viewport {
       flex: 1;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      padding: 12px 10px 30px;
+      max-width: 650px;
+      width: calc(100vw - 58px);
       min-width: 0;
+      overflow-y: auto;
     }
 
     /* 模块页面容器 */
     .module-page {
       display: none;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       width: 100%;
     }
     .module-page.active-page {
@@ -160,15 +133,15 @@
       background: var(--card-bg);
       border-radius: var(--radius-card);
       border: 1.5px solid var(--border-pink);
-      padding: 16px;
-      box-shadow: 0 6px 16px rgba(255, 133, 161, 0.1);
+      padding: 14px;
+      box-shadow: 0 4px 12px rgba(255, 133, 161, 0.1);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .card-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       color: var(--deep-pink);
       display: flex;
@@ -180,24 +153,24 @@
     .hero-header {
       background: linear-gradient(135deg, #FFFFFF 0%, #FFF4F7 100%);
       border: 2px solid var(--soft-pink);
-      padding: 18px;
+      padding: 14px;
     }
     .greeting-text {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--deep-pink);
     }
     .clock-large {
-      font-size: 40px;
+      font-size: 36px;
       font-weight: 900;
       color: var(--accent-bow);
       letter-spacing: -1px;
       line-height: 1.1;
-      margin: 4px 0;
+      margin: 3px 0;
       font-variant-numeric: tabular-nums;
     }
     .date-info {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-sub);
     }
 
@@ -205,19 +178,19 @@
     .quote-card {
       background: #FFF7F9;
       border-left: 4px solid var(--primary-pink);
-      border-radius: 12px;
-      padding: 10px 14px;
+      border-radius: 10px;
+      padding: 8px 12px;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
     .quote-zh {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
       color: var(--deep-pink);
     }
     .quote-en {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-sub);
       font-style: italic;
     }
@@ -226,28 +199,28 @@
     .checkin-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
+      gap: 5px;
     }
     .checkin-btn {
       background: #FFF8FA;
       border: 1.5px solid var(--border-pink);
-      border-radius: 12px;
-      padding: 8px 2px;
+      border-radius: 10px;
+      padding: 8px 1px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       cursor: pointer;
     }
     .checkin-btn .name {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       color: var(--text-main);
     }
     .checkin-btn.checked {
       background: linear-gradient(135deg, #FFB8C9 0%, #FF85A1 100%);
       border-color: var(--primary-pink);
-      box-shadow: 0 4px 8px rgba(255, 133, 161, 0.25);
+      box-shadow: 0 3px 6px rgba(255, 133, 161, 0.25);
     }
     .checkin-btn.checked .name {
       color: #FFFFFF;
@@ -258,23 +231,23 @@
     .overview-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 6px;
     }
     .overview-item {
       background: #FFF8FA;
-      border-radius: 12px;
-      padding: 10px 8px;
+      border-radius: 10px;
+      padding: 8px 4px;
       text-align: center;
       border: 1px solid var(--border-pink);
     }
     .overview-item .val {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 800;
       color: var(--deep-pink);
       margin-top: 2px;
     }
     .overview-item .lbl {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-sub);
     }
 
@@ -282,19 +255,19 @@
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 7px;
     }
     .form-row {
       display: flex;
-      gap: 6px;
+      gap: 5px;
     }
     .custom-input, select, textarea {
       width: 100%;
       background: #FFF8FA;
       border: 1.5px solid var(--border-pink);
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 12px;
+      border-radius: 9px;
+      padding: 7px 8px;
+      font-size: 11px;
       color: var(--text-main);
       outline: none;
     }
@@ -306,9 +279,9 @@
       background: linear-gradient(135deg, #FFA3BA 0%, #FF7597 100%);
       border: none;
       color: #FFFFFF;
-      border-radius: 10px;
-      padding: 8px 14px;
-      font-size: 12px;
+      border-radius: 9px;
+      padding: 7px 12px;
+      font-size: 11px;
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
@@ -318,20 +291,20 @@
     .stream-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      max-height: 260px;
+      gap: 6px;
+      max-height: 240px;
       overflow-y: auto;
     }
     .stream-item {
       background: #FFF9FB;
       border: 1.5px solid var(--border-pink);
-      border-radius: 10px;
-      padding: 8px 10px;
+      border-radius: 9px;
+      padding: 7px 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 6px;
-      font-size: 12px;
+      font-size: 11px;
     }
     .stream-item.is-done span {
       text-decoration: line-through;
@@ -341,775 +314,3 @@
       color: #E29CA9;
       cursor: pointer;
       font-weight: bold;
-      font-size: 13px;
-      padding: 2px 6px;
-    }
-
-    .priority-tag {
-      font-size: 10px;
-      padding: 2px 5px;
-      border-radius: 6px;
-      font-weight: bold;
-    }
-    .p-high { background: #FFE0E6; color: #E0355A; }
-    .p-mid { background: #FFF0D6; color: #D47B00; }
-    .p-low { background: #E8F5E9; color: #2E7D32; }
-
-    .food-img-thumb {
-      width: 44px;
-      height: 44px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 1px solid var(--border-pink);
-    }
-
-    /* 记账切换与图表 */
-    .tab-switch {
-      display: flex;
-      background: #FFE8EE;
-      border-radius: 10px;
-      padding: 3px;
-      gap: 4px;
-    }
-    .tab-btn {
-      flex: 1;
-      text-align: center;
-      padding: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      border-radius: 8px;
-      cursor: pointer;
-      color: var(--text-sub);
-    }
-    .tab-btn.active {
-      background: #FFFFFF;
-      color: var(--deep-pink);
-    }
-    .chart-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      background: #FFF8FA;
-      padding: 10px;
-      border-radius: 12px;
-      border: 1px solid var(--border-pink);
-    }
-    .chart-row {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .chart-label-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-    }
-    .chart-bar-bg {
-      height: 7px;
-      background: #FFE8EE;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .chart-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #FFA3BA, #FF6086);
-      border-radius: 4px;
-    }
-
-    /* 日记三板块 */
-    .diary-section-box {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .diary-sec-label {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--deep-pink);
-    }
-    .photo-upload-zone {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border: 1.5px dashed var(--soft-pink);
-      padding: 8px;
-      border-radius: 10px;
-      background: #FFFBFD;
-    }
-    .diary-photo-preview {
-      width: 48px;
-      height: 48px;
-      border-radius: 6px;
-      object-fit: cover;
-      display: none;
-    }
-  </style>
-</head>
-<body>
-
-<div class="app-layout">
-  <!-- 左侧垂直侧边导航栏 -->
-  <aside class="sidebar">
-    <div class="brand-avatar">
-      <!-- Hello Kitty 蝴蝶结 -->
-      <svg viewBox="0 0 100 100" style="width: 24px; height: 24px; fill: var(--accent-bow);">
-        <path d="M 50,50 M 50,42 C 45,35 30,30 20,40 C 10,50 18,65 30,62 C 40,60 46,54 50,48 C 54,54 60,60 70,62 C 82,65 90,50 80,40 C 70,30 55,35 50,42 Z"/>
-        <circle cx="50" cy="48" r="7" fill="#FFA6BA" stroke="var(--accent-bow)" stroke-width="2"/>
-      </svg>
-    </div>
-
-    <nav class="nav-list">
-      <div class="nav-item active" onclick="switchNav('desktop', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        <span class="nav-label">桌面</span>
-      </div>
-      <div class="nav-item" onclick="switchNav('todo', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-        <span class="nav-label">待办</span>
-      </div>
-      <div class="nav-item" onclick="switchNav('money', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-        <span class="nav-label">记账</span>
-      </div>
-      <div class="nav-item" onclick="switchNav('diet', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.48L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 3.89 2.43 7.34v6zM1 21.99V21h15.03v.99c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1zm15.03-7c0-6.08-4.92-11-11-11H1v18h15.03v-7z"/></svg>
-        <span class="nav-label">饮食</span>
-      </div>
-      <div class="nav-item" onclick="switchNav('diary', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
-        <span class="nav-label">日记</span>
-      </div>
-      <div class="nav-item" onclick="switchNav('settings', this)">
-        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        <span class="nav-label">设置</span>
-      </div>
-    </nav>
-  </aside>
-
-  <!-- 右侧主视口 -->
-  <main class="viewport">
-
-    <!-- 1. 桌面首页 -->
-    <section class="module-page active-page" id="page-desktop">
-      <div class="card hero-header">
-        <div class="greeting-text" id="home-greeting">你好呀，【(🌳) 的工作台】🌸</div>
-        <div class="clock-large" id="home-clock">00:00:00</div>
-        <div class="date-info" id="home-date">加载中...</div>
-      </div>
-
-      <!-- 语录卡片：中文句子 + 英文翻译 -->
-      <div class="quote-card">
-        <div class="quote-zh">“保持热爱，奔赴山海，今天的你也是最棒的小朋友。”</div>
-        <div class="quote-en">"Keep love in your heart, every day is full of gentle miracles."</div>
-      </div>
-
-      <!-- 每日打卡区 -->
-      <div class="card">
-        <div class="card-title">
-          <span>🍓 每日自律打卡</span>
-          <span style="font-size:11px; color:var(--text-sub); font-weight:normal;">点击切换完成态</span>
-        </div>
-        <div class="checkin-grid">
-          <div class="checkin-btn" id="chk-wake" onclick="toggleCheckin('wake')">
-            <span>🌅</span><span class="name">早起</span>
-          </div>
-          <div class="checkin-btn" id="chk-water" onclick="toggleCheckin('water')">
-            <span>💧</span><span class="name">饮水</span>
-          </div>
-          <div class="checkin-btn" id="chk-sport" onclick="toggleCheckin('sport')">
-            <span>🏃‍♀️</span><span class="name">运动</span>
-          </div>
-          <div class="checkin-btn" id="chk-read" onclick="toggleCheckin('read')">
-            <span>📖</span><span class="name">阅读</span>
-          </div>
-          <div class="checkin-btn" id="chk-sleep" onclick="toggleCheckin('sleep')">
-            <span>🌙</span><span class="name">早睡</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 今日概览 -->
-      <div class="card">
-        <div class="card-title"><span>📊 今日概览</span></div>
-        <div class="overview-grid">
-          <div class="overview-item">
-            <div class="lbl">今日待办</div>
-            <div class="val" id="ov-todo-count">0 项</div>
-          </div>
-          <div class="overview-item">
-            <div class="lbl">今日摄入</div>
-            <div class="val" id="ov-diet-cal">0 kcal</div>
-          </div>
-          <div class="overview-item">
-            <div class="lbl">今日消费</div>
-            <div class="val" id="ov-money-spend">￥0.00</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. 待办页面 -->
-    <section class="module-page" id="page-todo">
-      <div class="card">
-        <div class="card-title">🎀 添加待办任务</div>
-        <div class="form-group">
-          <input type="text" id="todo-txt" class="custom-input" placeholder="输入待办任务内容...">
-          <div class="form-row">
-            <input type="date" id="todo-date" class="custom-input" style="flex:1.2;">
-            <select id="todo-priority" class="custom-input" style="flex:1;">
-              <option value="high">紧急高优 🔴</option>
-              <option value="mid" selected>日常适中 🟡</option>
-              <option value="low">后续跟进 🟢</option>
-            </select>
-            <button class="primary-btn" onclick="addTodoItem()">添加</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>📝 今日待办</span>
-          <span style="font-size:11px; color:var(--text-sub); font-weight:normal;" id="pending-count">0 项</span>
-        </div>
-        <div class="stream-list" id="todo-pending-list"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>🌸 已完成待办</span>
-          <span style="font-size:11px; color:var(--text-sub); font-weight:normal;" id="done-count">0 项</span>
-        </div>
-        <div class="stream-list" id="todo-done-list"></div>
-      </div>
-    </section>
-
-    <!-- 3. 饮食板块 -->
-    <section class="module-page" id="page-diet">
-      <div class="card">
-        <div class="card-title">🥗 饮食记录与热量</div>
-        <div class="form-group">
-          <div class="form-row">
-            <input type="text" id="diet-name" class="custom-input" placeholder="食物名称 (如: 鲜虾沙拉)">
-            <input type="number" id="diet-cal" class="custom-input" placeholder="热量 (kcal)">
-          </div>
-          <div class="form-row">
-            <select id="diet-meal" class="custom-input">
-              <option value="早餐">早餐 🍳</option>
-              <option value="午餐">午餐 🍱</option>
-              <option value="晚餐">晚餐 🍲</option>
-              <option value="加餐">加餐小食 🍰</option>
-            </select>
-            <input type="date" id="diet-date" class="custom-input">
-          </div>
-          <div class="form-row" style="align-items: center;">
-            <label style="font-size:11px; color:var(--text-sub); cursor:pointer;">
-              📷 上传食物照片:
-              <input type="file" id="diet-file" accept="image/*" style="display:none;" onchange="previewDietImg(this)">
-            </label>
-            <img id="diet-preview" class="food-img-thumb" style="display:none;">
-            <button class="primary-btn" style="margin-left:auto;" onclick="addDietRecord()">录入饮食</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>🍓 历史饮食记录</span>
-          <span style="font-size:12px; font-weight:800; color:var(--accent-bow);" id="diet-total-today">今日摄入: 0 kcal</span>
-        </div>
-        <div class="stream-list" id="diet-history-list"></div>
-      </div>
-    </section>
-
-    <!-- 4. 记账板块 -->
-    <section class="module-page" id="page-money">
-      <div class="card">
-        <div class="card-title">💰 每日记账</div>
-        <div class="tab-switch">
-          <div class="tab-btn active" id="tab-spend" onclick="switchMoneyType('spend')">支出 💸</div>
-          <div class="tab-btn" id="tab-income" onclick="switchMoneyType('income')">收入 🧧</div>
-        </div>
-        <div class="form-group" style="margin-top:6px;">
-          <div class="form-row">
-            <input type="number" step="0.01" id="money-amount" class="custom-input" placeholder="价格 (￥)">
-            <select id="money-cat" class="custom-input">
-              <option value="餐饮">餐饮 🍜</option>
-              <option value="公交">公交 🚌</option>
-              <option value="购物">购物 🛍️</option>
-              <option value="其他">其他 🎈</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <input type="date" id="money-date" class="custom-input">
-            <input type="text" id="money-remark" class="custom-input" placeholder="备注信息...">
-            <button class="primary-btn" onclick="addMoneyRecord()">保存</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>📊 每月消费可视化图表</span>
-          <span style="font-size:11px; color:var(--text-sub); font-weight:normal;" id="chart-month-lbl">本月统计</span>
-        </div>
-        <div class="chart-container" id="monthly-chart-box">
-          <div style="font-size:11px; color:var(--text-sub); text-align:center;">暂无本月数据~</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>👛 消费流水明细</span>
-          <span style="font-size:12px; font-weight:800; color:var(--deep-pink);" id="money-today-spend">今日消费: ￥0.00</span>
-        </div>
-        <div class="stream-list" id="money-history-list"></div>
-      </div>
-    </section>
-
-    <!-- 5. 日记板块 -->
-    <section class="module-page" id="page-diary">
-      <div class="card">
-        <div class="card-title">
-          <span>📖 今日日记</span>
-          <input type="date" id="diary-filter-date" class="custom-input" style="width:130px; padding:3px 6px;" onchange="loadDiaryByDate()">
-        </div>
-        <div class="form-group">
-          <!-- 3件觉得感恩的事 -->
-          <div class="diary-section-box">
-            <span class="diary-sec-label">🌸 3件觉得感恩的事：</span>
-            <input type="text" id="d-thank-1" class="custom-input" placeholder="1. 第一件感恩的事...">
-            <input type="text" id="d-thank-2" class="custom-input" placeholder="2. 第二件感恩的事...">
-            <input type="text" id="d-thank-3" class="custom-input" placeholder="3. 第三件感恩的事...">
-          </div>
-
-          <!-- 2件值得改进的事 -->
-          <div class="diary-section-box">
-            <span class="diary-sec-label">🌿 2件值得改进的事：</span>
-            <input type="text" id="d-imp-1" class="custom-input" placeholder="1. 第一件值得改进的事...">
-            <input type="text" id="d-imp-2" class="custom-input" placeholder="2. 第二件值得改进的事...">
-          </div>
-
-          <!-- 1件对自己肯定的事 -->
-          <div class="diary-section-box">
-            <span class="diary-sec-label">✨ 1件对自己肯定的事：</span>
-            <input type="text" id="d-praise" class="custom-input" placeholder="1. 对自己的肯定...">
-          </div>
-
-          <!-- 传照片窗口 -->
-          <div class="photo-upload-zone">
-            <label style="font-size:11px; color:var(--text-sub); cursor:pointer;">
-              📷 点击上传今日照片:
-              <input type="file" id="diary-photo-file" accept="image/*" style="display:none;" onchange="previewDiaryPhoto(this)">
-            </label>
-            <img id="diary-photo-preview" class="diary-photo-preview">
-          </div>
-
-          <button class="primary-btn" style="align-self: flex-end;" onclick="saveCurrentDiary()">保存当天日记</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. 设置板块 -->
-    <section class="module-page" id="page-settings">
-      <div class="card">
-        <div class="card-title">⚙️ 工作台设置</div>
-        <div class="form-group">
-          <label style="font-size:12px; color:var(--text-sub);">工作台名称：</label>
-          <input type="text" id="cfg-name" class="custom-input" value="【(🌳) 的工作台】">
-          <button class="primary-btn" style="align-self:flex-start;" onclick="saveConfigName()">保存名称</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">📦 本地数据管理</div>
-        <p style="font-size:12px; color:var(--text-sub); line-height:1.6;">
-          所有待办、记账、饮食与日记全部独立保存在你手机本地 localStorage 中，刷新永久保留。
-        </p>
-        <button class="primary-btn" style="background:#E25574; align-self:flex-start;" onclick="clearLocalStorageData()">⚠️ 清空重置全部数据</button>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<script>
-  // 1. 单页切换
-  function switchNav(pageKey, el) {
-    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-    el.classList.add('active');
-
-    document.querySelectorAll('.module-page').forEach(page => page.classList.remove('active-page'));
-    const target = document.getElementById(`page-${pageKey}`);
-    if (target) target.classList.add('active-page');
-
-    if (pageKey === 'desktop') updateOverview();
-    if (pageKey === 'money') renderMonthlyChart();
-  }
-
-  // 2. 实时时间
-  function updateClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const s = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById("home-clock").innerText = `${h}:${m}:${s}`;
-
-    const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-    document.getElementById("home-date").innerText = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 · ${days[now.getDay()]} 🌸`;
-  }
-  setInterval(updateClock, 1000);
-  updateClock();
-
-  const todayStr = new Date().toISOString().split('T')[0];
-  document.getElementById('todo-date').value = todayStr;
-  document.getElementById('diet-date').value = todayStr;
-  document.getElementById('money-date').value = todayStr;
-  document.getElementById('diary-filter-date').value = todayStr;
-
-  // 3. 每日打卡
-  function getCheckinData() {
-    const saved = JSON.parse(localStorage.getItem('wk_checkins') || '{}');
-    if (saved.date !== todayStr) {
-      return { date: todayStr, wake: false, water: false, sport: false, read: false, sleep: false };
-    }
-    return saved;
-  }
-  function renderCheckins() {
-    const data = getCheckinData();
-    ['wake', 'water', 'sport', 'read', 'sleep'].forEach(key => {
-      const btn = document.getElementById(`chk-${key}`);
-      if (btn) {
-        if (data[key]) btn.classList.add('checked');
-        else btn.classList.remove('checked');
-      }
-    });
-  }
-  function toggleCheckin(key) {
-    const data = getCheckinData();
-    data[key] = !data[key];
-    localStorage.setItem('wk_checkins', JSON.stringify(data));
-    renderCheckins();
-  }
-  renderCheckins();
-
-  // 4. 待办逻辑
-  let todos = JSON.parse(localStorage.getItem('wk_todos') || '[]');
-  function saveAndRenderTodos() {
-    localStorage.setItem('wk_todos', JSON.stringify(todos));
-    const pendingList = document.getElementById('todo-pending-list');
-    const doneList = document.getElementById('todo-done-list');
-    pendingList.innerHTML = '';
-    doneList.innerHTML = '';
-
-    let pendingCount = 0;
-    let doneCount = 0;
-
-    todos.forEach((item, index) => {
-      const div = document.createElement('div');
-      div.className = `stream-item ${item.done ? 'is-done' : ''}`;
-      const pTag = item.priority === 'high' ? '<span class="priority-tag p-high">高优</span>' :
-                   item.priority === 'mid' ? '<span class="priority-tag p-mid">日常</span>' :
-                   '<span class="priority-tag p-low">低优</span>';
-
-      div.innerHTML = `
-        <div style="display:flex; align-items:center; gap:6px; cursor:pointer;" onclick="toggleTodo(${index})">
-          <input type="checkbox" ${item.done ? 'checked' : ''} style="accent-color:var(--deep-pink); cursor:pointer;">
-          ${pTag}
-          <span>${item.text} <small style="color:var(--text-sub)">(${item.date || '无日期'})</small></span>
-        </div>
-        <span class="delete-action" onclick="deleteTodo(${index})">✕</span>
-      `;
-
-      if (item.done) {
-        doneList.appendChild(div);
-        doneCount++;
-      } else {
-        pendingList.appendChild(div);
-        pendingCount++;
-      }
-    });
-
-    if (pendingCount === 0) pendingList.innerHTML = `<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:10px;">今日任务全搞定啦 🌸</div>`;
-    if (doneCount === 0) doneList.innerHTML = `<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:10px;">暂无已完成~</div>`;
-
-    document.getElementById('pending-count').innerText = `${pendingCount} 项`;
-    document.getElementById('done-count').innerText = `${doneCount} 项`;
-    document.getElementById('ov-todo-count').innerText = `${pendingCount} 项`;
-  }
-  function addTodoItem() {
-    const txt = document.getElementById('todo-txt').value.trim();
-    if (!txt) return;
-    todos.push({
-      text: txt,
-      date: document.getElementById('todo-date').value,
-      priority: document.getElementById('todo-priority').value,
-      done: false
-    });
-    document.getElementById('todo-txt').value = '';
-    saveAndRenderTodos();
-  }
-  function toggleTodo(idx) {
-    todos[idx].done = !todos[idx].done;
-    saveAndRenderTodos();
-  }
-  function deleteTodo(idx) {
-    todos.splice(idx, 1);
-    saveAndRenderTodos();
-  }
-  saveAndRenderTodos();
-
-  // 5. 饮食板块
-  let dietRecords = JSON.parse(localStorage.getItem('wk_diet') || '[]');
-  let tempDietImg = '';
-
-  function previewDietImg(input) {
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        tempDietImg = e.target.result;
-        const preview = document.getElementById('diet-preview');
-        preview.src = tempDietImg;
-        preview.style.display = 'block';
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-  function saveAndRenderDiet() {
-    localStorage.setItem('wk_diet', JSON.stringify(dietRecords));
-    const list = document.getElementById('diet-history-list');
-    list.innerHTML = '';
-
-    let todayCal = 0;
-    dietRecords.forEach((item, index) => {
-      if (item.date === todayStr) todayCal += Number(item.cal || 0);
-      const div = document.createElement('div');
-      div.className = 'stream-item';
-      div.innerHTML = `
-        <div style="display:flex; align-items:center; gap:8px;">
-          ${item.img ? `<img src="${item.img}" class="food-img-thumb">` : '🥗'}
-          <div>
-            <div style="font-weight:bold; color:var(--deep-pink);">${item.name} · ${item.meal}</div>
-            <div style="font-size:11px; color:var(--text-sub);">${item.cal} kcal · ${item.date}</div>
-          </div>
-        </div>
-        <span class="delete-action" onclick="deleteDiet(${index})">✕</span>
-      `;
-      list.appendChild(div);
-    });
-
-    if (dietRecords.length === 0) list.innerHTML = `<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:10px;">暂无饮食记录 🍓</div>`;
-    document.getElementById('diet-total-today').innerText = `今日摄入: ${todayCal} kcal`;
-    document.getElementById('ov-diet-cal').innerText = `${todayCal} kcal`;
-  }
-  function addDietRecord() {
-    const name = document.getElementById('diet-name').value.trim();
-    const cal = document.getElementById('diet-cal').value.trim();
-    if (!name || !cal) {
-      alert("请填写食物名称和热量！");
-      return;
-    }
-    dietRecords.unshift({
-      name: name,
-      cal: Number(cal),
-      meal: document.getElementById('diet-meal').value,
-      date: document.getElementById('diet-date').value,
-      img: tempDietImg
-    });
-    document.getElementById('diet-name').value = '';
-    document.getElementById('diet-cal').value = '';
-    document.getElementById('diet-preview').style.display = 'none';
-    tempDietImg = '';
-    saveAndRenderDiet();
-  }
-  function deleteDiet(idx) {
-    dietRecords.splice(idx, 1);
-    saveAndRenderDiet();
-  }
-  saveAndRenderDiet();
-
-  // 6. 记账板块
-  let currentMoneyType = 'spend';
-  let moneyRecords = JSON.parse(localStorage.getItem('wk_money') || '[]');
-
-  function switchMoneyType(type) {
-    currentMoneyType = type;
-    document.getElementById('tab-spend').classList.toggle('active', type === 'spend');
-    document.getElementById('tab-income').classList.toggle('active', type === 'income');
-  }
-  function saveAndRenderMoney() {
-    localStorage.setItem('wk_money', JSON.stringify(moneyRecords));
-    const list = document.getElementById('money-history-list');
-    list.innerHTML = '';
-
-    let todaySpend = 0;
-    moneyRecords.forEach((item, index) => {
-      if (item.date === todayStr && item.type === 'spend') {
-        todaySpend += Number(item.amount || 0);
-      }
-      const isSpend = item.type === 'spend';
-      const div = document.createElement('div');
-      div.className = 'stream-item';
-      div.innerHTML = `
-        <div>
-          <div style="font-weight:bold;">${item.cat} <small style="color:var(--text-sub);">(${item.remark || '无备注'})</small></div>
-          <div style="font-size:11px; color:var(--text-sub);">${item.date}</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <span style="font-weight:bold; font-size:13px; color:${isSpend ? 'var(--accent-bow)' : '#2E7D32'};">
-            ${isSpend ? '-' : '+'}￥${Number(item.amount).toFixed(2)}
-          </span>
-          <span class="delete-action" onclick="deleteMoney(${index})">✕</span>
-        </div>
-      `;
-      list.appendChild(div);
-    });
-
-    if (moneyRecords.length === 0) list.innerHTML = `<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:10px;">暂无记账明细 💰</div>`;
-    document.getElementById('money-today-spend').innerText = `今日消费: ￥${todaySpend.toFixed(2)}`;
-    document.getElementById('ov-money-spend').innerText = `￥${todaySpend.toFixed(2)}`;
-    renderMonthlyChart();
-  }
-  function addMoneyRecord() {
-    const amt = document.getElementById('money-amount').value.trim();
-    if (!amt || Number(amt) <= 0) {
-      alert("请输入有效价格！");
-      return;
-    }
-    moneyRecords.unshift({
-      type: currentMoneyType,
-      amount: Number(amt),
-      cat: document.getElementById('money-cat').value,
-      date: document.getElementById('money-date').value,
-      remark: document.getElementById('money-remark').value.trim()
-    });
-    document.getElementById('money-amount').value = '';
-    document.getElementById('money-remark').value = '';
-    saveAndRenderMoney();
-  }
-  function deleteMoney(idx) {
-    moneyRecords.splice(idx, 1);
-    saveAndRenderMoney();
-  }
-  function renderMonthlyChart() {
-    const curYearMonth = todayStr.substring(0, 7);
-    document.getElementById('chart-month-lbl').innerText = `${curYearMonth} 月度`;
-
-    const catTotals = { '餐饮': 0, '公交': 0, '购物': 0, '其他': 0 };
-    let totalMonthSpend = 0;
-    let totalMonthIncome = 0;
-
-    moneyRecords.forEach(r => {
-      if (r.date && r.date.startsWith(curYearMonth)) {
-        if (r.type === 'spend') {
-          totalMonthSpend += Number(r.amount);
-          if (catTotals[r.cat] !== undefined) catTotals[r.cat] += Number(r.amount);
-          else catTotals['其他'] += Number(r.amount);
-        } else {
-          totalMonthIncome += Number(r.amount);
-        }
-      }
-    });
-
-    const box = document.getElementById('monthly-chart-box');
-    box.innerHTML = `
-      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:800; border-bottom:1px dashed var(--border-pink); padding-bottom:6px;">
-        <span style="color:var(--deep-pink);">月总支出: ￥${totalMonthSpend.toFixed(2)}</span>
-        <span style="color:#2E7D32;">月总收入: ￥${totalMonthIncome.toFixed(2)}</span>
-      </div>
-    `;
-
-    for (const [cat, val] of Object.entries(catTotals)) {
-      const pct = totalMonthSpend > 0 ? ((val / totalMonthSpend) * 100).toFixed(0) : 0;
-      const row = document.createElement('div');
-      row.className = 'chart-row';
-      row.innerHTML = `
-        <div class="chart-label-row">
-          <span>${cat}</span>
-          <span style="font-weight:bold; color:var(--deep-pink);">￥${val.toFixed(2)} (${pct}%)</span>
-        </div>
-        <div class="chart-bar-bg">
-          <div class="chart-bar-fill" style="width: ${pct}%;"></div>
-        </div>
-      `;
-      box.appendChild(row);
-    }
-  }
-  saveAndRenderMoney();
-
-  // 7. 日记逻辑
-  let diaryStore = JSON.parse(localStorage.getItem('wk_diaries') || '{}');
-  let currentDiaryPhoto = '';
-
-  function previewDiaryPhoto(input) {
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        currentDiaryPhoto = e.target.result;
-        const img = document.getElementById('diary-photo-preview');
-        img.src = currentDiaryPhoto;
-        img.style.display = 'block';
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-  function loadDiaryByDate() {
-    const selectedDate = document.getElementById('diary-filter-date').value;
-    const entry = diaryStore[selectedDate] || {};
-
-    document.getElementById('d-thank-1').value = entry.thank1 || '';
-    document.getElementById('d-thank-2').value = entry.thank2 || '';
-    document.getElementById('d-thank-3').value = entry.thank3 || '';
-
-    document.getElementById('d-imp-1').value = entry.imp1 || '';
-    document.getElementById('d-imp-2').value = entry.imp2 || '';
-
-    document.getElementById('d-praise').value = entry.praise || '';
-
-    const img = document.getElementById('diary-photo-preview');
-    if (entry.photo) {
-      currentDiaryPhoto = entry.photo;
-      img.src = entry.photo;
-      img.style.display = 'block';
-    } else {
-      currentDiaryPhoto = '';
-      img.style.display = 'none';
-    }
-  }
-  function saveCurrentDiary() {
-    const selectedDate = document.getElementById('diary-filter-date').value;
-    diaryStore[selectedDate] = {
-      thank1: document.getElementById('d-thank-1').value.trim(),
-      thank2: document.getElementById('d-thank-2').value.trim(),
-      thank3: document.getElementById('d-thank-3').value.trim(),
-      imp1: document.getElementById('d-imp-1').value.trim(),
-      imp2: document.getElementById('d-imp-2').value.trim(),
-      praise: document.getElementById('d-praise').value.trim(),
-      photo: currentDiaryPhoto
-    };
-    localStorage.setItem('wk_diaries', JSON.stringify(diaryStore));
-    alert(`🎉 ${selectedDate} 的日记已妥善保存！`);
-  }
-  loadDiaryByDate();
-
-  // 8. 设置板块
-  function saveConfigName() {
-    const name = document.getElementById('cfg-name').value.trim();
-    if (name) {
-      document.getElementById('home-greeting').innerText = `你好呀，${name} 🌸`;
-      document.title = name;
-      alert("工作台名称已成功修改！");
-    }
-  }
-  function clearLocalStorageData() {
-    if (confirm("确定清空全部本地数据吗？此操作不可撤销！")) {
-      localStorage.clear();
-      location.reload();
-    }
-  }
-  function updateOverview() {
-    saveAndRenderTodos();
-    saveAndRenderDiet();
-    saveAndRenderMoney();
-  }
-</script>
-</body>
-</html>
