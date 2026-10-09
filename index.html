@@ -2,518 +2,429 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-  <title>水豚噜噜的松弛清单</title>
-  
-  <!-- iPhone 原生应用体验 -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="噜噜清单">
-  <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/capybara.png">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>个人工作台 · Workspace</title>
   <style>
-    :root {
-      /* 水豚大地奶咖色调 */
-      --bg-warm: #f7f1e5;
-      --card-bg: rgba(255, 253, 249, 0.9);
-      --card-border: #ede1d1;
-      --capy-brown: #795548;
-      --capy-dark: #4e342e;
-      --capy-orange: #ff8f00;
-      --capy-orange-soft: #ffe0b2;
-      --leaf-green: #689f38;
-      --leaf-soft: #dcedc8;
-      --spa-blue: #0288d1;
-      --spa-soft: #b3e5fc;
-      --text-main: #3e2723;
-      --text-sub: #8d6e63;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "SF Pro Rounded", sans-serif;
     }
-
     body {
-      background-color: var(--bg-warm);
-      background-image: 
-        radial-gradient(#e6d5be 1.2px, transparent 1.2px),
-        radial-gradient(#e6d5be 1.2px, var(--bg-warm) 1.2px);
-      background-size: 24px 24px;
-      background-position: 0 0, 12px 12px;
-      color: var(--text-main);
+      background: #0D1117;
+      color: #C9D1D9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
       min-height: 100vh;
-      padding: env(safe-area-inset-top, 24px) 20px calc(env(safe-area-inset-bottom, 24px) + 24px);
       display: flex;
       justify-content: center;
+      padding: 24px 16px;
     }
-
-    .container {
+    .workspace {
       width: 100%;
-      max-width: 440px;
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    /* 顶部标题栏 */
-    .app-header {
+    /* 顶部问候与时间看板 */
+    .hero-header {
+      background: linear-gradient(135deg, #161B22 0%, #1F242C 100%);
+      border: 1px solid #30363D;
+      border-radius: 16px;
+      padding: 24px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      margin: 16px 0 20px;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
     }
-    .header-text h1 {
-      font-size: 25px;
+    .greeting-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+    .greeting-sub {
+      font-size: 13px;
+      color: #8B949E;
+    }
+    .clock-display {
+      font-size: 38px;
       font-weight: 800;
-      color: var(--capy-dark);
+      color: #58A6FF;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -1px;
+    }
+
+    /* 双栏主体布局 */
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 680px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 卡片通用 */
+    .card {
+      background: #161B22;
+      border: 1px solid #30363D;
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #F0F6FC;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
-    .date-pill {
+
+    /* 工具导航矩阵 */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .tool-item {
+      background: #0D1117;
+      border: 1px solid #21262D;
+      border-radius: 10px;
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .tool-item:hover {
+      border-color: #58A6FF;
+      transform: translateY(-2px);
+      background: #161B22;
+    }
+    .tool-icon {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+    .tool-name {
       font-size: 13px;
       font-weight: 600;
-      color: var(--capy-orange);
-      margin-top: 4px;
+      color: #E6EDF3;
     }
-    .capy-avatar {
-      font-size: 40px;
-      line-height: 1;
-      filter: drop-shadow(0 6px 8px rgba(121, 85, 72, 0.2));
-      animation: capyFloat 3.5s ease-in-out infinite alternate;
-      user-select: none;
-    }
-    @keyframes capyFloat {
-      0% { transform: translateY(0px) rotate(0deg); }
-      100% { transform: translateY(-5px) rotate(2deg); }
+    .tool-desc {
+      font-size: 11px;
+      color: #8B949E;
+      margin-top: 2px;
     }
 
-    /* 泡澡进度看板 */
-    .dashboard {
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
-      border-radius: 26px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 24px rgba(121, 85, 72, 0.08);
-    }
-    .dash-top {
+    /* 番茄钟卡片 */
+    .pomo-wrap {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      margin-bottom: 12px;
+      gap: 12px;
+      padding: 10px 0;
     }
-    .dash-top .label {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-sub);
-    }
-    .dash-top .percent {
-      font-size: 24px;
+    .pomo-timer {
+      font-size: 44px;
       font-weight: 800;
-      color: var(--capy-orange);
+      color: #FFA657;
+      font-variant-numeric: tabular-nums;
     }
-    .progress-track {
-      width: 100%;
-      height: 16px;
-      background: #ece0cf;
-      border-radius: 99px;
-      overflow: hidden;
-      margin-bottom: 12px;
-      padding: 2px;
-    }
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #ffa726, #fb8c00);
-      border-radius: 99px;
-      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .stats-footer {
-      font-size: 12px;
-      color: var(--text-sub);
+    .pomo-btns {
       display: flex;
-      justify-content: space-between;
-      font-weight: 600;
-    }
-
-    /* 输入区 */
-    .input-card {
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
-      border-radius: 24px;
-      padding: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(121, 85, 72, 0.06);
-    }
-    .input-wrapper {
-      display: flex;
-      align-items: center;
       gap: 10px;
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 6px 8px 6px 16px;
-      border: 2px solid #e0d2c0;
-      margin-bottom: 14px;
-      transition: border-color 0.2s;
     }
-    .input-wrapper:focus-within {
-      border-color: var(--capy-orange);
-    }
-    input[type="text"] {
-      flex: 1;
-      background: transparent;
+    .pomo-btn {
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 20px;
       border: none;
-      color: var(--capy-dark);
-      font-size: 15px;
-      outline: none;
-      font-weight: 500;
-    }
-    input[type="text"]::placeholder {
-      color: #bcaaa4;
-    }
-    .btn-submit {
-      width: 40px;
-      height: 40px;
-      border-radius: 13px;
-      background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-      border: none;
-      color: #fff;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(245, 124, 0, 0.35);
-      transition: transform 0.12s ease;
+      transition: 0.2s;
     }
-    .btn-submit:active {
-      transform: scale(0.92);
-    }
+    .pomo-btn.start { background: #238636; color: white; }
+    .pomo-btn.reset { background: #21262D; color: #8B949E; border: 1px solid #30363D; }
 
-    /* 豚门标签 */
-    .tag-selector {
+    /* 今日待办 */
+    .todo-input-bar {
       display: flex;
       gap: 8px;
     }
-    .tag-chip {
-      padding: 6px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 700;
-      border: 1.5px solid transparent;
-      background: #f0e4d4;
-      color: var(--capy-brown);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .tag-chip.active {
-      background: #ffffff;
-      border-color: var(--capy-orange);
-      color: var(--capy-orange);
-      box-shadow: 0 3px 8px rgba(255, 143, 0, 0.2);
-      transform: translateY(-1px);
-    }
-
-    /* 筛选状态 */
-    .tabs {
-      display: flex;
-      background: #ebdccb;
-      padding: 4px;
-      border-radius: 16px;
-      margin-bottom: 16px;
-    }
-    .tab {
+    .todo-input {
       flex: 1;
-      text-align: center;
-      padding: 8px;
+      background: #0D1117;
+      border: 1px solid #30363D;
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: white;
       font-size: 13px;
-      font-weight: 700;
-      border-radius: 12px;
-      color: var(--capy-brown);
+      outline: none;
+    }
+    .todo-input:focus { border-color: #58A6FF; }
+    .todo-add-btn {
+      background: #238636;
       border: none;
-      background: transparent;
+      color: white;
+      border-radius: 6px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: bold;
       cursor: pointer;
-      transition: all 0.2s;
     }
-    .tab.active {
-      background: #ffffff;
-      color: var(--capy-dark);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
-    }
-
-    /* 计划卡片 */
-    .task-list {
+    .todo-list {
+      list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
     }
-    .task-item {
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
-      border-radius: 20px;
-      padding: 14px 16px;
+    .todo-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 5px 14px rgba(121, 85, 72, 0.05);
-      animation: slideIn 0.25s ease-out;
-      transition: all 0.2s;
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .task-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex: 1;
-    }
-
-    /* 水豚橘子复选框 */
-    .checkbox {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 2px dashed #bcaaa4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
-      background: #ffffff;
-      font-size: 16px;
-      transition: all 0.2s;
-    }
-    .task-item.done .checkbox {
-      border: none;
-      background: transparent;
-      transform: scale(1.15);
-    }
-
-    .task-content {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .task-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--capy-dark);
-      line-height: 1.4;
-      transition: all 0.2s;
-    }
-    .task-item.done .task-title {
-      text-decoration: line-through;
-      color: #bcaaa4;
-    }
-    .category-badge {
-      align-self: flex-start;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 7px;
+      background: #0D1117;
+      padding: 8px 10px;
       border-radius: 6px;
+      font-size: 13px;
+      border: 1px solid #21262D;
     }
-    .category-头顶橘子 { background: var(--capy-orange-soft); color: var(--capy-orange); }
-    .category-温泉发呆 { background: var(--spa-soft); color: var(--spa-blue); }
-    .category-嚼嚼草叶 { background: var(--leaf-soft); color: var(--leaf-green); }
-
-    .btn-delete {
-      background: transparent;
-      border: none;
-      color: #bcaaa4;
+    .todo-item.done span {
+      text-decoration: line-through;
+      color: #484F58;
+    }
+    .del-btn {
+      color: #8B949E;
       cursor: pointer;
-      padding: 8px;
-      font-size: 16px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: color 0.15s;
+      font-size: 12px;
     }
-    .btn-delete:active {
-      color: #d32f2f;
-    }
+    .del-btn:hover { color: #F85149; }
 
-    /* 空状态 */
-    .empty-placeholder {
-      text-align: center;
-      padding: 40px 0;
-      color: var(--text-sub);
-      font-size: 14px;
-      line-height: 1.8;
-      font-weight: 500;
+    /* 快捷链接网格 */
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .link-chip {
+      background: #0D1117;
+      border: 1px solid #30363D;
+      color: #58A6FF;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      transition: 0.2s;
+    }
+    .link-chip:hover {
+      background: #1F242C;
+      border-color: #58A6FF;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- 顶部状态栏 -->
-    <header class="app-header">
-      <div class="header-text">
-        <div class="date-pill" id="currentDate">TODAY</div>
-        <h1>水豚噜噜清单</h1>
-      </div>
-      <div class="capy-avatar">🍊🦫</div>
-    </header>
 
-    <!-- 泡澡能量进度看板 -->
-    <section class="dashboard">
-      <div class="dash-top">
-        <span class="label">♨️ 噜噜泡澡完成度</span>
-        <span class="percent" id="percentNum">0%</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progressBar"></div>
-      </div>
-      <div class="stats-footer">
-        <span id="remainCount">待办: 0 件</span>
-        <span id="finishCount">已松弛搞定: 0 件</span>
-      </div>
-    </section>
-
-    <!-- 气泡输入卡片 -->
-    <section class="input-card">
-      <div class="input-wrapper">
-        <input type="text" id="taskInput" placeholder="慢悠悠记下一件事..." maxlength="35">
-        <button class="btn-submit" id="addBtn">＋</button>
-      </div>
-      <div class="tag-selector" id="tagGroup">
-        <div class="tag-chip active" data-cat="头顶橘子">🍊 头顶橘子</div>
-        <div class="tag-chip" data-cat="温泉发呆">♨️ 温泉发呆</div>
-        <div class="tag-chip" data-cat="嚼嚼草叶">🌿 嚼嚼草叶</div>
-      </div>
-    </section>
-
-    <!-- 筛选栏 -->
-    <nav class="tabs">
-      <button class="tab active" data-filter="all">全部计划</button>
-      <button class="tab" data-filter="active">未完成</button>
-      <button class="tab" data-filter="done">已搞定</button>
-    </nav>
-
-    <!-- 计划列表 -->
-    <main class="task-list" id="taskList"></main>
+<div class="workspace">
+  <!-- 问候与时钟 -->
+  <div class="hero-header">
+    <div>
+      <div class="greeting-title" id="greeting-txt">你好，开始专注的一天</div>
+      <div class="greeting-sub" id="date-txt">加载日期中...</div>
+    </div>
+    <div class="clock-display" id="time-txt">00:00:00</div>
   </div>
 
-  <script>
-    let tasks = JSON.parse(localStorage.getItem('capy_tasks') || '[]');
-    let currentCategory = '头顶橘子';
-    let currentFilter = 'all';
+  <!-- 核心工具矩阵 -->
+  <div class="card">
+    <div class="card-title">🚀 我的工具箱 (My Apps)</div>
+    <div class="tool-grid">
+      <a href="game.html" class="tool-item">
+        <span class="tool-icon">🪵</span>
+        <span class="tool-name">解压木鱼</span>
+        <span class="tool-desc">水豚投喂 / 烦恼粉碎</span>
+      </a>
+      <a href="capy.html" class="tool-item">
+        <span class="tool-icon">📝</span>
+        <span class="tool-name">桌面便签</span>
+        <span class="tool-desc">看板分类 / 灵感速记</span>
+      </a>
+      <a href="stock.html" class="tool-item">
+        <span class="tool-icon">📈</span>
+        <span class="tool-name">股票监控</span>
+        <span class="tool-desc">走势分时 / 盘面诊断</span>
+      </a>
+    </div>
+  </div>
 
-    // 格式化今日日期
-    const dateEl = document.getElementById('currentDate');
+  <!-- 主体工作区 (双栏) -->
+  <div class="grid-container">
+    <!-- 番茄钟 -->
+    <div class="card">
+      <div class="card-title">⏱️ 番茄专注钟 (Pomodoro)</div>
+      <div class="pomo-wrap">
+        <div class="pomo-timer" id="pomo-time">25:00</div>
+        <div class="pomo-btns">
+          <button class="pomo-btn start" id="pomo-toggle" onclick="togglePomodoro()">开始专注</button>
+          <button class="pomo-btn reset" onclick="resetPomodoro()">重置</button>
+        </div>
+      </div>
+      <div style="font-size: 11px; color: #8B949E; text-align: center;">25 分钟专注，5 分钟休息，劳逸结合</div>
+    </div>
+
+    <!-- 迷你待办清单 -->
+    <div class="card">
+      <div class="card-title">📋 今日待办清单</div>
+      <div class="todo-input-bar">
+        <input type="text" id="todo-input" class="todo-input" placeholder="添加待办事项..." onkeydown="if(event.key==='Enter')addTodo()">
+        <button class="todo-add-btn" onclick="addTodo()">添加</button>
+      </div>
+      <ul class="todo-list" id="todo-list"></ul>
+    </div>
+  </div>
+
+  <!-- 常用外链导航 -->
+  <div class="card">
+    <div class="card-title">🔗 快速通道 (Bookmarks)</div>
+    <div class="quick-links">
+      <a href="https://github.com/execute-xm/pomodoro" target="_blank" class="link-chip">🐙 本仓库 GitHub</a>
+      <a href="https://github.com" target="_blank" class="link-chip">💻 GitHub 首页</a>
+      <a href="https://www.bilibili.com" target="_blank" class="link-chip">📺 哔哩哔哩</a>
+      <a href="https://www.zhihu.com" target="_blank" class="link-chip">📖 知乎</a>
+      <a href="https://v2ex.com" target="_blank" class="link-chip">💬 V2EX</a>
+      <a href="https://juejin.cn" target="_blank" class="link-chip">⚡ 稀土掘金</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 1. 实时时间与动态问候
+  function updateClock() {
     const now = new Date();
-    dateEl.textContent = `${now.getMonth() + 1}月${now.getDate()}日 · 情绪稳定的一天`;
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById("time-txt").innerText = `${h}:${m}:${s}`;
 
-    const taskInput = document.getElementById('taskInput');
-    const addBtn = document.getElementById('addBtn');
-    const taskList = document.getElementById('taskList');
-    const percentNum = document.getElementById('percentNum');
-    const progressBar = document.getElementById('progressBar');
-    const remainCount = document.getElementById('remainCount');
-    const finishCount = document.getElementById('finishCount');
-    const tagChips = document.querySelectorAll('.tag-chip');
-    const tabs = document.querySelectorAll('.tab');
+    const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+    const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 · ${days[now.getDay()]}`;
+    document.getElementById("date-txt").innerText = dateStr;
 
-    // 标签切换
-    tagChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        tagChips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        currentCategory = chip.dataset.cat;
-      });
-    });
+    const hour = now.getHours();
+    let greet = "晚上好，愿今天收获满满";
+    if (hour >= 5 && hour < 12) greet = "早上好，元气满满的一天开始啦 ☀️";
+    else if (hour >= 12 && hour < 18) greet = "下午好，保持专注与高效 ☕";
+    document.getElementById("greeting-txt").innerText = greet;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
 
-    // 状态过滤切换
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        currentFilter = tab.dataset.filter;
-        render();
-      });
-    });
+  // 2. 番茄钟
+  let timeLeft = 25 * 60;
+  let timerInterval = null;
+  let isPomoRunning = false;
 
-    function save() {
-      localStorage.setItem('capy_tasks', JSON.stringify(tasks));
-      render();
+  function formatTime(seconds) {
+    const min = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const sec = String(seconds % 60).padStart(2, '0');
+    return `${min}:${sec}`;
+  }
+
+  function togglePomodoro() {
+    const btn = document.getElementById("pomo-toggle");
+    if (!isPomoRunning) {
+      isPomoRunning = true;
+      btn.innerText = "暂停专注";
+      btn.style.background = "#D29922";
+      timerInterval = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          document.getElementById("pomo-time").innerText = formatTime(timeLeft);
+        } else {
+          clearInterval(timerInterval);
+          isPomoRunning = false;
+          btn.innerText = "开始专注";
+          btn.style.background = "#238636";
+          alert("🎉 恭喜！一个番茄时间已完成，去敲敲水豚休息 5 分钟吧！");
+          resetPomodoro();
+        }
+      }, 1000);
+    } else {
+      isPomoRunning = false;
+      btn.innerText = "继续专注";
+      btn.style.background = "#238636";
+      clearInterval(timerInterval);
     }
+  }
 
-    function render() {
-      const filtered = tasks.filter(t => {
-        if (currentFilter === 'active') return !t.completed;
-        if (currentFilter === 'done') return t.completed;
-        return true;
-      });
+  function resetPomodoro() {
+    clearInterval(timerInterval);
+    isPomoRunning = false;
+    timeLeft = 25 * 60;
+    document.getElementById("pomo-time").innerText = "25:00";
+    const btn = document.getElementById("pomo-toggle");
+    btn.innerText = "开始专注";
+    btn.style.background = "#238636";
+  }
 
-      if (filtered.length === 0) {
-        taskList.innerHTML = `
-          <div class="empty-placeholder">
-            ${currentFilter === 'done' ? '还没有搞定的计划呢～' : '空空如也～<br>像水豚一样放空，或者记下今天的第一件事 🍊'}
-          </div>`;
-      } else {
-        taskList.innerHTML = filtered.map(t => `
-          <div class="task-item ${t.completed ? 'done' : ''}">
-            <div class="task-left">
-              <div class="checkbox" onclick="toggleTask(${t.id})">
-                ${t.completed ? '🍊' : ''}
-              </div>
-              <div class="task-content">
-                <span class="category-badge category-${t.category}">${t.category}</span>
-                <span class="task-title">${t.title}</span>
-              </div>
-            </div>
-            <button class="btn-delete" onclick="deleteTask(${t.id})">✕</button>
-          </div>
-        `).join('');
-      }
+  // 3. 今日待办逻辑
+  let todos = JSON.parse(localStorage.getItem("ws_todos") || "[]");
 
-      // 计算泡澡进度
-      const total = tasks.length;
-      const completed = tasks.filter(t => t.completed).length;
-      const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
-
-      percentNum.textContent = `${percent}%`;
-      progressBar.style.width = `${percent}%`;
-      remainCount.textContent = `待办: ${total - completed} 件`;
-      finishCount.textContent = `已松弛搞定: ${completed} 件`;
+  function saveAndRenderTodos() {
+    localStorage.setItem("ws_todos", JSON.stringify(todos));
+    const list = document.getElementById("todo-list");
+    list.innerHTML = "";
+    if (todos.length === 0) {
+      list.innerHTML = `<li style="text-align:center; font-size:12px; color:#484F58; padding:12px;">暂无待办，输入即可添加 ✨</li>`;
+      return;
     }
-
-    function addTask() {
-      const text = taskInput.value.trim();
-      if (!text) return;
-
-      tasks.unshift({
-        id: Date.now(),
-        title: text,
-        category: currentCategory,
-        completed: false
-      });
-
-      taskInput.value = '';
-      save();
-    }
-
-    window.toggleTask = function(id) {
-      tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
-      save();
-    };
-
-    window.deleteTask = function(id) {
-      tasks = tasks.filter(t => t.id !== id);
-      save();
-    };
-
-    addBtn.addEventListener('click', addTask);
-    taskInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') addTask();
+    todos.forEach((todo, idx) => {
+      const li = document.createElement("li");
+      li.className = `todo-item ${todo.done ? 'done' : ''}`;
+      li.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleTodo(${idx})">
+          <input type="checkbox" ${todo.done ? 'checked' : ''} style="cursor:pointer;">
+          <span>${todo.text}</span>
+        </div>
+        <span class="del-btn" onclick="deleteTodo(${idx})">✕</span>
+      `;
+      list.appendChild(li);
     });
+  }
 
-    // 初始渲染
-    render();
-  </script>
+  function addTodo() {
+    const input = document.getElementById("todo-input");
+    const val = input.value.trim();
+    if (!val) return;
+    todos.push({ text: val, done: false });
+    input.value = "";
+    saveAndRenderTodos();
+  }
+
+  function toggleTodo(idx) {
+    todos[idx].done = !todos[idx].done;
+    saveAndRenderTodos();
+  }
+
+  function deleteTodo(idx) {
+    todos.splice(idx, 1);
+    saveAndRenderTodos();
+  }
+
+  saveAndRenderTodos();
+</script>
 </body>
 </html>
