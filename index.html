@@ -26,7 +26,6 @@
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
     }
 
-    /* 手机与电脑统一左右分栏 */
     body {
       background: linear-gradient(135deg, #FFF0F4 0%, #FFE6EC 50%, #FFDCE6 100%);
       color: var(--text-main);
@@ -38,7 +37,7 @@
       width: 100vw;
     }
 
-    /* 左侧固定垂直侧边导航栏 */
+    /* 左侧固定垂直侧边导航栏 (Hello Kitty 图标) */
     .sidebar {
       width: 62px;
       min-width: 62px;
@@ -49,7 +48,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px 0;
+      padding: 10px 0;
       position: sticky;
       top: 0;
       height: 100vh;
@@ -58,30 +57,30 @@
     }
 
     .brand-avatar {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       background: #FFE8EF;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       border: 1.5px solid var(--primary-pink);
       flex-shrink: 0;
-      box-shadow: 0 3px 8px rgba(255, 133, 161, 0.2);
+      box-shadow: 0 2px 6px rgba(255, 133, 161, 0.2);
     }
 
     .nav-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 5px;
       width: 100%;
       align-items: center;
     }
 
     .nav-item {
       width: 50px;
-      height: 48px;
+      height: 44px;
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -100,8 +99,8 @@
     }
 
     .nav-kitty-icon {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       fill: currentColor;
     }
 
@@ -121,7 +120,7 @@
       height: 100vh;
     }
 
-    /* 模块页面容器：彻底修复切换无响应问题 */
+    /* 模块页面容器 */
     .module-page {
       display: none;
       flex-direction: column;
@@ -214,7 +213,6 @@
       gap: 4px;
       color: var(--deep-pink);
       font-weight: bold;
-      cursor: pointer;
     }
     .weather-dropdown {
       background: transparent;
@@ -380,6 +378,17 @@
     .p-mid { background: #FFF0D6; color: #D47B00; }
     .p-low { background: #E8F5E9; color: #2E7D32; }
 
+    /* 学习标签卡片 */
+    .study-cat-badge {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .cat-en { background: #E3F2FD; color: #1976D2; }
+    .cat-ai { background: #EDE7F6; color: #5E35B1; }
+    .cat-copy { background: #FCE4EC; color: #C2185B; }
+
     .food-img-thumb {
       width: 40px;
       height: 40px;
@@ -441,30 +450,37 @@
       border-radius: 3px;
     }
 
-    /* 日记三板块 */
-    .diary-section-box {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .diary-sec-label {
+    /* 新·周复盘板块样式 */
+    .review-textarea {
+      width: 100%;
+      height: 130px;
+      background: #FFF8FA;
+      border: 1.5px solid var(--border-pink);
+      border-radius: 10px;
+      padding: 10px;
       font-size: 11px;
-      font-weight: 800;
-      color: var(--deep-pink);
+      color: var(--text-main);
+      outline: none;
+      resize: vertical;
+      line-height: 1.6;
+    }
+    .review-textarea:focus {
+      border-color: var(--primary-pink);
+      background: #FFFFFF;
     }
     .photo-upload-zone {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       border: 1.5px dashed var(--soft-pink);
-      padding: 6px;
-      border-radius: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
       background: #FFFBFD;
     }
-    .diary-photo-preview {
-      width: 44px;
-      height: 44px;
-      border-radius: 6px;
+    .review-photo-preview {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
       object-fit: cover;
       display: none;
     }
@@ -472,47 +488,53 @@
 </head>
 <body>
 
-  <!-- 左侧固定垂直侧边导航栏 (Hello Kitty 专属图标) -->
+  <!-- 左侧固定垂直侧边导航栏 -->
   <aside class="sidebar">
     <div class="brand-avatar" title="Hello Kitty 蝴蝶结">
-      <svg viewBox="0 0 100 100" style="width: 24px; height: 24px;">
+      <svg viewBox="0 0 100 100" style="width: 22px; height: 22px;">
         <path d="M 50,50 M 50,42 C 45,35 30,30 20,40 C 10,50 18,65 30,62 C 40,60 46,54 50,48 C 54,54 60,60 70,62 C 82,65 90,50 80,40 C 70,30 55,35 50,42 Z" fill="var(--accent-bow)"/>
         <circle cx="50" cy="48" r="7" fill="#FFA6BA" stroke="var(--accent-bow)" stroke-width="2"/>
       </svg>
     </div>
 
     <nav class="nav-list">
-      <!-- 桌面 -->
+      <!-- 1. 桌面 -->
       <div class="nav-item active" id="btn-desktop" onclick="switchNav('desktop')">
         <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12c0 2.2.7 4.2 2 5.8L3 21l3.5-.9C8 21.2 9.9 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm-4 7c.8 0 1.5.7 1.5 1.5S8.8 12 8 12s-1.5-.7-1.5-1.5S7.2 9 8 9zm8 0c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5zm-4 6c-1.8 0-3.3-1.1-3.8-2.6.2 0 .5.1.8.1 1.2 0 2.2-.6 2.8-1.5.6.9 1.6 1.5 2.8 1.5.3 0 .6-.1.8-.1-.5 1.5-2 2.6-3.8 2.6z"/></svg>
         <span class="nav-label">桌面</span>
       </div>
 
-      <!-- 待办 -->
+      <!-- 2. 待办 -->
       <div class="nav-item" id="btn-todo" onclick="switchNav('todo')">
         <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8 4c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm-1 10l-4-4 1.4-1.4L10 14.2l7.6-7.6L19 8l-9 9z"/></svg>
         <span class="nav-label">待办</span>
       </div>
 
-      <!-- 记账 -->
+      <!-- 3. 学习 (英语、AI使用、文案) -->
+      <div class="nav-item" id="btn-study" onclick="switchNav('study')">
+        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        <span class="nav-label">学习</span>
+      </div>
+
+      <!-- 4. 记账 -->
       <div class="nav-item" id="btn-money" onclick="switchNav('money')">
         <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M12 21.4l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.4z"/></svg>
         <span class="nav-label">记账</span>
       </div>
 
-      <!-- 饮食 -->
+      <!-- 5. 饮食 -->
       <div class="nav-item" id="btn-diet" onclick="switchNav('diet')">
         <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 4.12 2.8 7.58 6.64 8.65.68-.37 1.36-.65 2.36-.65 1 0 1.68.28 2.36.65 3.84-1.07 6.64-4.53 6.64-8.65 0-4.97-4.03-9-9-9zm1 5.5c0 .83-.67 1.5-1.5 1.5S10 9.33 10 8.5 10.67 7 11.5 7s1.5.67 1.5 1.5z"/></svg>
         <span class="nav-label">饮食</span>
       </div>
 
-      <!-- 日记 -->
-      <div class="nav-item" id="btn-diary" onclick="switchNav('diary')">
-        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        <span class="nav-label">日记</span>
+      <!-- 6. 周复盘 -->
+      <div class="nav-item" id="btn-review" onclick="switchNav('review')">
+        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+        <span class="nav-label">复盘</span>
       </div>
 
-      <!-- 设置 -->
+      <!-- 7. 设置 -->
       <div class="nav-item" id="btn-settings" onclick="switchNav('settings')">
         <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
         <span class="nav-label">设置</span>
@@ -548,7 +570,7 @@
         </div>
       </div>
 
-      <!-- 语录卡片：中文句子 + 英文翻译 -->
+      <!-- 语录卡片 -->
       <div class="quote-card">
         <div class="quote-zh" id="quote-zh">“保持热爱，奔赴山海，今天的你也是最棒的小朋友。”</div>
         <div class="quote-en" id="quote-en">"Keep love in your heart, every day is full of gentle miracles."</div>
@@ -588,8 +610,8 @@
             <div class="val" id="ov-todo-count">0 项</div>
           </div>
           <div class="overview-item">
-            <div class="lbl">今日摄入</div>
-            <div class="val" id="ov-diet-cal">0 kcal</div>
+            <div class="lbl">学习打卡</div>
+            <div class="val" id="ov-study-count">0 项</div>
           </div>
           <div class="overview-item">
             <div class="lbl">今日消费</div>
@@ -634,41 +656,38 @@
       </div>
     </section>
 
-    <!-- 3. 饮食板块 -->
-    <section class="module-page" id="page-diet">
+    <!-- 3. 学习板块 (英语、AI使用、文案) -->
+    <section class="module-page" id="page-study">
       <div class="card">
-        <div class="card-title">🥗 饮食记录与热量</div>
+        <div class="card-title">📚 添加学习提升任务</div>
         <div class="form-group">
+          <input type="text" id="study-txt" class="custom-input" placeholder="学习内容 (如: 背50个雅思单词 / AI工作流实战 / 爆款文案拆解)...">
           <div class="form-row">
-            <input type="text" id="diet-name" class="custom-input" placeholder="食物名称">
-            <input type="number" id="diet-cal" class="custom-input" placeholder="热量(kcal)">
-          </div>
-          <div class="form-row">
-            <select id="diet-meal" class="custom-input">
-              <option value="早餐">早餐 🍳</option>
-              <option value="午餐">午餐 🍱</option>
-              <option value="晚餐">晚餐 🍲</option>
-              <option value="加餐">加餐 🍰</option>
+            <select id="study-cat" class="custom-input" style="flex:1;">
+              <option value="英语">🇬🇧 英语</option>
+              <option value="AI使用">🤖 AI使用</option>
+              <option value="文案">✍️ 文案</option>
             </select>
-            <input type="date" id="diet-date" class="custom-input">
-          </div>
-          <div class="form-row" style="align-items: center;">
-            <label style="font-size:10px; color:var(--text-sub); cursor:pointer;">
-              📷 上传食物照片:
-              <input type="file" id="diet-file" accept="image/*" style="display:none;" onchange="previewDietImg(this)">
-            </label>
-            <img id="diet-preview" class="food-img-thumb" style="display:none;">
-            <button class="primary-btn" style="margin-left:auto;" onclick="addDietRecord()">录入饮食</button>
+            <input type="date" id="study-date" class="custom-input" style="flex:1.2;">
+            <button class="primary-btn" onclick="addStudyItem()">打卡记录</button>
           </div>
         </div>
       </div>
 
       <div class="card">
         <div class="card-title">
-          <span>🍓 历史饮食记录</span>
-          <span style="font-size:11px; font-weight:800; color:var(--accent-bow);" id="diet-total-today">今日摄入: 0 kcal</span>
+          <span>📖 今日学习清单</span>
+          <span style="font-size:10px; color:var(--text-sub); font-weight:normal;" id="study-pending-count">0 项</span>
         </div>
-        <div class="stream-list" id="diet-history-list"></div>
+        <div class="stream-list" id="study-pending-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🌟 已掌握与完成</span>
+          <span style="font-size:10px; color:var(--text-sub); font-weight:normal;" id="study-done-count">0 项</span>
+        </div>
+        <div class="stream-list" id="study-done-list"></div>
       </div>
     </section>
 
@@ -717,50 +736,77 @@
       </div>
     </section>
 
-    <!-- 5. 日记板块 -->
-    <section class="module-page" id="page-diary">
+    <!-- 5. 饮食板块 -->
+    <section class="module-page" id="page-diet">
+      <div class="card">
+        <div class="card-title">🥗 饮食记录与热量</div>
+        <div class="form-group">
+          <div class="form-row">
+            <input type="text" id="diet-name" class="custom-input" placeholder="食物名称">
+            <input type="number" id="diet-cal" class="custom-input" placeholder="热量(kcal)">
+          </div>
+          <div class="form-row">
+            <select id="diet-meal" class="custom-input">
+              <option value="早餐">早餐 🍳</option>
+              <option value="午餐">午餐 🍱</option>
+              <option value="晚餐">晚餐 🍲</option>
+              <option value="加餐">加餐 🍰</option>
+            </select>
+            <input type="date" id="diet-date" class="custom-input">
+          </div>
+          <div class="form-row" style="align-items: center;">
+            <label style="font-size:10px; color:var(--text-sub); cursor:pointer;">
+              📷 上传食物照片:
+              <input type="file" id="diet-file" accept="image/*" style="display:none;" onchange="previewDietImg(this)">
+            </label>
+            <img id="diet-preview" class="food-img-thumb" style="display:none;">
+            <button class="primary-btn" style="margin-left:auto;" onclick="addDietRecord()">录入饮食</button>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-title">
-          <span>📖 今日日记</span>
-          <input type="date" id="diary-filter-date" class="custom-input" style="width:115px; padding:2px 4px;" onchange="loadDiaryByDate()">
+          <span>🍓 历史饮食记录</span>
+          <span style="font-size:11px; font-weight:800; color:var(--accent-bow);" id="diet-total-today">今日摄入: 0 kcal</span>
+        </div>
+        <div class="stream-list" id="diet-history-list"></div>
+      </div>
+    </section>
+
+    <!-- 6. 周复盘板块 (自由复盘总结 + 下周展望 + 照片记录) -->
+    <section class="module-page" id="page-review">
+      <div class="card">
+        <div class="card-title">
+          <span>🗓️ 本周复盘与总结 (Weekly Review)</span>
+          <input type="week" id="review-filter-week" class="custom-input" style="width:140px; padding:2px 4px;" onchange="loadReviewByWeek()">
         </div>
         <div class="form-group">
-          <!-- 3件觉得感恩的事 -->
-          <div class="diary-section-box">
-            <span class="diary-sec-label">🌸 3件觉得感恩的事：</span>
-            <input type="text" id="d-thank-1" class="custom-input" placeholder="1. 第一件感恩的事...">
-            <input type="text" id="d-thank-2" class="custom-input" placeholder="2. 第二件感恩的事...">
-            <input type="text" id="d-thank-3" class="custom-input" placeholder="3. 第三件感恩的事...">
+          <div>
+            <div style="font-size:11px; font-weight:800; color:var(--deep-pink); margin-bottom:4px;">✨ 本周收获、心得与成长复盘：</div>
+            <textarea id="rev-content" class="review-textarea" placeholder="自由写下这周的得与失、工作与学习收获、生活里的微小确幸，或者值得自我夸赞的点滴..."></textarea>
           </div>
 
-          <!-- 2件值得改进的事 -->
-          <div class="diary-section-box">
-            <span class="diary-sec-label">🌿 2件值得改进的事：</span>
-            <input type="text" id="d-imp-1" class="custom-input" placeholder="1. 第一件值得改进的事...">
-            <input type="text" id="d-imp-2" class="custom-input" placeholder="2. 第二件值得改进的事...">
+          <div>
+            <div style="font-size:11px; font-weight:800; color:var(--deep-pink); margin-bottom:4px;">🎯 下周核心目标与改进方向：</div>
+            <input type="text" id="rev-goal" class="custom-input" placeholder="例如: 英语刷完3套真题、少熬夜、写完AI项目初稿...">
           </div>
 
-          <!-- 1件对自己肯定的事 -->
-          <div class="diary-section-box">
-            <span class="diary-sec-label">✨ 1件对自己肯定的事：</span>
-            <input type="text" id="d-praise" class="custom-input" placeholder="1. 对自己的肯定与夸赞...">
-          </div>
-
-          <!-- 传照片窗口 -->
+          <!-- 照片上传窗口 -->
           <div class="photo-upload-zone">
             <label style="font-size:10px; color:var(--text-sub); cursor:pointer;">
-              📷 点击上传今日照片:
-              <input type="file" id="diary-photo-file" accept="image/*" style="display:none;" onchange="previewDiaryPhoto(this)">
+              📷 点击上传本周美好纪念照:
+              <input type="file" id="rev-photo-file" accept="image/*" style="display:none;" onchange="previewReviewPhoto(this)">
             </label>
-            <img id="diary-photo-preview" class="diary-photo-preview">
+            <img id="rev-photo-preview" class="review-photo-preview">
           </div>
 
-          <button class="primary-btn" style="align-self: flex-end;" onclick="saveCurrentDiary()">保存当天日记</button>
+          <button class="primary-btn" style="align-self: flex-end;" onclick="saveCurrentReview()">保存本周复盘</button>
         </div>
       </div>
     </section>
 
-    <!-- 6. 设置板块 -->
+    <!-- 7. 设置板块 -->
     <section class="module-page" id="page-settings">
       <div class="card">
         <div class="card-title">⚙️ 工作台设置</div>
@@ -773,7 +819,7 @@
       <div class="card">
         <div class="card-title">📦 本地数据管理</div>
         <p style="font-size:11px; color:var(--text-sub); line-height:1.5;">
-          所有待办、记账、饮食与日记全部独立保存在本地 localStorage 中，刷新永久保留。
+          所有待办、学习任务、记账、饮食与周复盘全部独立保存在本地 localStorage 中，刷新永久保留。
         </p>
         <button class="primary-btn" style="background:#E25574; align-self:flex-start;" onclick="clearLocalStorageData()">⚠️ 清空重置全部数据</button>
       </div>
@@ -782,15 +828,13 @@
   </main>
 
 <script>
-  // 1. 单页精准平滑切换 (修复点不到的关键逻辑)
+  // 1. 单页平滑切换
   function switchNav(pageKey) {
     try {
-      // 导航高亮
       document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
       const activeBtn = document.getElementById(`btn-${pageKey}`);
       if (activeBtn) activeBtn.classList.add('active');
 
-      // 模块显隐
       document.querySelectorAll('.module-page').forEach(page => {
         page.classList.remove('active-page');
       });
@@ -800,15 +844,13 @@
         targetPage.classList.add('active-page');
       }
 
-      // 滚动回到顶端
       const viewport = document.getElementById('main-viewport');
       if (viewport) viewport.scrollTop = 0;
 
-      // 关联更新对应模块的数据统计
       if (pageKey === 'desktop') updateOverview();
       if (pageKey === 'money') renderMonthlyChart();
     } catch(e) {
-      console.error("切换页面错误:", e);
+      console.error("切换错误:", e);
     }
   }
 
@@ -930,12 +972,23 @@
   if (weatherSel) weatherSel.value = savedWeather;
   changeWeather(savedWeather);
 
+  // 获取当前周次（格式：2026-W41）
+  function getCurrentWeekString() {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+    const week1 = new Date(d.getFullYear(), 0, 4);
+    const weekNum = 1 + Math.round(((d.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+    return `${d.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
+  }
+
   let todayStr = new Date().toISOString().split('T')[0];
   try {
     document.getElementById('todo-date').value = todayStr;
+    document.getElementById('study-date').value = todayStr;
     document.getElementById('diet-date').value = todayStr;
     document.getElementById('money-date').value = todayStr;
-    document.getElementById('diary-filter-date').value = todayStr;
+    document.getElementById('review-filter-week').value = getCurrentWeekString();
   } catch(e) {}
 
   // 5. 每日打卡
@@ -1043,7 +1096,80 @@
   }
   saveAndRenderTodos();
 
-  // 7. 饮食板块
+  // 7. 学习板块逻辑 (英语、AI使用、文案)
+  let studyTasks = [];
+  try {
+    studyTasks = JSON.parse(localStorage.getItem('wk_study_tasks') || '[]');
+  } catch(e) { studyTasks = []; }
+
+  function saveAndRenderStudy() {
+    try {
+      localStorage.setItem('wk_study_tasks', JSON.stringify(studyTasks));
+      const pendingList = document.getElementById('study-pending-list');
+      const doneList = document.getElementById('study-done-list');
+      if (!pendingList || !doneList) return;
+      pendingList.innerHTML = '';
+      doneList.innerHTML = '';
+
+      let pendingCount = 0;
+      let doneCount = 0;
+
+      studyTasks.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = `stream-item ${item.done ? 'is-done' : ''}`;
+        
+        const catClass = item.cat === '英语' ? 'cat-en' : (item.cat === 'AI使用' ? 'cat-ai' : 'cat-copy');
+        const badge = `<span class="study-cat-badge ${catClass}">${item.cat}</span>`;
+
+        div.innerHTML = `
+          <div style="display:flex; align-items:center; gap:5px; cursor:pointer;" onclick="toggleStudy(${index})">
+            <input type="checkbox" ${item.done ? 'checked' : ''} style="accent-color:var(--deep-pink); cursor:pointer;">
+            ${badge}
+            <span>${item.text} <small style="color:var(--text-sub)">(${item.date || '今日'})</small></span>
+          </div>
+          <span class="delete-action" onclick="deleteStudy(${index})">✕</span>
+        `;
+
+        if (item.done) {
+          doneList.appendChild(div);
+          doneCount++;
+        } else {
+          pendingList.appendChild(div);
+          pendingCount++;
+        }
+      });
+
+      if (pendingCount === 0) pendingList.innerHTML = `<div style="font-size:10px; color:var(--text-sub); text-align:center; padding:8px;">自律学习清单已清空，满级进步！📚</div>`;
+      if (doneCount === 0) doneList.innerHTML = `<div style="font-size:10px; color:var(--text-sub); text-align:center; padding:8px;">暂无已打卡项~</div>`;
+
+      document.getElementById('study-pending-count').innerText = `${pendingCount} 项`;
+      document.getElementById('study-done-count').innerText = `${doneCount} 项`;
+      document.getElementById('ov-study-count').innerText = `${doneCount} 项已成`;
+    } catch(e) {}
+  }
+  function addStudyItem() {
+    const txt = document.getElementById('study-txt').value.trim();
+    if (!txt) return;
+    studyTasks.push({
+      text: txt,
+      cat: document.getElementById('study-cat').value,
+      date: document.getElementById('study-date').value,
+      done: false
+    });
+    document.getElementById('study-txt').value = '';
+    saveAndRenderStudy();
+  }
+  function toggleStudy(idx) {
+    studyTasks[idx].done = !studyTasks[idx].done;
+    saveAndRenderStudy();
+  }
+  function deleteStudy(idx) {
+    studyTasks.splice(idx, 1);
+    saveAndRenderStudy();
+  }
+  saveAndRenderStudy();
+
+  // 8. 饮食板块
   let dietRecords = [];
   try {
     dietRecords = JSON.parse(localStorage.getItem('wk_diet') || '[]');
@@ -1078,7 +1204,7 @@
           <div style="display:flex; align-items:center; gap:6px;">
             ${item.img ? `<img src="${item.img}" class="food-img-thumb">` : '🥗'}
             <div>
-              <div style="font-weight:bold; color:var(--deep-pink);">${item.name} · ${item.meal}</div>
+              <div style="font-weight:bold; color:var(--deep-pink);">${item.name} ·${item.meal}</div>
               <div style="font-size:10px; color:var(--text-sub);">${item.cal} kcal · ${item.date}</div>
             </div>
           </div>
@@ -1118,7 +1244,7 @@
   }
   saveAndRenderDiet();
 
-  // 8. 记账板块
+  // 9. 记账板块
   let currentMoneyType = 'spend';
   let moneyRecords = [];
   try {
@@ -1153,169 +1279,3 @@
           <div style="display:flex; align-items:center; gap:5px;">
             <span style="font-weight:bold; font-size:12px; color:${isSpend ? 'var(--accent-bow)' : '#2E7D32'};">
               ${isSpend ? '-' : '+'}￥${Number(item.amount).toFixed(2)}
-            </span>
-            <span class="delete-action" onclick="deleteMoney(${index})">✕</span>
-          </div>
-        `;
-        list.appendChild(div);
-      });
-
-      if (moneyRecords.length === 0) list.innerHTML = `<div style="font-size:10px; color:var(--text-sub); text-align:center; padding:8px;">暂无记账明细 💰</div>`;
-      document.getElementById('money-today-spend').innerText = `今日消费: ￥${todaySpend.toFixed(2)}`;
-      document.getElementById('ov-money-spend').innerText = `￥${todaySpend.toFixed(2)}`;
-      renderMonthlyChart();
-    } catch(e) {}
-  }
-  function addMoneyRecord() {
-    const amt = document.getElementById('money-amount').value.trim();
-    if (!amt || Number(amt) <= 0) {
-      alert("请输入有效价格！");
-      return;
-    }
-    moneyRecords.unshift({
-      type: currentMoneyType,
-      amount: Number(amt),
-      cat: document.getElementById('money-cat').value,
-      date: document.getElementById('money-date').value,
-      remark: document.getElementById('money-remark').value.trim()
-    });
-    document.getElementById('money-amount').value = '';
-    document.getElementById('money-remark').value = '';
-    saveAndRenderMoney();
-  }
-  function deleteMoney(idx) {
-    moneyRecords.splice(idx, 1);
-    saveAndRenderMoney();
-  }
-  function renderMonthlyChart() {
-    try {
-      const curYearMonth = todayStr.substring(0, 7);
-      document.getElementById('chart-month-lbl').innerText = `${curYearMonth} 月度`;
-
-      const catTotals = { '餐饮': 0, '公交': 0, '购物': 0, '其他': 0 };
-      let totalMonthSpend = 0;
-      let totalMonthIncome = 0;
-
-      moneyRecords.forEach(r => {
-        if (r.date && r.date.startsWith(curYearMonth)) {
-          if (r.type === 'spend') {
-            totalMonthSpend += Number(r.amount);
-            if (catTotals[r.cat] !== undefined) catTotals[r.cat] += Number(r.amount);
-            else catTotals['其他'] += Number(r.amount);
-          } else {
-            totalMonthIncome += Number(r.amount);
-          }
-        }
-      });
-
-      const box = document.getElementById('monthly-chart-box');
-      if (!box) return;
-      box.innerHTML = `
-        <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; border-bottom:1px dashed var(--border-pink); padding-bottom:5px;">
-          <span style="color:var(--deep-pink);">月总支出: ￥${totalMonthSpend.toFixed(2)}</span>
-          <span style="color:#2E7D32;">月总收入: ￥${totalMonthIncome.toFixed(2)}</span>
-        </div>
-      `;
-
-      for (const [cat, val] of Object.entries(catTotals)) {
-        const pct = totalMonthSpend > 0 ? ((val / totalMonthSpend) * 100).toFixed(0) : 0;
-        const row = document.createElement('div');
-        row.className = 'chart-row';
-        row.innerHTML = `
-          <div class="chart-label-row">
-            <span>${cat}</span>
-            <span style="font-weight:bold; color:var(--deep-pink);">￥${val.toFixed(2)} (${pct}%)</span>
-          </div>
-          <div class="chart-bar-bg">
-            <div class="chart-bar-fill" style="width: ${pct}%;"></div>
-          </div>
-        `;
-        box.appendChild(row);
-      }
-    } catch(e) {}
-  }
-  saveAndRenderMoney();
-
-  // 9. 日记板块
-  let diaryStore = {};
-  try {
-    diaryStore = JSON.parse(localStorage.getItem('wk_diaries') || '{}');
-  } catch(e) { diaryStore = {}; }
-  let currentDiaryPhoto = '';
-
-  function previewDiaryPhoto(input) {
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        currentDiaryPhoto = e.target.result;
-        const img = document.getElementById('diary-photo-preview');
-        img.src = currentDiaryPhoto;
-        img.style.display = 'block';
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-  function loadDiaryByDate() {
-    try {
-      const selectedDate = document.getElementById('diary-filter-date').value;
-      const entry = diaryStore[selectedDate] || {};
-
-      document.getElementById('d-thank-1').value = entry.thank1 || '';
-      document.getElementById('d-thank-2').value = entry.thank2 || '';
-      document.getElementById('d-thank-3').value = entry.thank3 || '';
-
-      document.getElementById('d-imp-1').value = entry.imp1 || '';
-      document.getElementById('d-imp-2').value = entry.imp2 || '';
-
-      document.getElementById('d-praise').value = entry.praise || '';
-
-      const img = document.getElementById('diary-photo-preview');
-      if (entry.photo) {
-        currentDiaryPhoto = entry.photo;
-        img.src = entry.photo;
-        img.style.display = 'block';
-      } else {
-        currentDiaryPhoto = '';
-        img.style.display = 'none';
-      }
-    } catch(e) {}
-  }
-  function saveCurrentDiary() {
-    const selectedDate = document.getElementById('diary-filter-date').value;
-    diaryStore[selectedDate] = {
-      thank1: document.getElementById('d-thank-1').value.trim(),
-      thank2: document.getElementById('d-thank-2').value.trim(),
-      thank3: document.getElementById('d-thank-3').value.trim(),
-      imp1: document.getElementById('d-imp-1').value.trim(),
-      imp2: document.getElementById('d-imp-2').value.trim(),
-      praise: document.getElementById('d-praise').value.trim(),
-      photo: currentDiaryPhoto
-    };
-    localStorage.setItem('wk_diaries', JSON.stringify(diaryStore));
-    alert(`🎉 ${selectedDate} 的日记已妥善保存！`);
-  }
-  loadDiaryByDate();
-
-  // 10. 设置板块
-  function saveConfigName() {
-    const name = document.getElementById('cfg-name').value.trim();
-    if (name) {
-      document.getElementById('home-greeting').innerText = `你好呀，${name} 🌸`;
-      document.title = name;
-      alert("工作台名称已成功修改！");
-    }
-  }
-  function clearLocalStorageData() {
-    if (confirm("确定清空全部本地数据吗？此操作不可撤销！")) {
-      localStorage.clear();
-      location.reload();
-    }
-  }
-  function updateOverview() {
-    saveAndRenderTodos();
-    saveAndRenderDiet();
-    saveAndRenderMoney();
-  }
-</script>
-</body>
-</html>
