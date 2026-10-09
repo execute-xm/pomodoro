@@ -3,398 +3,257 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🌸 软萌工作台 · Cozy Workspace 🍓</title>
+  <title>【(🌳) 的工作台】</title>
   <style>
+    :root {
+      --bg-pink: #FFF0F4;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --primary-pink: #FF85A1;
+      --deep-pink: #E05A7D;
+      --soft-pink: #FFD9E2;
+      --text-main: #5C3E48;
+      --text-sub: #9E7D88;
+      --accent-bow: #FF3B69;
+      --border-pink: #FFE2EB;
+      --radius-card: 18px;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
     }
+
     body {
-      background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 50%, #FFDFE8 100%);
-      color: #6D4C57;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #FFF0F4 0%, #FFE6EC 50%, #FFDCE6 100%);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
-      justify-content: center;
-      padding: 24px 16px;
-      position: relative;
+      overflow-x: hidden;
     }
 
-    /* 漂浮装饰 */
-    .floating-decor {
+    /* 左侧固定垂直侧边导航栏 */
+    .sidebar {
+      width: 72px;
+      background: rgba(255, 255, 255, 0.96);
+      border-right: 1.5px solid var(--border-pink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 0;
       position: fixed;
-      font-size: 22px;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.35;
-      animation: floatUpSlow linear infinite;
-    }
-    @keyframes floatUpSlow {
-      0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
-      15% { opacity: 0.45; }
-      85% { opacity: 0.45; }
-      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      box-shadow: 2px 0 12px rgba(255, 133, 161, 0.12);
     }
 
-    /* 主布局容器：稳定的左右并排 */
-    .workspace-wrap {
+    .brand-avatar {
+      width: 44px;
+      height: 44px;
+      background: #FFE8EF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      border: 1.5px solid var(--primary-pink);
+      box-shadow: 0 4px 8px rgba(255, 133, 161, 0.2);
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       width: 100%;
-      max-width: 1100px;
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-      position: relative;
-      z-index: 1;
-    }
-    @media (max-width: 860px) {
-      .workspace-wrap {
-        flex-direction: column;
-      }
+      align-items: center;
     }
 
-    /* 左侧边栏（固定宽度） */
-    .side-panel {
-      width: 280px;
-      flex-shrink: 0;
+    .nav-item {
+      width: 56px;
+      height: 52px;
+      border-radius: 14px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-    }
-    @media (max-width: 860px) {
-      .side-panel {
-        width: 100%;
-      }
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-sub);
+      gap: 2px;
     }
 
-    /* 右侧主内容区（弹性伸缩） */
-    .main-panel {
+    .nav-item:hover {
+      background: #FFF5F8;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, #FFA3BA 0%, #FF7597 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(255, 117, 151, 0.35);
+      transform: scale(1.03);
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .nav-label {
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* 右侧主视口内容区 */
+    .viewport {
+      margin-left: 72px;
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      min-width: 0;
+      padding: 16px 14px 36px;
+      max-width: 600px;
+      width: 100%;
+      margin-right: auto;
     }
 
-    /* 通用粉色卡片 */
+    /* 模块容器卡片 */
+    .module-page {
+      display: none;
+      animation: fadeInPage 0.2s ease-out forwards;
+    }
+    .module-page.active-page {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    @keyframes fadeInPage {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .card {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(8px);
-      border: 1.5px solid #FFD6DF;
-      border-radius: 20px;
-      padding: 18px 20px;
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      border: 1.5px solid var(--border-pink);
+      padding: 16px;
+      box-shadow: 0 6px 16px rgba(255, 133, 161, 0.1);
       display: flex;
       flex-direction: column;
       gap: 12px;
-      box-shadow: 0 8px 20px rgba(255, 182, 193, 0.25);
     }
+
     .card-title {
       font-size: 15px;
       font-weight: 800;
-      color: #D45B7A;
+      color: var(--deep-pink);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    /* 左侧工具按钮 */
-    .tool-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    /* 顶部仪表盘卡片 */
+    .hero-header {
+      background: linear-gradient(135deg, #FFFFFF 0%, #FFF4F7 100%);
+      border: 2px solid var(--soft-pink);
+      padding: 18px;
     }
-    .tool-btn {
-      background: #FFF5F7;
-      border: 1.5px solid #FFD6DF;
-      border-radius: 14px;
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-    .tool-btn:hover {
-      background: #FFE9EE;
-      border-color: #FF8DA1;
-      transform: translateX(4px);
-      box-shadow: 0 4px 12px rgba(255, 141, 161, 0.2);
-    }
-    .tool-icon {
-      font-size: 26px;
-      flex-shrink: 0;
-    }
-    .tool-info {
-      display: flex;
-      flex-direction: column;
-    }
-    .tool-name {
+
+    .greeting-text {
       font-size: 14px;
       font-weight: 700;
-      color: #9E3E58;
-    }
-    .tool-desc {
-      font-size: 11px;
-      color: #B58390;
-      margin-top: 2px;
+      color: var(--deep-pink);
     }
 
-    /* 随手备忘录 */
-    .memo-area {
-      width: 100%;
-      height: 110px;
-      background: #FFF5F7;
-      border: 1.5px solid #FFD6DF;
-      border-radius: 12px;
-      padding: 10px;
-      color: #6D4C57;
-      font-size: 12px;
-      outline: none;
-      resize: none;
-      line-height: 1.5;
-    }
-    .memo-area:focus {
-      border-color: #FF6B8B;
-      background: #FFFFFF;
-    }
-
-    /* 顶部问候横幅 */
-    .hero-header {
-      background: rgba(255, 255, 255, 0.95);
-      border: 2px solid #FFD1DC;
-      border-radius: 22px;
-      padding: 20px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 14px;
-      box-shadow: 0 10px 25px rgba(255, 182, 193, 0.35);
-    }
-    .greet-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-    .greet-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: #E85A7F;
-      transition: opacity 0.3s ease;
-    }
-    .refresh-btn {
-      background: #FFE4EC;
-      border: 1px solid #FFB6C1;
-      border-radius: 50%;
-      width: 26px;
-      height: 26px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 13px;
-    }
-    .clock-num {
-      font-size: 38px;
+    .clock-large {
+      font-size: 40px;
       font-weight: 900;
-      color: #FF6B8B;
-      font-variant-numeric: tabular-nums;
+      color: var(--accent-bow);
       letter-spacing: -1px;
-    }
-
-    /* 右侧双栏模块（番茄钟 + 今日待办） */
-    .two-col-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media (max-width: 680px) {
-      .two-col-grid { grid-template-columns: 1fr; }
-    }
-
-    /* 番茄钟 */
-    .pomo-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 0;
-    }
-    .pomo-timer {
-      font-size: 44px;
-      font-weight: 900;
-      color: #FF5A79;
+      line-height: 1.1;
+      margin: 4px 0;
       font-variant-numeric: tabular-nums;
     }
-    .pomo-btns {
-      display: flex;
-      gap: 10px;
-    }
-    .pomo-btn {
-      padding: 6px 18px;
+
+    .date-info {
       font-size: 12px;
-      font-weight: bold;
-      border-radius: 18px;
-      border: none;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .pomo-btn.start {
-      background: linear-gradient(135deg, #FF7B95 0%, #FF5A79 100%);
-      color: white;
-      box-shadow: 0 4px 10px rgba(255, 90, 121, 0.3);
-    }
-    .pomo-btn.reset {
-      background: #FFE8ED;
-      color: #A36B79;
-      border: 1px solid #FFCAD4;
+      color: var(--text-sub);
     }
 
-    /* 输入栏与列表 */
-    .input-bar {
-      display: flex;
-      gap: 8px;
-    }
-    .text-input {
-      flex: 1;
-      background: #FFF5F7;
-      border: 1.5px solid #FFD6DF;
-      border-radius: 10px;
-      padding: 7px 10px;
-      color: #6D4C57;
-      font-size: 12px;
-      outline: none;
-    }
-    .text-input:focus {
-      border-color: #FF6B8B;
-      background: #FFFFFF;
-    }
-    .action-btn {
-      background: linear-gradient(135deg, #FF7B95 0%, #FF5A79 100%);
-      border: none;
-      color: white;
-      border-radius: 10px;
-      padding: 0 14px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .item-list {
-      list-style: none;
+    /* 中英文语录卡片 */
+    .quote-card {
+      background: #FFF7F9;
+      border-left: 4px solid var(--primary-pink);
+      border-radius: 12px;
+      padding: 10px 14px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      max-height: 150px;
-      overflow-y: auto;
+      gap: 3px;
     }
-    .list-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #FFF8F9;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      border: 1px solid #FFE4E8;
-    }
-    .list-row.done span {
-      text-decoration: line-through;
-      color: #BFA5AD;
-    }
-    .del-btn {
-      color: #D89FA9;
-      cursor: pointer;
-      font-size: 12px;
+    .quote-zh {
+      font-size: 13px;
       font-weight: bold;
+      color: var(--deep-pink);
+      line-height: 1.4;
     }
-    .del-btn:hover { color: #FF4757; }
-
-    /* 每周复盘网格 */
-    .review-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media (max-width: 580px) {
-      .review-grid { grid-template-columns: 1fr; }
-    }
-    .review-box {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .review-label {
+    .quote-en {
       font-size: 11px;
-      font-weight: 700;
-      color: #9E3E58;
+      color: var(--text-sub);
+      font-style: italic;
     }
 
-    /* 快捷网址 */
-    .quick-links {
+    /* 每日打卡区按钮 */
+    .checkin-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .checkin-btn {
+      background: #FFF8FA;
+      border: 1.5px solid var(--border-pink);
+      border-radius: 12px;
+      padding: 9px 2px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .link-chip {
-      background: #FFF2F5;
-      border: 1.5px solid #FFD1DC;
-      color: #C74D6C;
-      text-decoration: none;
-      padding: 6px 12px;
-      border-radius: 10px;
-      font-size: 12px;
+
+    .checkin-btn .icon {
+      font-size: 18px;
+    }
+
+    .checkin-btn .name {
+      font-size: 11px;
+      color: var(--text-main);
       font-weight: 600;
-      transition: 0.2s;
     }
-    .link-chip:hover {
-      background: #FFE1E8;
-      border-color: #FF7B95;
+
+    .checkin-btn.checked {
+      background: linear-gradient(135deg, #FFB8C9 0%, #FF85A1 100%);
+      border-color: var(--primary-pink);
+      box-shadow: 0 4px 8px rgba(255, 133, 161, 0.25);
       transform: translateY(-2px);
     }
-  </style>
-</head>
-<body>
+    .checkin-btn.checked .name {
+      color: #FFFFFF;
+      font-weight: 800;
+    }
 
-<div id="decor-container"></div>
-
-<div class="workspace-wrap">
-  <!-- 左侧：工作台栏 -->
-  <aside class="side-panel">
-    <!-- 工具卡片 -->
-    <div class="card">
-      <div class="card-title">
-        <span>🌸 工作台</span>
-        <span style="font-size:11px; color:#B58390; font-weight:normal;">Workspace</span>
-      </div>
-      <div class="tool-list">
-        <a href="game.html" class="tool-btn">
-          <span class="tool-icon">🪵</span>
-          <div class="tool-info">
-            <span class="tool-name">水豚敲木鱼</span>
-            <span class="tool-desc">投喂橘子 · 烦恼粉碎</span>
-          </div>
-        </a>
-        <a href="capy.html" class="tool-btn">
-          <span class="tool-icon">📝</span>
-          <div class="tool-info">
-            <span class="tool-name">水豚便签看板</span>
-            <span class="tool-desc">灵感备忘 · 任务归档</span>
-          </div>
-        </a>
-        <a href="stock.html" class="tool-btn">
-          <span class="tool-icon">📈</span>
-          <div class="tool-info">
-            <span class="tool-name">财富看板</span>
-            <span class="tool-desc">股票走势 · 盘面监控</span>
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <!-- 随手备忘录卡片 -->
-    <div
+    /* 今日概览 */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .overview-item {
+      background: #FFF8FA;
+      border-radius: 12px;
+      padding: 10px 8px;
+      text-align: center;
+      border: 1px solid var(--border-pink
