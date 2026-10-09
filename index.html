@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>个人工作台 · Workspace</title>
+  <title>🌸 软萌粉色工作台 · 治愈文案馆 🍓</title>
   <style>
     * {
       box-sizing: border-box;
@@ -12,78 +12,122 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      background: #0D1117;
-      color: #C9D1D9;
+      background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 50%, #FFDFE8 100%);
+      color: #6D4C57;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       padding: 24px 16px;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    /* 背景漂浮萌物动画 */
+    .floating-decor {
+      position: fixed;
+      font-size: 24px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+      animation: floatUpSlow linear infinite;
+    }
+    @keyframes floatUpSlow {
+      0% {
+        transform: translateY(105vh) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      15% { opacity: 0.55; }
+      85% { opacity: 0.55; }
+      100% {
+        transform: translateY(-10vh) rotate(360deg) scale(1.1);
+        opacity: 0;
+      }
+    }
+
     .workspace {
       width: 100%;
       max-width: 860px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
+      position: relative;
+      z-index: 1;
     }
 
-    /* 顶部问候与时间看板 */
+    /* 顶部问候卡片 */
     .hero-header {
-      background: linear-gradient(135deg, #161B22 0%, #1F242C 100%);
-      border: 1px solid #30363D;
-      border-radius: 16px;
-      padding: 24px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      border: 2px solid #FFD1DC;
+      border-radius: 24px;
+      padding: 24px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
+      box-shadow: 0 10px 25px rgba(255, 182, 193, 0.35);
+    }
+    .greeting-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
     }
     .greeting-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 6px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #E85A7F;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      display: inline-block;
+    }
+    .refresh-greet-btn {
+      background: #FFE4EC;
+      border: 1px solid #FFB6C1;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .refresh-greet-btn:active {
+      transform: scale(0.85) rotate(45deg);
     }
     .greeting-sub {
       font-size: 13px;
-      color: #8B949E;
+      color: #9C7783;
     }
     .clock-display {
-      font-size: 38px;
-      font-weight: 800;
-      color: #58A6FF;
+      font-size: 40px;
+      font-weight: 900;
+      color: #FF6B8B;
       font-variant-numeric: tabular-nums;
       letter-spacing: -1px;
+      text-shadow: 0 2px 10px rgba(255, 107, 139, 0.2);
     }
 
-    /* 双栏主体布局 */
-    .grid-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media (max-width: 680px) {
-      .grid-container {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* 卡片通用 */
+    /* 卡片通用软萌风 */
     .card {
-      background: #161B22;
-      border: 1px solid #30363D;
-      border-radius: 14px;
-      padding: 18px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid #FFE0E6;
+      border-radius: 20px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
+      box-shadow: 0 8px 20px rgba(255, 182, 193, 0.25);
     }
     .card-title {
-      font-size: 14px;
-      font-weight: bold;
-      color: #F0F6FC;
+      font-size: 15px;
+      font-weight: 800;
+      color: #D45B7A;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -93,71 +137,91 @@
     .tool-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
     .tool-item {
-      background: #0D1117;
-      border: 1px solid #21262D;
-      border-radius: 10px;
-      padding: 14px 10px;
+      background: #FFF5F7;
+      border: 1.5px solid #FFD6DF;
+      border-radius: 16px;
+      padding: 16px 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       text-decoration: none;
       color: inherit;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
       cursor: pointer;
     }
     .tool-item:hover {
-      border-color: #58A6FF;
-      transform: translateY(-2px);
-      background: #161B22;
+      background: #FFE9EE;
+      border-color: #FF8DA1;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 6px 16px rgba(255, 141, 161, 0.3);
     }
     .tool-icon {
-      font-size: 26px;
+      font-size: 30px;
       margin-bottom: 6px;
     }
     .tool-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: #E6EDF3;
+      font-size: 14px;
+      font-weight: 700;
+      color: #9E3E58;
     }
     .tool-desc {
       font-size: 11px;
-      color: #8B949E;
-      margin-top: 2px;
+      color: #B58390;
+      margin-top: 3px;
     }
 
-    /* 番茄钟卡片 */
+    /* 双栏主体 */
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 680px) {
+      .grid-container { grid-template-columns: 1fr; }
+    }
+
+    /* 番茄钟 */
     .pomo-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 12px;
-      padding: 10px 0;
+      padding: 6px 0;
     }
     .pomo-timer {
-      font-size: 44px;
-      font-weight: 800;
-      color: #FFA657;
+      font-size: 46px;
+      font-weight: 900;
+      color: #FF5A79;
       font-variant-numeric: tabular-nums;
+      text-shadow: 0 2px 12px rgba(255, 90, 121, 0.25);
     }
     .pomo-btns {
       display: flex;
       gap: 10px;
     }
     .pomo-btn {
-      padding: 6px 16px;
+      padding: 7px 18px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: bold;
       border-radius: 20px;
       border: none;
       cursor: pointer;
       transition: 0.2s;
     }
-    .pomo-btn.start { background: #238636; color: white; }
-    .pomo-btn.reset { background: #21262D; color: #8B949E; border: 1px solid #30363D; }
+    .pomo-btn.start {
+      background: linear-gradient(135deg, #FF7B95 0%, #FF5A79 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(255, 90, 121, 0.35);
+    }
+    .pomo-btn.reset {
+      background: #FFE8ED;
+      color: #A36B79;
+      border: 1px solid #FFCAD4;
+    }
 
     /* 今日待办 */
     .todo-input-bar {
@@ -166,21 +230,25 @@
     }
     .todo-input {
       flex: 1;
-      background: #0D1117;
-      border: 1px solid #30363D;
-      border-radius: 6px;
-      padding: 6px 10px;
-      color: white;
+      background: #FFF5F7;
+      border: 1.5px solid #FFD6DF;
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: #6D4C57;
       font-size: 13px;
       outline: none;
     }
-    .todo-input:focus { border-color: #58A6FF; }
+    .todo-input:focus {
+      border-color: #FF6B8B;
+      background: #FFFFFF;
+    }
+    .todo-input::placeholder { color: #C49DA7; }
     .todo-add-btn {
-      background: #238636;
+      background: linear-gradient(135deg, #FF7B95 0%, #FF5A79 100%);
       border: none;
       color: white;
-      border-radius: 6px;
-      padding: 0 12px;
+      border-radius: 10px;
+      padding: 0 16px;
       font-size: 13px;
       font-weight: bold;
       cursor: pointer;
@@ -197,99 +265,107 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #0D1117;
-      padding: 8px 10px;
-      border-radius: 6px;
+      background: #FFF8F9;
+      padding: 9px 12px;
+      border-radius: 10px;
       font-size: 13px;
-      border: 1px solid #21262D;
+      border: 1px solid #FFE4E8;
     }
     .todo-item.done span {
       text-decoration: line-through;
-      color: #484F58;
+      color: #BFA5AD;
     }
     .del-btn {
-      color: #8B949E;
+      color: #D89FA9;
       cursor: pointer;
-      font-size: 12px;
+      font-size: 13px;
+      font-weight: bold;
     }
-    .del-btn:hover { color: #F85149; }
+    .del-btn:hover { color: #FF4757; }
 
-    /* 快捷链接网格 */
+    /* 快捷网址 */
     .quick-links {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
     .link-chip {
-      background: #0D1117;
-      border: 1px solid #30363D;
-      color: #58A6FF;
+      background: #FFF2F5;
+      border: 1.5px solid #FFD1DC;
+      color: #C74D6C;
       text-decoration: none;
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 7px 14px;
+      border-radius: 12px;
       font-size: 12px;
+      font-weight: 600;
       transition: 0.2s;
     }
     .link-chip:hover {
-      background: #1F242C;
-      border-color: #58A6FF;
+      background: #FFE1E8;
+      border-color: #FF7B95;
+      transform: translateY(-2px);
     }
   </style>
 </head>
 <body>
 
+<div id="decor-container"></div>
+
 <div class="workspace">
-  <!-- 问候与时钟 -->
+  <!-- 顶部问候卡片 -->
   <div class="hero-header">
     <div>
-      <div class="greeting-title" id="greeting-txt">你好，开始专注的一天</div>
+      <div class="greeting-title-wrap">
+        <span class="greeting-title" id="greeting-txt">你好呀，元气拉满～ 🌸</span>
+        <button class="refresh-greet-btn" title="换一句问候" onclick="refreshGreeting(true)">✨</button>
+      </div>
       <div class="greeting-sub" id="date-txt">加载日期中...</div>
     </div>
     <div class="clock-display" id="time-txt">00:00:00</div>
   </div>
 
-  <!-- 核心工具矩阵 -->
+  <!-- 工具导航 -->
   <div class="card">
-    <div class="card-title">🚀 我的工具箱 (My Apps)</div>
+    <div class="card-title">🍓 少女心工具箱 · Cute Apps</div>
     <div class="tool-grid">
       <a href="game.html" class="tool-item">
         <span class="tool-icon">🪵</span>
-        <span class="tool-name">解压木鱼</span>
-        <span class="tool-desc">水豚投喂 / 烦恼粉碎</span>
+        <span class="tool-name">水豚敲木鱼</span>
+        <span class="tool-desc">投喂橘子 · 烦恼粉碎</span>
       </a>
       <a href="capy.html" class="tool-item">
         <span class="tool-icon">📝</span>
-        <span class="tool-name">桌面便签</span>
-        <span class="tool-desc">看板分类 / 灵感速记</span>
+        <span class="tool-name">水豚桌面便签</span>
+        <span class="tool-desc">灵感备忘 · 看板整理</span>
       </a>
       <a href="stock.html" class="tool-item">
         <span class="tool-icon">📈</span>
-        <span class="tool-name">股票监控</span>
-        <span class="tool-desc">走势分时 / 盘面诊断</span>
+        <span class="tool-name">财富看板</span>
+        <span class="tool-desc">股票走势 · 盘面监控</span>
       </a>
     </div>
   </div>
 
-  <!-- 主体工作区 (双栏) -->
+  <!-- 双栏主体 -->
   <div class="grid-container">
     <!-- 番茄钟 -->
     <div class="card">
-      <div class="card-title">⏱️ 番茄专注钟 (Pomodoro)</div>
+      <div class="card-title">⏰ 草莓番茄钟 · Focus Time</div>
       <div class="pomo-wrap">
         <div class="pomo-timer" id="pomo-time">25:00</div>
         <div class="pomo-btns">
-          <button class="pomo-btn start" id="pomo-toggle" onclick="togglePomodoro()">开始专注</button>
+          <button class="pomo-btn start" id="pomo-toggle" onclick="togglePomodoro()">开始专注 🍓</button>
           <button class="pomo-btn reset" onclick="resetPomodoro()">重置</button>
         </div>
       </div>
-      <div style="font-size: 11px; color: #8B949E; text-align: center;">25 分钟专注，5 分钟休息，劳逸结合</div>
+      <div style="font-size: 11px; color: #B58390; text-align: center;">专注 25 分钟，喝杯热茶吃块小饼干 🍰</div>
     </div>
 
-    <!-- 迷你待办清单 -->
+    <!-- 待办清单 -->
     <div class="card">
-      <div class="card-title">📋 今日待办清单</div>
+      <div class="card-title">🎀 今日元气待办 · To-Do</div>
       <div class="todo-input-bar">
-        <input type="text" id="todo-input" class="todo-input" placeholder="添加待办事项..." onkeydown="if(event.key==='Enter')addTodo()">
+        <input type="text" id="todo-input" class="todo-input" placeholder="输入一件待办事项..." onkeydown="if(event.key==='Enter')addTodo()">
         <button class="todo-add-btn" onclick="addTodo()">添加</button>
       </div>
       <ul class="todo-list" id="todo-list"></ul>
@@ -298,20 +374,146 @@
 
   <!-- 常用外链导航 -->
   <div class="card">
-    <div class="card-title">🔗 快速通道 (Bookmarks)</div>
+    <div class="card-title">🍧 常用传送门 · Bookmarks</div>
     <div class="quick-links">
-      <a href="https://github.com/execute-xm/pomodoro" target="_blank" class="link-chip">🐙 本仓库 GitHub</a>
-      <a href="https://github.com" target="_blank" class="link-chip">💻 GitHub 首页</a>
-      <a href="https://www.bilibili.com" target="_blank" class="link-chip">📺 哔哩哔哩</a>
-      <a href="https://www.zhihu.com" target="_blank" class="link-chip">📖 知乎</a>
-      <a href="https://v2ex.com" target="_blank" class="link-chip">💬 V2EX</a>
-      <a href="https://juejin.cn" target="_blank" class="link-chip">⚡ 稀土掘金</a>
+      <a href="https://github.com/execute-xm/pomodoro" target="_blank" class="link-chip">🐙 我的 GitHub 仓库</a>
+      <a href="https://www.bilibili.com" target="_blank" class="link-chip">📺 哔哩哔哩 (追番/学习)</a>
+      <a href="https://www.xiaohongshu.com" target="_blank" class="link-chip">📕 小红书</a>
+      <a href="https://www.zhihu.com" target="_blank" class="link-chip">📖 知乎精选</a>
+      <a href="https://v2ex.com" target="_blank" class="link-chip">💬 V2EX 社区</a>
+      <a href="https://juejin.cn" target="_blank" class="link-chip">⚡ 掘金技术社区</a>
     </div>
   </div>
 </div>
 
 <script>
-  // 1. 实时时间与动态问候
+  // 1. 漂浮可爱背景小元素
+  const cuteIcons = ["🌸", "🍓", "🍊", "✨", "☁️", "🐰", "🌷", "🍰", "🎀", "💖"];
+  const decorContainer = document.getElementById("decor-container");
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement("div");
+    el.className = "floating-decor";
+    el.innerText = cuteIcons[Math.floor(Math.random() * cuteIcons.length)];
+    el.style.left = `${Math.random() * 96}%`;
+    el.style.animationDuration = `${8 + Math.random() * 12}s`;
+    el.style.animationDelay = `${Math.random() * 10}s`;
+    el.style.fontSize = `${18 + Math.random() * 16}px`;
+    decorContainer.appendChild(el);
+  }
+
+  // 2. 超丰富大容量文案库（分类智能混合）
+  const greetingsMap = {
+    morning: [
+      "早安！太阳晒屁股啦，元气满满冲鸭 ☀️",
+      "早上好！吃一顿香喷喷的早餐开启美好一天 🥐",
+      "清晨的第一缕微风，把所有烦恼都吹散 🍃",
+      "新的一天，做全世界最可爱的小朋友 🌸",
+      "早呀！喝一杯温水，唤醒沉睡的身体 🥛",
+      "早安！今天也是闪闪发光的存在 ✨",
+      "带着微笑出门，今天会遇到超棒的好事 🌷",
+      "清晨的阳光正正好，伸个大懒腰吧 🐱",
+      "早安！每一个清晨都是宇宙重新派发的小幸运 🍀",
+      "今天的好心情已准时送达，请查收 💌"
+    ],
+    afternoon: [
+      "下午好！来杯奶茶/冰美式续个命吧 🧋",
+      "午后微风刚好，伸个懒腰继续加油 🍰",
+      "今天也是情绪超级稳定的一天 🍊",
+      "累了就去戳戳水豚，摸摸鱼充个电 🪵",
+      "打瞌睡了吗？闭目养神五分钟再战 💤",
+      "生活明朗，万物可爱，下午也要开开心心 🍓",
+      "别急，慢慢走，沿途的小花都为你开着 🌼",
+      "下午好！工作做不完没事，快乐不能少 🎈",
+      "来块小蛋糕吧，甜味可以治愈一切疲惫 🧁",
+      "今天的云朵软绵绵的，像棉花糖一样 ☁️",
+      "喝水时间到！咕嘟咕嘟补充水分 💧",
+      "保持可爱，保持专注，还有半天就下班啦 🏃‍♀️"
+    ],
+    evening: [
+      "天黑啦，收工准备开启温馨小夜晚 🌙",
+      "晚上好！享受属于自己的宁静小时光 🕯️",
+      "今天辛苦啦，你已经做得很棒了 🍓",
+      "万家灯火，总有一抹温柔为你亮起 ✨",
+      "把白天的疲惫关在门外，晚上是属于快乐的 🛋️",
+      "晚风轻踩着云朵，晚霞也是粉红色的 🌇",
+      "吃一顿丰盛的晚餐，犒劳努力了一天的自己 🍲",
+      "今日工作进度已达标，心安理得去追剧 📺",
+      "今晚的风很温柔，去散散步吹吹晚风吧 🍃",
+      "今天发生的烦心事，就让它随风飘走吧 🫧"
+    ],
+    night: [
+      "夜深啦，小兔子也要钻被窝了，早点睡 💤",
+      "天塌下来有水豚顶着，今晚好梦 🧸",
+      "别熬夜啦，熬夜容易掉头发哦 🌙",
+      "晚安，愿梦里有漫天繁星和草莓蛋糕 🌟",
+      "放下手机闭上眼，把烦恼清空到回收站 🗑️",
+      "月亮不睡我不睡，但水豚说熬夜变憔悴 🦭",
+      "今夜无忧无虑，盖好被子做个香甜的梦 🛌",
+      "星星已经睡着了，你也要乖乖闭上眼 🌠",
+      "祝你今晚睡个好觉，明天又是崭新的 💖",
+      "晚安，宇宙正默默守护着可爱的人 🪐"
+    ],
+    friday: [
+      "周五狂欢！打工人的快乐终于要回来了 🥳",
+      "星期五不积极，思想有问题！周末在向你招手 🍟",
+      "熬过今天，就是快乐无边的双休日 🎉",
+      "周五的空气里都弥漫着放假的清甜香味 🍹"
+    ],
+    weekend: [
+      "周末愉快！无所事事是今天最正经的事 🏖️",
+      "赖床到自然醒，这才是人生的真谛 🥞",
+      "周末宜：吃喝玩乐、泡温泉、敲水豚 🍊",
+      "放假啦！把所有工作群通通开启免打扰 🔕",
+      "今天不当打工人，今天要做快乐小神仙 🧚‍♀️"
+    ]
+  };
+
+  let lastIndex = -1;
+
+  function refreshGreeting(forceRandom = false) {
+    const now = new Date();
+    const hour = now.getHours();
+    const day = now.getDay(); // 0 是周日，5 是周五，6 是周六
+
+    let pool = [];
+
+    // 基础时间段
+    if (hour >= 5 && hour < 12) pool = [...greetingsMap.morning];
+    else if (hour >= 12 && hour < 18) pool = [...greetingsMap.afternoon];
+    else if (hour >= 18 && hour < 23) pool = [...greetingsMap.evening];
+    else pool = [...greetingsMap.night];
+
+    // 周五与周末混入专属文案
+    if (day === 5 && hour >= 12) {
+      pool = [...pool, ...greetingsMap.friday];
+    } else if (day === 0 || day === 6) {
+      pool = [...pool, ...greetingsMap.weekend];
+    }
+
+    // 随机选出与上一条不重复的语录
+    let nextIdx = Math.floor(Math.random() * pool.length);
+    if (pool.length > 1 && nextIdx === lastIndex) {
+      nextIdx = (nextIdx + 1) % pool.length;
+    }
+    lastIndex = nextIdx;
+
+    const targetText = pool[nextIdx];
+    const textEl = document.getElementById("greeting-txt");
+
+    // 柔和淡出淡入切换动效
+    textEl.style.opacity = "0";
+    textEl.style.transform = "translateY(-4px)";
+    setTimeout(() => {
+      textEl.innerText = targetText;
+      textEl.style.opacity = "1";
+      textEl.style.transform = "translateY(0)";
+    }, 200);
+  }
+
+  // 每 15 秒自动轮播一次问候语
+  setInterval(() => refreshGreeting(false), 15000);
+
+  // 3. 时间与日期
   function updateClock() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, '0');
@@ -320,19 +522,14 @@
     document.getElementById("time-txt").innerText = `${h}:${m}:${s}`;
 
     const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-    const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 · ${days[now.getDay()]}`;
+    const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 · ${days[now.getDay()]} 🌸`;
     document.getElementById("date-txt").innerText = dateStr;
-
-    const hour = now.getHours();
-    let greet = "晚上好，愿今天收获满满";
-    if (hour >= 5 && hour < 12) greet = "早上好，元气满满的一天开始啦 ☀️";
-    else if (hour >= 12 && hour < 18) greet = "下午好，保持专注与高效 ☕";
-    document.getElementById("greeting-txt").innerText = greet;
   }
   setInterval(updateClock, 1000);
   updateClock();
+  refreshGreeting(true);
 
-  // 2. 番茄钟
+  // 4. 草莓番茄钟
   let timeLeft = 25 * 60;
   let timerInterval = null;
   let isPomoRunning = false;
@@ -347,8 +544,8 @@
     const btn = document.getElementById("pomo-toggle");
     if (!isPomoRunning) {
       isPomoRunning = true;
-      btn.innerText = "暂停专注";
-      btn.style.background = "#D29922";
+      btn.innerText = "暂停一下 ⏸";
+      btn.style.background = "#FF9AA2";
       timerInterval = setInterval(() => {
         if (timeLeft > 0) {
           timeLeft--;
@@ -356,16 +553,16 @@
         } else {
           clearInterval(timerInterval);
           isPomoRunning = false;
-          btn.innerText = "开始专注";
-          btn.style.background = "#238636";
-          alert("🎉 恭喜！一个番茄时间已完成，去敲敲水豚休息 5 分钟吧！");
+          btn.innerText = "开始专注 🍓";
+          btn.style.background = "linear-gradient(135deg, #FF7B95 0%, #FF5A79 100%)";
+          alert("🎉 叮～ 专注完成！奖励自己吃颗草莓，放松 5 分钟吧！");
           resetPomodoro();
         }
       }, 1000);
     } else {
       isPomoRunning = false;
-      btn.innerText = "继续专注";
-      btn.style.background = "#238636";
+      btn.innerText = "继续加油 🍓";
+      btn.style.background = "linear-gradient(135deg, #FF7B95 0%, #FF5A79 100%)";
       clearInterval(timerInterval);
     }
   }
@@ -376,19 +573,19 @@
     timeLeft = 25 * 60;
     document.getElementById("pomo-time").innerText = "25:00";
     const btn = document.getElementById("pomo-toggle");
-    btn.innerText = "开始专注";
-    btn.style.background = "#238636";
+    btn.innerText = "开始专注 🍓";
+    btn.style.background = "linear-gradient(135deg, #FF7B95 0%, #FF5A79 100%)";
   }
 
-  // 3. 今日待办逻辑
-  let todos = JSON.parse(localStorage.getItem("ws_todos") || "[]");
+  // 5. 元气待办
+  let todos = JSON.parse(localStorage.getItem("pink_ws_todos") || "[]");
 
   function saveAndRenderTodos() {
-    localStorage.setItem("ws_todos", JSON.stringify(todos));
+    localStorage.setItem("pink_ws_todos", JSON.stringify(todos));
     const list = document.getElementById("todo-list");
     list.innerHTML = "";
     if (todos.length === 0) {
-      list.innerHTML = `<li style="text-align:center; font-size:12px; color:#484F58; padding:12px;">暂无待办，输入即可添加 ✨</li>`;
+      list.innerHTML = `<li style="text-align:center; font-size:12px; color:#C49DA7; padding:12px;">暂无待办，今天的轻松值拉满啦 🌸</li>`;
       return;
     }
     todos.forEach((todo, idx) => {
@@ -396,7 +593,7 @@
       li.className = `todo-item ${todo.done ? 'done' : ''}`;
       li.innerHTML = `
         <div style="display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleTodo(${idx})">
-          <input type="checkbox" ${todo.done ? 'checked' : ''} style="cursor:pointer;">
+          <input type="checkbox" ${todo.done ? 'checked' : ''} style="cursor:pointer; accent-color: #FF5A79;">
           <span>${todo.text}</span>
         </div>
         <span class="del-btn" onclick="deleteTodo(${idx})">✕</span>
