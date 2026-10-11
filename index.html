@@ -6,18 +6,17 @@
   <title>【帝皇铠甲暴龙金刚兽的工作台】</title>
   <style>
     :root {
-      --bg-pink: #FFF0F4;
+      --bg: #FFF0F4;
       --card-bg: rgba(255, 255, 255, 0.96);
-      --primary-pink: #FF85A1;
+      --primary: #FF85A1;
       --deep-pink: #E05A7D;
       --soft-pink: #FFD9E2;
-      --text-main: #5C3E48;
-      --text-sub: #9E7D88;
-      --accent-bow: #FF3B69;
-      --border-pink: #FFE2EB;
-      --radius-card: 16px;
+      --text: #5C3E48;
+      --sub: #9E7D88;
+      --accent: #FF3B69;
+      --border: #FFE2EB;
+      --radius: 16px;
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -25,127 +24,115 @@
       -webkit-tap-highlight-color: transparent;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
     }
-
     body {
       background: linear-gradient(135deg, #FFF0F4 0%, #FFE6EC 50%, #FFDCE6 100%);
-      color: var(--text-main);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: row;
-      justify-content: flex-start;
       overflow-x: hidden;
       width: 100vw;
     }
-
+    /* 左侧固定侧边栏 (可容纳11个导航项且滚动顺滑) */
     .sidebar {
       width: 62px;
       min-width: 62px;
       max-width: 62px;
-      flex-shrink: 0;
       background: rgba(255, 255, 255, 0.95);
-      border-right: 1.5px solid var(--border-pink);
+      border-right: 1.5px solid var(--border);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px 0;
+      padding: 10px 0 20px;
       position: sticky;
       top: 0;
       height: 100vh;
+      overflow-y: auto;
       z-index: 100;
       box-shadow: 2px 0 10px rgba(255, 133, 161, 0.12);
+      scrollbar-width: none;
     }
-
+    .sidebar::-webkit-scrollbar { display: none; }
     .brand-avatar {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       background: #FFE8EF;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 8px;
-      border: 1.5px solid var(--primary-pink);
+      margin-bottom: 6px;
+      border: 1.5px solid var(--primary);
       flex-shrink: 0;
     }
-
     .nav-list {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
       width: 100%;
       align-items: center;
     }
-
     .nav-btn {
       width: 50px;
-      height: 44px;
+      height: 42px;
       border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: var(--text-sub);
+      color: var(--sub);
       gap: 2px;
       border: none;
       background: transparent;
       transition: all 0.15s ease;
       user-select: none;
+      flex-shrink: 0;
     }
-
     .nav-btn.active {
       background: linear-gradient(135deg, #FFA3BA 0%, #FF7597 100%) !important;
       color: #FFFFFF !important;
       box-shadow: 0 4px 8px rgba(255, 117, 151, 0.35);
     }
-
-    .nav-kitty-icon {
-      width: 16px;
-      height: 16px;
+    .nav-icon {
+      width: 15px;
+      height: 15px;
       fill: currentColor;
       pointer-events: none;
     }
-
     .nav-label {
-      font-size: 9px;
+      font-size: 8.5px;
       font-weight: 700;
       pointer-events: none;
     }
-
+    /* 右侧主视口 */
     .viewport {
       flex: 1;
-      padding: 12px 10px 40px;
+      padding: 12px 10px 50px;
       max-width: 650px;
       width: calc(100vw - 62px);
-      min-width: 0;
       overflow-y: auto;
       height: 100vh;
     }
-
     .panel {
       display: none;
       flex-direction: column;
       gap: 12px;
       width: 100%;
     }
-    #p-desktop {
-      display: flex;
-    }
     .panel.active {
       display: flex !important;
     }
-
     .card {
       background: var(--card-bg);
-      border-radius: var(--radius-card);
-      border: 1.5px solid var(--border-pink);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
       padding: 14px;
       box-shadow: 0 4px 12px rgba(255, 133, 161, 0.1);
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-
     .card-title {
       font-size: 14px;
       font-weight: 800;
@@ -154,111 +141,60 @@
       align-items: center;
       justify-content: space-between;
     }
-
-    .hero-header {
+    .clock-hero {
       background: linear-gradient(135deg, #FFFFFF 0%, #FFF4F7 100%);
       border: 2px solid var(--soft-pink);
-      padding: 14px;
-    }
-    .greeting-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-    }
-    .greeting-text {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--deep-pink);
-      line-height: 1.4;
-      transition: opacity 0.2s ease;
-    }
-    .refresh-greet-btn {
-      background: #FFE4EC;
-      border: 1px solid #FFB6C1;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 12px;
-      flex-shrink: 0;
     }
     .clock-large {
-      font-size: 36px;
+      font-size: 38px;
       font-weight: 900;
-      color: var(--accent-bow);
+      color: var(--accent);
       letter-spacing: -1px;
-      line-height: 1.1;
       margin: 4px 0 2px;
       font-variant-numeric: tabular-nums;
     }
-
-    .date-weather-combined {
+    .combined-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       background: #FFF7F9;
-      border: 1px solid var(--border-pink);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 6px 10px;
       font-size: 11px;
-      color: var(--text-sub);
-      margin-top: 4px;
+      color: var(--sub);
     }
-    .weather-part {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--deep-pink);
-      font-weight: bold;
-    }
-    .weather-dropdown {
-      background: transparent;
-      border: none;
-      font-size: 11px;
-      color: var(--deep-pink);
-      outline: none;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .water-tracker-grid {
+    /* 8杯水网格 */
+    .water-grid {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       gap: 4px;
-      margin-top: 2px;
     }
     .water-cup {
       background: #FFF8FA;
-      border: 1.5px solid var(--border-pink);
+      border: 1.5px solid var(--border);
       border-radius: 8px;
       padding: 6px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      text-align: center;
       font-size: 16px;
       cursor: pointer;
-      transition: all 0.2s;
       user-select: none;
+      transition: all 0.2s;
     }
-    .water-cup.filled {
+    .water-cup.on {
       background: linear-gradient(135deg, #FFB8C9 0%, #FF85A1 100%);
-      border-color: var(--primary-pink);
-      box-shadow: 0 2px 6px rgba(255, 133, 161, 0.3);
+      border-color: var(--primary);
       transform: translateY(-2px);
     }
-
+    /* 心情网格 */
     .mood-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
+      gap: 5px;
     }
     .mood-btn {
       background: #FFF8FA;
-      border: 1.5px solid var(--border-pink);
+      border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 6px 2px;
       display: flex;
@@ -267,44 +203,23 @@
       gap: 2px;
       font-size: 11px;
       cursor: pointer;
-      color: var(--text-sub);
-      user-select: none;
+      color: var(--sub);
     }
-    .mood-btn.active {
+    .mood-btn.on {
       background: #FFE8EE;
-      border-color: var(--primary-pink);
+      border-color: var(--primary);
       color: var(--deep-pink);
       font-weight: bold;
     }
-
-    .quote-card {
-      background: #FFF7F9;
-      border-left: 4px solid var(--primary-pink);
-      border-radius: 10px;
-      padding: 8px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .quote-zh {
-      font-size: 12px;
-      font-weight: bold;
-      color: var(--deep-pink);
-    }
-    .quote-en {
-      font-size: 10px;
-      color: var(--text-sub);
-      font-style: italic;
-    }
-
-    .checkin-grid {
+    /* 习惯打卡 */
+    .habit-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 5px;
     }
-    .checkin-btn {
+    .habit-btn {
       background: #FFF8FA;
-      border: 1.5px solid var(--border-pink);
+      border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 8px 1px;
       display: flex;
@@ -312,124 +227,39 @@
       align-items: center;
       gap: 3px;
       cursor: pointer;
-      user-select: none;
+      font-size: 10px;
+      font-weight: 600;
     }
-    .checkin-btn.checked {
+    .habit-btn.on {
       background: linear-gradient(135deg, #FFB8C9 0%, #FF85A1 100%);
-      border-color: var(--primary-pink);
+      border-color: var(--primary);
       color: #FFFFFF;
       font-weight: 800;
     }
-
+    /* 概览 */
     .overview-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
     }
-    .overview-item {
+    .overview-box {
       background: #FFF8FA;
       border-radius: 10px;
       padding: 8px 4px;
       text-align: center;
-      border: 1px solid var(--border-pink);
+      border: 1px solid var(--border);
     }
-    .overview-item .val {
+    .overview-box .val {
       font-size: 14px;
       font-weight: 800;
       color: var(--deep-pink);
       margin-top: 2px;
     }
-    .overview-item .lbl {
+    .overview-box .lbl {
       font-size: 10px;
-      color: var(--text-sub);
+      color: var(--sub);
     }
-
-    .pomo-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 0;
-    }
-    .pomo-timer {
-      font-size: 38px;
-      font-weight: 900;
-      color: var(--deep-pink);
-      font-variant-numeric: tabular-nums;
-    }
-    .pomo-btns {
-      display: flex;
-      gap: 8px;
-    }
-    .pomo-btn {
-      padding: 6px 16px;
-      font-size: 11px;
-      font-weight: 800;
-      border-radius: 18px;
-      border: none;
-      cursor: pointer;
-    }
-    .pomo-btn.start {
-      background: linear-gradient(135deg, #FFA3BA 0%, #FF7597 100%);
-      color: white;
-    }
-    .pomo-btn.reset {
-      background: #FFE8EE;
-      color: var(--text-sub);
-    }
-
-    .prompt-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-    .prompt-chip {
-      background: #FFF8FA;
-      border: 1px solid var(--border-pink);
-      border-radius: 8px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      cursor: pointer;
-    }
-    .prompt-title {
-      font-size: 11px;
-      font-weight: bold;
-      color: var(--deep-pink);
-    }
-    .prompt-desc {
-      font-size: 9px;
-      color: var(--text-sub);
-    }
-
-    .wish-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .wish-item {
-      background: #FFF9FB;
-      border: 1px solid var(--border-pink);
-      border-radius: 10px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .wish-bar-bg {
-      height: 6px;
-      background: #FFE8EE;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .wish-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #FFA3BA, #FF6086);
-      border-radius: 3px;
-      transition: width 0.3s;
-    }
-
+    /* 表单与按钮 */
     .form-group {
       display: flex;
       flex-direction: column;
@@ -442,12 +272,16 @@
     .custom-input, select, textarea {
       width: 100%;
       background: #FFF8FA;
-      border: 1.5px solid var(--border-pink);
+      border: 1.5px solid var(--border);
       border-radius: 9px;
       padding: 7px 8px;
       font-size: 11px;
-      color: var(--text-main);
+      color: var(--text);
       outline: none;
+    }
+    .custom-input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      background: #FFFFFF;
     }
     .primary-btn {
       background: linear-gradient(135deg, #FFA3BA 0%, #FF7597 100%);
@@ -460,7 +294,7 @@
       cursor: pointer;
       white-space: nowrap;
     }
-
+    /* 流水列表 */
     .stream-list {
       display: flex;
       flex-direction: column;
@@ -470,7 +304,7 @@
     }
     .stream-item {
       background: #FFF9FB;
-      border: 1.5px solid var(--border-pink);
+      border: 1.5px solid var(--border);
       border-radius: 9px;
       padding: 7px 8px;
       display: flex;
@@ -490,7 +324,6 @@
       font-size: 12px;
       padding: 2px 4px;
     }
-
     .priority-tag {
       font-size: 9px;
       padding: 1px 4px;
@@ -501,1103 +334,41 @@
     .p-mid { background: #FFF0D6; color: #D47B00; }
     .p-low { background: #E8F5E9; color: #2E7D32; }
 
-    .study-cat-badge {
+    .study-badge {
       font-size: 9px;
       padding: 1px 5px;
       border-radius: 5px;
       font-weight: bold;
     }
-    .cat-en { background: #E3F2FD; color: #1976D2; }
-    .cat-ai { background: #EDE7F6; color: #5E35B1; }
-    .cat-copy { background: #FCE4EC; color: #C2185B; }
+    .b-en { background: #E3F2FD; color: #1976D2; }
+    .b-ai { background: #EDE7F6; color: #5E35B1; }
+    .b-copy { background: #FCE4EC; color: #C2185B; }
 
-    .food-img-thumb {
-      width: 40px;
-      height: 40px;
-      border-radius: 6px;
-      object-fit: cover;
-      border: 1px solid var(--border-pink);
-    }
-
-    .tab-switch {
-      display: flex;
-      background: #FFE8EE;
-      border-radius: 9px;
-      padding: 2px;
-      gap: 3px;
-    }
-    .tab-btn {
-      flex: 1;
-      text-align: center;
-      padding: 5px;
-      font-size: 11px;
-      font-weight: 700;
-      border-radius: 7px;
-      cursor: pointer;
-      color: var(--text-sub);
-    }
-    .tab-btn.active {
-      background: #FFFFFF;
-      color: var(--deep-pink);
-    }
-    .chart-container {
+    /* 番茄钟 */
+    .pomo-wrap {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      background: #FFF8FA;
-      padding: 8px;
-      border-radius: 10px;
-      border: 1px solid var(--border-pink);
-    }
-    .chart-row {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .chart-label-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-    }
-    .chart-bar-bg {
-      height: 6px;
-      background: #FFE8EE;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .chart-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #FFA3BA, #FF6086);
-      border-radius: 3px;
-    }
-
-    .review-textarea {
-      width: 100%;
-      height: 120px;
-      background: #FFF8FA;
-      border: 1.5px solid var(--border-pink);
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 11px;
-      color: var(--text-main);
-      outline: none;
-      resize: vertical;
-      line-height: 1.6;
-    }
-
-    .photo-upload-zone {
-      display: flex;
       align-items: center;
       gap: 8px;
-      border: 1.5px dashed var(--soft-pink);
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: #FFFBFD;
+      padding: 6px 0;
     }
-    .review-photo-preview {
-      width: 52px;
-      height: 52px;
-      border-radius: 8px;
-      object-fit: cover;
-      display: none;
+    .pomo-time {
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--deep-pink);
+      font-variant-numeric: tabular-nums;
     }
-
-    .muyu-float-btn {
-      position: fixed;
-      bottom: 18px;
-      right: 18px;
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, #FFA3BA 0%, #FF7597 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      box-shadow: 0 4px 14px rgba(255, 117, 151, 0.4);
-      cursor: pointer;
-      z-index: 999;
-      user-select: none;
-    }
-    .muyu-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(4px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .muyu-box {
-      width: 280px;
-      background: #FFFFFF;
-      border-radius: 20px;
-      border: 2px solid var(--border-pink);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      position: relative;
-    }
-    .muyu-drum {
-      width: 90px;
-      height: 90px;
-      background: #FFF0F4;
-      border: 2px solid var(--primary-pink);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      cursor: pointer;
-      user-select: none;
-    }
-    .muyu-toast {
-      position: absolute;
-      top: 50px;
-      color: var(--accent-bow);
+    .pomo-btn {
+      padding: 6px 16px;
+      font-size: 11px;
       font-weight: 800;
-      font-size: 14px;
-      pointer-events: none;
-      animation: floatUp 0.6s ease-out forwards;
+      border-radius: 18px;
+      border: none;
+      cursor: pointer;
     }
-    @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-30px); }
-    }
-  </style>
-</head>
-<body>
+    .pomo-start { background: linear-gradient(135deg, #FFA3BA 0%, #FF7597 100%); color: white; }
+    .pomo-reset { background: #FFE8EE; color: var(--sub); }
 
-  <!-- 左侧固定垂直侧边导航栏 -->
-  <aside class="sidebar">
-    <div class="brand-avatar">
-      <svg viewBox="0 0 100 100" style="width: 22px; height: 22px;">
-        <path d="M 50,50 M 50,42 C 45,35 30,30 20,40 C 10,50 18,65 30,62 C 40,60 46,54 50,48 C 54,54 60,60 70,62 C 82,65 90,50 80,40 C 70,30 55,35 50,42 Z" fill="var(--accent-bow)"/>
-        <circle cx="50" cy="48" r="7" fill="#FFA6BA" stroke="var(--accent-bow)" stroke-width="2"/>
-      </svg>
-    </div>
-
-    <nav class="nav-list">
-      <button class="nav-btn active" onclick="goTab('desktop', this)">
-        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12c0 2.2.7 4.2 2 5.8L3 21l3.5-.9C8 21.2 9.9 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm-4 7c.8 0 1.5.7 1.5 1.5S8.8 12 8 12s-1.5-.7-1.5-1.5S7.2 9 8 9zm8 0c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5zm-4 6c-1.8 0-3.3-1.1-3.8-2.6.2 0 .5.1.8.1 1.2 0 2.2-.6 2.8-1.5.6.9 1.6 1.5 2.8 1.5.3 0 .6-.1.8-.1-.5 1.5-2 2.6-3.8 2.6z"/></svg>
-        <span class="nav-label">桌面</span>
-      </button>
-      <button class="nav-btn" onclick="goTab('todo', this)">
-        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8 4c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm-1 10l-4-4 1.4-1.4L10 14.2l7.6-7.6L19 8l-9 9z"/></svg>
-        <span class="nav-label">待办</span>
-      </button>
-      <button class="nav-btn" onclick="goTab('study', this)">
-        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
-        <span class="nav-label">学习</span>
-      </button>
-      <button class="nav-btn" onclick="goTab('money', this)">
-        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M12 21.4l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.4z"/></svg>
-        <span class="nav-label">记账</span>
-      </button>
-      <button class="nav-btn" onclick="goTab('diet', this)">
-        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 4.12 2.8 7.58 6.64 8.65.68-.37 1.36-.65 2.36-.65 1 0 1.68.28 2.36.65 3.84-1.07 6.64-4.53 6.64-8.65 0-4.97-4.03-9-9-9zm1 5.5c0 .83-.67 1.5-1.5 1.5S10 9.33 10 8.5 10.67 7 11.5 7s1.5.67 1.5 1.5z"/></svg>
-        <span class="nav-label">饮食</span>
-      </button>
-      <button class="nav-btn" onclick="goTab('review', this)">
-        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-        <span class="nav-label">复盘</span>
-      </button>
-      <button class="nav-btn" onclick="goTab('settings', this)">
-        <svg class="nav-kitty-icon" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        <span class="nav-label">设置</span>
-      </button>
-    </nav>
-  </aside>
-
-  <!-- 右侧主内容视口 -->
-  <main class="viewport" id="main-viewport">
-
-    <!-- 1. 桌面 -->
-    <div id="p-desktop" class="panel active">
-      <div class="card hero-header">
-        <div class="greeting-row">
-          <div class="greeting-text" id="home-greeting">你好呀，【帝皇铠甲暴龙金刚兽的工作台】🌸</div>
-          <button class="refresh-greet-btn" onclick="refreshGreeting()">✨</button>
-        </div>
-        <div class="clock-large" id="live-clock">--:--:--</div>
-        <div class="date-weather-combined">
-          <span id="live-date">--月--日</span>
-          <div class="weather-part">
-            <span id="weather-icon">☀️</span>
-            <select class="weather-dropdown" id="weather-selector" onchange="changeWeather(this.value)">
-              <option value="sunny">晴天 24℃</option>
-              <option value="cloudy">多云 22℃</option>
-              <option value="rain">小雨 19℃</option>
-              <option value="rainbow">彩虹 23℃</option>
-              <option value="breeze">微风 21℃</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- 心情晴雨表 -->
-      <div class="card">
-        <div class="card-title">
-          <span>🐱 今日心情晴雨表</span>
-          <span style="font-size:10px; color:var(--text-sub);" id="mood-label">点击记录状态</span>
-        </div>
-        <div class="mood-grid">
-          <div class="mood-btn" onclick="setMood('开心 🌸')"><span>🌸</span>开心</div>
-          <div class="mood-btn" onclick="setMood('充实 ⚡')"><span>⚡</span>充实</div>
-          <div class="mood-btn" onclick="setMood('平静 🍃')"><span>🍃</span>平静</div>
-          <div class="mood-btn" onclick="setMood('疲惫 ☕')"><span>☕</span>疲惫</div>
-          <div class="mood-btn" onclick="setMood('emo 🌧️')"><span>🌧️</span>emo</div>
-        </div>
-      </div>
-
-      <!-- 8杯水 -->
-      <div class="card">
-        <div class="card-title">
-          <span>🍓 咕嘟咕嘟 · 8杯水健康打卡</span>
-          <span style="font-size:10px; color:var(--deep-pink); font-weight:bold;" id="water-count-txt">已饮 0/8 杯</span>
-        </div>
-        <div class="water-tracker-grid" id="water-grid"></div>
-      </div>
-
-      <!-- 习惯打卡 -->
-      <div class="card">
-        <div class="card-title"><span>🌱 每日习惯打卡</span></div>
-        <div class="checkin-grid">
-          <div class="checkin-btn" id="chk-wake" onclick="toggleHabit('wake')"><span>🌅</span><span style="font-size:10px;">早起</span></div>
-          <div class="checkin-btn" id="chk-sport" onclick="toggleHabit('sport')"><span>🏃‍♀️</span><span style="font-size:10px;">运动</span></div>
-          <div class="checkin-btn" id="chk-read" onclick="toggleHabit('read')"><span>📖</span><span style="font-size:10px;">阅读</span></div>
-          <div class="checkin-btn" id="chk-sleep" onclick="toggleHabit('sleep')"><span>🌙</span><span style="font-size:10px;">早睡</span></div>
-        </div>
-      </div>
-
-      <!-- 今日概览 -->
-      <div class="card">
-        <div class="card-title"><span>📊 今日概览</span></div>
-        <div class="overview-grid">
-          <div class="overview-item"><div class="lbl">今日待办</div><div class="val" id="ov-todo">0 项</div></div>
-          <div class="overview-item"><div class="lbl">专注周期</div><div class="val" id="ov-pomo">0 次</div></div>
-          <div class="overview-item"><div class="lbl">今日消费</div><div class="val" id="ov-money">￥0.00</div></div>
-        </div>
-      </div>
-
-      <!-- 双语语录 -->
-      <div class="quote-card">
-        <div class="quote-zh">“保持热爱，奔赴山海，今天的你也是最棒的小朋友。”</div>
-        <div class="quote-en">"Keep love in your heart, every day is full of gentle miracles."</div>
-      </div>
-    </div>
-
-    <!-- 2. 待办 -->
-    <div id="p-todo" class="panel">
-      <div class="card">
-        <div class="card-title">🎀 添加待办任务</div>
-        <div class="form-group">
-          <input type="text" id="todo-txt" class="custom-input" placeholder="输入任务内容...">
-          <div class="form-row">
-            <input type="date" id="todo-date" class="custom-input" style="flex:1.2;">
-            <select id="todo-priority" class="custom-input" style="flex:1;">
-              <option value="high">高优 🔴</option>
-              <option value="mid" selected>日常 🟡</option>
-              <option value="low">低优 🟢</option>
-            </select>
-            <button class="primary-btn" onclick="addTodo()">添加</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>📝 今日待办</span><span style="font-size:10px; color:var(--text-sub);" id="pending-count">0 项</span></div>
-        <div class="stream-list" id="todo-pending-list"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>🌸 已完成待办</span><span style="font-size:10px; color:var(--text-sub);" id="done-count">0 项</span></div>
-        <div class="stream-list" id="todo-done-list"></div>
-      </div>
-    </div>
-
-    <!-- 3. 学习 -->
-    <div id="p-study" class="panel">
-      <div class="card">
-        <div class="card-title"><span>⏱️ 专注番茄钟</span><span style="font-size:10px; color:var(--deep-pink);" id="pomo-status">待开始</span></div>
-        <div class="pomo-wrap">
-          <div class="pomo-display pomo-timer" id="pomo-display">25:00</div>
-          <div class="pomo-btns">
-            <button class="pomo-btn start" id="pomo-toggle-btn" onclick="togglePomodoro()">开始专注 🍓</button>
-            <button class="pomo-btn reset" onclick="resetPomodoro()">重置</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>🪄 AI 常用提示词咒语盒</span><span style="font-size:10px; color:var(--text-sub);">点击即复制</span></div>
-        <div class="prompt-grid">
-          <div class="prompt-chip" onclick="copyPrompt('请作为专业文案编辑，将以下文字润色得更生动自然、富有吸引力：\n')">
-            <span class="prompt-title">✍️ 爆款文案润色</span>
-            <span class="prompt-desc">专业编辑口吻</span>
-          </div>
-          <div class="prompt-chip" onclick="copyPrompt('请将以下内容翻译为地道、自然的母语英语，并给出重点短语解析：\n')">
-            <span class="prompt-title">🇬🇧 地道英语翻译</span>
-            <span class="prompt-desc">地道短语润色</span>
-          </div>
-          <div class="prompt-chip" onclick="copyPrompt('请对以下工作与学习进行深度结构化复盘，提炼亮点与3条改进策略：\n')">
-            <span class="prompt-title">📊 深度周报总结</span>
-            <span class="prompt-desc">条理复盘提效</span>
-          </div>
-          <div class="prompt-chip" onclick="copyPrompt('请帮我优化以下提示词，增加清晰角色设定、背景与明确约束：\n')">
-            <span class="prompt-title">🤖 提示词高级优化</span>
-            <span class="prompt-desc">精准输出质量</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">📚 添加学习提升任务</div>
-        <div class="form-group">
-          <input type="text" id="study-txt" class="custom-input" placeholder="任务内容 (如: 背50个单词 / 拆解文案)...">
-          <div class="form-row">
-            <select id="study-cat" class="custom-input" style="flex:1;">
-              <option value="英语">🇬🇧 英语</option>
-              <option value="AI使用">🤖 AI使用</option>
-              <option value="文案">✍️ 文案</option>
-            </select>
-            <button class="primary-btn" onclick="addStudy()">记录</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>📖 学习清单</span></div>
-        <div class="stream-list" id="study-list"></div>
-      </div>
-    </div>
-
-    <!-- 4. 记账 -->
-    <div id="p-money" class="panel">
-      <div class="card">
-        <div class="card-title">💰 每日记账</div>
-        <div class="tab-switch">
-          <div class="tab-btn active" id="tab-spend" onclick="setMoneyType('spend')">支出 💸</div>
-          <div class="tab-btn" id="tab-income" onclick="setMoneyType('income')">收入 🧧</div>
-        </div>
-        <div class="form-group" style="margin-top:4px;">
-          <div class="form-row">
-            <input type="number" step="0.01" id="money-amt" class="custom-input" placeholder="价格 (￥)">
-            <select id="money-cat" class="custom-input">
-              <option value="餐饮">餐饮 🍜</option>
-              <option value="公交">公交 🚌</option>
-              <option value="购物">购物 🛍️</option>
-              <option value="其他">其他 🎈</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <input type="text" id="money-remark" class="custom-input" placeholder="备注 (如: 午餐)...">
-            <button class="primary-btn" onclick="addMoney()">保存</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>🎁 心愿好物攒钱清单</span><button class="primary-btn" style="padding:2px 8px; font-size:10px;" onclick="addWish()">+ 新心愿</button></div>
-        <div class="wish-list" id="wish-box"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>📊 月度消费图表</span></div>
-        <div class="chart-container" id="monthly-chart-box"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>👛 消费流水</span><span style="font-size:11px; color:var(--deep-pink); font-weight:bold;" id="money-today-spend">今日: ￥0.00</span></div>
-        <div class="stream-list" id="money-list"></div>
-      </div>
-    </div>
-
-    <!-- 5. 饮食 -->
-    <div id="p-diet" class="panel">
-      <div class="card">
-        <div class="card-title">🥗 饮食记录与卡路里</div>
-        <div class="form-group">
-          <div class="form-row">
-            <input type="text" id="diet-name" class="custom-input" placeholder="食物名称">
-            <input type="number" id="diet-cal" class="custom-input" placeholder="热量 (kcal)">
-          </div>
-          <div class="form-row">
-            <select id="diet-meal" class="custom-input">
-              <option value="早餐">早餐 🍳</option>
-              <option value="午餐">午餐 🍱</option>
-              <option value="晚餐">晚餐 🍲</option>
-              <option value="加餐">加餐 🍰</option>
-            </select>
-            <label style="font-size:10px; color:var(--text-sub); display:flex; align-items:center; cursor:pointer;">
-              📷 上传照片
-              <input type="file" id="diet-file" accept="image/*" style="display:none;" onchange="previewDiet(this)">
-            </label>
-            <img id="diet-preview-img" class="food-img-thumb" style="display:none;">
-            <button class="primary-btn" style="margin-left:auto;" onclick="addDiet()">录入</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><span>🍓 今日摄入历史</span><span style="font-size:11px; color:var(--accent-bow); font-weight:bold;" id="diet-today-cal">0 kcal</span></div>
-        <div class="stream-list" id="diet-list"></div>
-      </div>
-    </div>
-
-    <!-- 6. 周复盘 -->
-    <div id="p-review" class="panel">
-      <div class="card">
-        <div class="card-title">
-          <span>🗓️ 周度复盘 (Weekly Review)</span>
-          <input type="text" id="review-week-txt" class="custom-input" style="width:130px; padding:2px 4px;" placeholder="2026年第41周" onchange="loadReview()">
-        </div>
-        <div class="form-group">
-          <div>
-            <div style="font-size:11px; font-weight:800; color:var(--deep-pink); margin-bottom:4px;">✨ 本周成长收获与心得复盘：</div>
-            <textarea id="rev-content" class="review-textarea" placeholder="自由写下这周的得失、生活微光与学习感悟..."></textarea>
-          </div>
-          <div>
-            <div style="font-size:11px; font-weight:800; color:var(--deep-pink); margin-bottom:4px;">🎯 下周核心目标与规划：</div>
-            <input type="text" id="rev-goal" class="custom-input" placeholder="例如: 英语刷完3套真题、每天运动20分钟...">
-          </div>
-          <div class="photo-upload-zone">
-            <label style="font-size:10px; color:var(--text-sub); cursor:pointer;">
-              📷 点击上传本周美好纪念照:
-              <input type="file" accept="image/*" style="display:none;" onchange="previewReview(this)">
-            </label>
-            <img id="rev-preview-img" class="review-photo-preview">
-          </div>
-          <button class="primary-btn" style="align-self: flex-end;" onclick="saveReview()">保存本周复盘</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 7. 设置 -->
-    <div id="p-settings" class="panel">
-      <div class="card">
-        <div class="card-title">⚙️ 工作台设置</div>
-        <div class="form-group">
-          <label style="font-size:11px; color:var(--text-sub);">空间名称：</label>
-          <input type="text" id="cfg-name" class="custom-input" value="【帝皇铠甲暴龙金刚兽的工作台】">
-          <button class="primary-btn" style="align-self:flex-start;" onclick="saveName()">保存修改</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">📦 本地数据管理</div>
-        <p style="font-size:11px; color:var(--text-sub); line-height:1.5;">全部数据保存在本地，刷新永久保留。</p>
-        <button class="primary-btn" style="background:#E25574; align-self:flex-start;" onclick="resetAll()">⚠️ 清空重置全部数据</button>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- 悬浮水豚木鱼 -->
-  <div class="muyu-float-btn" onclick="openMuyu()">🪵</div>
-  <div class="muyu-modal" id="muyu-modal" onclick="closeMuyu()">
-    <div class="muyu-box" onclick="event.stopPropagation()">
-      <div style="font-size:14px; font-weight:800; color:var(--deep-pink);">🦭 暴龙水豚解压木鱼</div>
-      <div id="muyu-toast"></div>
-      <div class="muyu-drum" onclick="hitMuyu()">🪵</div>
-      <div style="font-size:11px; color:var(--text-sub);">敲击木鱼 · 烦恼-1 · 功德+1</div>
-      <div style="font-size:12px; font-weight:bold; color:var(--deep-pink);" id="muyu-score-txt">累计功德: 0</div>
-      <button class="primary-btn" style="padding:4px 14px; font-size:11px;" onclick="closeMuyu()">收起</button>
-    </div>
-  </div>
-
-  <script>
-    // ================= 1. 基础导航与时钟 =================
-    function goTab(name, btn) {
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      document.querySelectorAll('.panel').forEach(p => {
-        p.classList.remove('active');
-        p.style.display = 'none';
-      });
-      const target = document.getElementById('p-' + name);
-      if (target) {
-        target.classList.add('active');
-        target.style.display = 'flex';
-      }
-      const vp = document.getElementById('main-viewport');
-      if (vp) vp.scrollTop = 0;
-    }
-
-    function tick() {
-      try {
-        const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        const s = String(now.getSeconds()).padStart(2, '0');
-        const cEl = document.getElementById('live-clock');
-        if (cEl) cEl.innerText = `${h}:${m}:${s}`;
-        const days = ['日', '一', '二', '三', '四', '五', '六'];
-        const dEl = document.getElementById('live-date');
-        if (dEl) dEl.innerText = `${now.getMonth()+1}月${now.getDate()}日 · 周${days[now.getDay()]}`;
-      } catch(e) {}
-    }
-    setInterval(tick, 1000);
-    tick();
-
-    const greetings = [
-      "早安！帝皇铠甲合体，今天也是无敌战力 ☀️",
-      "早上好！吃一顿香喷喷的早餐，元气满满冲鸭 🥐",
-      "下午好！暴龙金刚兽也要来杯奶茶续命 🧋",
-      "午后微风刚好，伸个懒腰继续战斗 🍰",
-      "天黑啦，收工准备开启温馨小夜晚 🌙",
-      "今天辛苦啦，帝皇铠甲赞赏你的努力 🍓",
-      "夜深啦，小金刚兽也要钻被窝了，早点睡 💤"
-    ];
-    function refreshGreeting() {
-      try {
-        const text = greetings[Math.floor(Math.random() * greetings.length)];
-        const el = document.getElementById('home-greeting');
-        if (el) el.innerText = text;
-      } catch(e) {}
-    }
-
-    const weatherMap = { sunny:'☀️', cloudy:'⛅', rain:'🌧️', rainbow:'🌈', breeze:'🍃' };
-    function changeWeather(val) {
-      try {
-        const el = document.getElementById('weather-icon');
-        if (el) el.innerText = weatherMap[val] || '☀️';
-        localStorage.setItem('wk_v6_weather', val);
-      } catch(e) {}
-    }
-    try {
-      const savedW = localStorage.getItem('wk_v6_weather') || 'sunny';
-      const wSel = document.getElementById('weather-selector');
-      if (wSel) wSel.value = savedW;
-      changeWeather(savedW);
-    } catch(e) {}
-
-    const todayStr = new Date().toISOString().split('T')[0];
-    try {
-      if (document.getElementById('todo-date')) document.getElementById('todo-date').value = todayStr;
-      const nowD = new Date();
-      if (document.getElementById('review-week-txt')) {
-        document.getElementById('review-week-txt').value = `${nowD.getFullYear()}年第${Math.ceil((nowD.getDate() + 6) / 7)}周`;
-      }
-    } catch(e) {}
-
-    // ================= 2. 8杯水与习惯 =================
-    let waterCount = 0;
-    try { waterCount = Number(localStorage.getItem('wk_v6_water_' + todayStr) || 0); } catch(e){}
-    function renderWater() {
-      try {
-        const box = document.getElementById('water-grid');
-        if (!box) return;
-        box.innerHTML = '';
-        for (let i = 1; i <= 8; i++) {
-          const cup = document.createElement('div');
-          cup.className = `water-cup ${i <= waterCount ? 'filled' : ''}`;
-          cup.innerText = i <= waterCount ? '🍓' : '💧';
-          cup.onclick = () => {
-            waterCount = (i === waterCount) ? i - 1 : i;
-            localStorage.setItem('wk_v6_water_' + todayStr, waterCount);
-            renderWater();
-          };
-          box.appendChild(cup);
-        }
-        const txt = document.getElementById('water-count-txt');
-        if (txt) txt.innerText = `已饮 ${waterCount}/8 杯`;
-      } catch(e) {}
-    }
-    renderWater();
-
-    function setMood(m) {
-      try {
-        localStorage.setItem('wk_v6_mood_' + todayStr, m);
-        const el = document.getElementById('mood-label');
-        if (el) el.innerText = `今日状态: ${m}`;
-        document.querySelectorAll('.mood-btn').forEach(b => {
-          b.classList.toggle('active', b.innerText.includes(m.slice(0, 2)));
-        });
-      } catch(e) {}
-    }
-    try {
-      const savedM = localStorage.getItem('wk_v6_mood_' + todayStr);
-      if (savedM) setMood(savedM);
-    } catch(e) {}
-
-    let habits = {};
-    try { habits = JSON.parse(localStorage.getItem('wk_v6_habits_' + todayStr) || '{}'); } catch(e){}
-    function renderHabits() {
-      try {
-        ['wake', 'sport', 'read', 'sleep'].forEach(k => {
-          const el = document.getElementById('chk-' + k);
-          if (el) el.classList.toggle('checked', !!habits[k]);
-        });
-      } catch(e) {}
-    }
-    function toggleHabit(k) {
-      try {
-        habits[k] = !habits[k];
-        localStorage.setItem('wk_v6_habits_' + todayStr, JSON.stringify(habits));
-        renderHabits();
-      } catch(e) {}
-    }
-    renderHabits();
-
-    // ================= 3. 番茄钟与AI提示词 =================
-    let pSec = 25 * 60;
-    let pTimer = null;
-    let pCount = 0;
-    try { pCount = Number(localStorage.getItem('wk_v6_pomo_' + todayStr) || 0); } catch(e){}
-
-    function togglePomodoro() {
-      const btn = document.getElementById('pomo-toggle-btn');
-      const st = document.getElementById('pomo-status');
-      if (!pTimer) {
-        if (btn) btn.innerText = "暂停 ⏸";
-        if (st) st.innerText = "专注进行中 🔥";
-        pTimer = setInterval(() => {
-          if (pSec > 0) {
-            pSec--;
-            const m = String(Math.floor(pSec / 60)).padStart(2, '0');
-            const s = String(pSec % 60).padStart(2, '0');
-            const disp = document.getElementById('pomo-display');
-            if (disp) disp.innerText = `${m}:${s}`;
-          } else {
-            clearInterval(pTimer);
-            pTimer = null;
-            pCount++;
-            localStorage.setItem('wk_v6_pomo_' + todayStr, pCount);
-            const ov = document.getElementById('ov-pomo');
-            if (ov) ov.innerText = `${pCount} 次`;
-            alert("🎉 专注完成！休息 5 分钟吧！");
-            resetPomodoro();
-          }
-        }, 1000);
-      } else {
-        clearInterval(pTimer);
-        pTimer = null;
-        if (btn) btn.innerText = "继续专注 ▶";
-        if (st) st.innerText = "已暂停";
-      }
-    }
-    function resetPomodoro() {
-      clearInterval(pTimer);
-      pTimer = null;
-      pSec = 25 * 60;
-      const disp = document.getElementById('pomo-display');
-      if (disp) disp.innerText = "25:00";
-      const btn = document.getElementById('pomo-toggle-btn');
-      if (btn) btn.innerText = "开始专注 🍓";
-      const st = document.getElementById('pomo-status');
-      if (st) st.innerText = "待开始";
-    }
-    const ovP = document.getElementById('ov-pomo');
-    if (ovP) ovP.innerText = `${pCount} 次`;
-
-    function copyPrompt(t) {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(t).then(() => alert("✨ Prompt 咒语已复制到剪贴板！"));
-      } else {
-        alert("复制成功！");
-      }
-    }
-
-    // ================= 4. 待办逻辑 =================
-    let todos = [];
-    try { todos = JSON.parse(localStorage.getItem('wk_v6_todos') || '[]'); } catch(e){}
-    function renderTodos() {
-      try {
-        localStorage.setItem('wk_v6_todos', JSON.stringify(todos));
-        const pl = document.getElementById('todo-pending-list');
-        const dl = document.getElementById('todo-done-list');
-        if (!pl || !dl) return;
-        pl.innerHTML = '';
-        dl.innerHTML = '';
-        let pc = 0, dc = 0;
-        todos.forEach((t, i) => {
-          const div = document.createElement('div');
-          div.className = `stream-item ${t.done ? 'is-done' : ''}`;
-          const pTag = t.priority === 'high' ? '<span class="priority-tag p-high">高优</span>' :
-                       t.priority === 'mid' ? '<span class="priority-tag p-mid">日常</span>' :
-                       '<span class="priority-tag p-low">低优</span>';
-          div.innerHTML = `
-            <div style="display:flex; align-items:center; gap:5px; cursor:pointer;" onclick="toggleTodo(${i})">
-              <input type="checkbox" ${t.done ? 'checked' : ''} style="accent-color:var(--deep-pink); cursor:pointer;">
-              ${pTag}
-              <span>${t.text} <small style="color:var(--text-sub)">(${t.date || '无日期'})</small></span>
-            </div>
-            <span class="delete-action" onclick="delTodo(${i})">✕</span>
-          `;
-          if (t.done) { dl.appendChild(div); dc++; }
-          else { pl.appendChild(div); pc++; }
-        });
-        if (pc === 0) pl.innerHTML = `<div style="font-size:10px; color:var(--text-sub); text-align:center; padding:8px;">今日任务全搞定啦 🌸</div>`;
-        if (dc === 0) dl.innerHTML = `<div style="font-size:10px; color:var(--text-sub); text-align:center; padding:8px;">暂无已完成~</div>`;
-        const pCnt = document.getElementById('pending-count');
-        const dCnt = document.getElementById('done-count');
-        const ovT = document.getElementById('ov-todo');
-        if (pCnt) pCnt.innerText = `${pc} 项`;
-        if (dCnt) dCnt.innerText = `${dc} 项`;
-        if (ovT) ovT.innerText = `${pc} 项`;
-      } catch(e) {}
-    }
-    function addTodo() {
-      const input = document.getElementById('todo-txt');
-      if (!input || !input.value.trim()) return;
-      todos.push({
-        text: input.value.trim(),
-        date: document.getElementById('todo-date').value,
-        priority: document.getElementById('todo-priority').value,
-        done: false
-      });
-      input.value = '';
-      renderTodos();
-    }
-    function toggleTodo(i) { if (todos[i]) { todos[i].done = !todos[i].done; renderTodos(); } }
-    function delTodo(i) { todos.splice(i, 1); renderTodos(); }
-    renderTodos();
-
-    // ================= 5. 学习打卡 =================
-    let studies = [];
-    try { studies = JSON.parse(localStorage.getItem('wk_v6_studies') || '[]'); } catch(e){}
-    function renderStudies() {
-      try {
-        localStorage.setItem('wk_v6_studies', JSON.stringify(studies));
-        const box = document.getElementById('study-list');
-        if (!box) return;
-        box.innerHTML = '';
-        studies.forEach((s, i) => {
-          const div = document.createElement('div');
-          div.className = `stream-item ${s.done ? 'is-done' : ''}`;
-          const cc = s.cat === '英语' ? 'cat-en' : (s.cat === 'AI使用' ? 'cat-ai' : 'cat-copy');
-          div.innerHTML = `
-            <div style="display:flex; align-items:center; gap:5px; cursor:pointer;" onclick="toggleStudy(${i})">
-              <input type="checkbox" ${s.done ? 'checked' : ''} style="accent-color:var(--deep-pink); cursor:pointer;">
-              <span class="study-cat-badge ${cc}">${s.cat}</span>
-              <span>${s.text}</span>
-            </div>
-            <span class="delete-action" onclick="delStudy(${i})">✕</span>
-          `;
-          box.appendChild(div);
-        });
-        if (studies.length === 0) box.innerHTML = `<div style="font-size:10px; color:var(--text-sub); text-align:center; padding:8px;">清单为空，添加提升任务吧 📚</div>`;
-      } catch(e) {}
-    }
-    function addStudy() {
-      const input = document.getElementById('study-txt');
-      if (!input || !input.value.trim()) return;
-      studies.push({
-        text: input.value.trim(),
-        cat: document.getElementById('study-cat').value,
-        done: false
-      });
-      input.value = '';
-      renderStudies();
-    }
-    function toggleStudy(i) { if (studies[i]) { studies[i].done = !studies[i].done; renderStudies(); } }
-    function delStudy(i) { studies.splice(i, 1); renderStudies(); }
-    renderStudies();
-
-    // ================= 6. 记账与心愿 =================
-    let mType = 'spend';
-    let moneys = [];
-    try { moneys = JSON.parse(localStorage.getItem('wk_v6_money') || '[]'); } catch(e){}
-
-    function setMoneyType(t) {
-      mType = t;
-      const sp = document.getElementById('tab-spend');
-      const inc = document.getElementById('tab-income');
-      if (sp) sp.classList.toggle('active', t === 'spend');
-      if (inc) inc.classList.toggle('active', t === 'income');
-    }
-    function renderMoney() {
-      try {
-        localStorage.setItem('wk_v6_money', JSON.stringify(moneys));
-        const list = document.getElementById('money-list');
-        if (!list) return;
-        list.innerHTML = '';
-        let todaySum = 0;
-        moneys.forEach((m, i) => {
-          if (m.date === todayStr && m.type === 'spend') todaySum += Number(m.amt);
-          const isSp = m.type === 'spend';
-          const div = document.createElement('div');
-          div.className = 'stream-item';
-          div.innerHTML = `
-            <div><b>${m.cat}</b> <small style="color:var(--text-sub);">(${m.remark || '无备注'})</small></div>
-            <div style="display:flex; align-items:center; gap:5px;">
-              <span style="font-weight:bold; color:${isSp ? 'var(--accent-bow)' : '#2E7D32'};">${isSp ? '-' : '+'}￥${Number(m.amt).toFixed(2)}</span>
-              <span class="delete-action" onclick="delMoney(${i})">✕</span>
-            </div>
-          `;
-          list.appendChild(div);
-        });
-        const spEl = document.getElementById('money-today-spend');
-        const ovM = document.getElementById('ov-money');
-        if (spEl) spEl.innerText = `今日: ￥${todaySum.toFixed(2)}`;
-        if (ovM) ovM.innerText = `￥${todaySum.toFixed(2)}`;
-        renderChart();
-      } catch(e) {}
-    }
-    function addMoney() {
-      const amtEl = document.getElementById('money-amt');
-      if (!amtEl || !amtEl.value || Number(amtEl.value) <= 0) return;
-      moneys.unshift({
-        type: mType,
-        amt: Number(amtEl.value),
-        cat: document.getElementById('money-cat').value,
-        remark: document.getElementById('money-remark').value.trim(),
-        date: todayStr
-      });
-      amtEl.value = '';
-      document.getElementById('money-remark').value = '';
-      renderMoney();
-    }
-    function delMoney(i) { moneys.splice(i, 1); renderMoney(); }
-    function renderChart() {
-      try {
-        const box = document.getElementById('monthly-chart-box');
-        if (!box) return;
-        const curYM = todayStr.substring(0, 7);
-        const catTotals = { '餐饮': 0, '公交': 0, '购物': 0, '其他': 0 };
-        let spendSum = 0, incSum = 0;
-        moneys.forEach(r => {
-          if (r.date && r.date.startsWith(curYM)) {
-            if (r.type === 'spend') {
-              spendSum += Number(r.amt);
-              if (catTotals[r.cat] !== undefined) catTotals[r.cat] += Number(r.amt);
-              else catTotals['其他'] += Number(r.amt);
-            } else { incSum += Number(r.amt); }
-          }
-        });
-        box.innerHTML = `
-          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; border-bottom:1px dashed var(--border-pink); padding-bottom:5px;">
-            <span style="color:var(--deep-pink);">月支出: ￥${spendSum.toFixed(2)}</span>
-            <span style="color:#2E7D32;">月收入: ￥${incSum.toFixed(2)}</span>
-          </div>
-        `;
-        for (const [cat, val] of Object.entries(catTotals)) {
-          const pct = spendSum > 0 ? ((val / spendSum) * 100).toFixed(0) : 0;
-          const row = document.createElement('div');
-          row.className = 'chart-row';
-          row.innerHTML = `
-            <div class="chart-label-row"><span>${cat}</span><span style="font-weight:bold; color:var(--deep-pink);">￥${val.toFixed(2)} (${pct}%)</span></div>
-            <div class="chart-bar-bg"><div class="chart-bar-fill" style="width: ${pct}%;"></div></div>
-          `;
-          box.appendChild(row);
-        }
-      } catch(e) {}
-    }
-    renderMoney();
-
-    let wishes = [];
-    try { wishes = JSON.parse(localStorage.getItem('wk_v6_wishes') || '[]'); } catch(e){}
-    function renderWishes() {
-      try {
-        localStorage.setItem('wk_v6_wishes', JSON.stringify(wishes));
-        const box = document.getElementById('wish-box');
-        if (!box) return;
-        box.innerHTML = '';
-        if (wishes.length === 0) {
-          box.innerHTML = `<div style="font-size:10px; color:var(--text-sub); text-align:center; padding:6px;">暂无心愿，点击上方添加好物 🎁</div>`;
-          return;
-        }
-        wishes.forEach((w, i) => {
-          const pct = Math.min(100, Math.round(((w.saved || 0) / w.price) * 100));
-          const div = document.createElement('div');
-          div.className = 'wish-item';
-          div.innerHTML = `
-            <div style="display:flex; justify-content:space-between; font-size:11px;">
-              <b style="color:var(--deep-pink);">${w.name} (￥${w.price})</b>
-              <span style="color:var(--text-sub); cursor:pointer;" onclick="delWish(${i})">✕</span>
-            </div>
-            <div class="wish-bar-bg"><div class="wish-bar-fill" style="width: ${pct}%;"></div></div>
-            <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-sub);">
-              <span>已攒: ￥${w.saved || 0} (${pct}%)</span>
-              <span style="cursor:pointer; color:var(--deep-pink); font-weight:bold;" onclick="fundWish(${i})">+ 存入</span>
-            </div>
-          `;
-          box.appendChild(div);
-        });
-      } catch(e) {}
-    }
-    function addWish() {
-      const name = prompt("心愿名称：");
-      if (!name) return;
-      const price = prompt("目标金额 (元)：");
-      if (!price || Number(price) <= 0) return;
-      wishes.push({ name, price: Number(price), saved: 0 });
-      renderWishes();
-    }
-    function fundWish(i) {
-      const amt = prompt("存入金额 (元)：");
-      if (!amt || Number(amt) <= 0) return;
-      wishes[i].saved = (wishes[i].saved || 0) + Number(amt);
-      renderWishes();
-    }
-    function delWish(i) { wishes.splice(i, 1); renderWishes(); }
-    renderWishes();
-
-    // ================= 7. 饮食板块 =================
-    let diets = [];
-    try { diets = JSON.parse(localStorage.getItem('wk_v6_diets') || '[]'); } catch(e){}
-    let tempDietImg = '';
-    function previewDiet(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          tempDietImg = e.target.result;
-          const img = document.getElementById('diet-preview-img');
-          if (img) { img.src = tempDietImg; img.style.display = 'block'; }
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-    function renderDiets() {
-      try {
-        localStorage.setItem('wk_v6_diets', JSON.stringify(diets));
-        const box = document.getElementById('diet-list');
-        if (!box) return;
-        box.innerHTML = '';
-        let sum = 0;
-        diets.forEach((d, i) => {
-          if (d.date === todayStr) sum += Number(d.cal);
-          const div = document.createElement('div');
-          div.className = 'stream-item';
-          div.innerHTML = `
-            <div style="display:flex; align-items:center; gap:6px;">
-              ${d.img ? `<img src="${d.img}" class="food-img-thumb">` : '🥗'}
-              <div>
-                <div style="font-weight:bold; color:var(--deep-pink);">${d.name} · ${d.meal}</div>
-                <div style="font-size:10px; color:var(--text-sub);">${d.cal} kcal</div>
-              </div>
-            </div>
-            <span class="delete-action" onclick="delDiet(${i})">✕</span>
-          `;
-          box.appendChild(div);
-        });
-        const cEl = document.getElementById('diet-today-cal');
-        if (cEl) cEl.innerText = `${sum} kcal`;
-      } catch(e) {}
-    }
-    function addDiet() {
-      const name = document.getElementById('diet-name').value.trim();
-      const cal = document.getElementById('diet-cal').value.trim();
-      if (!name || !cal) { alert("请填写食物与热量！"); return; }
-      diets.unshift({
-        name, cal: Number(cal), meal: document.getElementById('diet-meal').value, date: todayStr, img: tempDietImg
-      });
-      document.getElementById('diet-name').value = '';
-      document.getElementById('diet-cal').value = '';
-      const pImg = document.getElementById('diet-preview-img');
-      if (pImg) pImg.style.display = 'none';
-      tempDietImg = '';
-      renderDiets();
-    }
-    function delDiet(i) { diets.splice(i, 1); renderDiets(); }
-    renderDiets();
-
-    // ================= 8. 周复盘板块 =================
-    let reviews = {};
-    try { reviews = JSON.parse(localStorage.getItem('wk_v6_reviews') || '{}'); } catch(e){}
-    let tempRevImg = '';
-    function previewReview(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          tempRevImg = e.target.result;
-          const img = document.getElementById('rev-preview-img');
-          if (img) { img.src = tempRevImg; img.style.display = 'block'; }
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-    function loadReview() {
-      try {
-        const wk = document.getElementById('review-week-txt').value.trim();
-        const r = reviews[wk] || {};
-        document.getElementById('rev-content').value = r.content || '';
-        document.getElementById('rev-goal').value = r.goal || '';
-        const img = document.getElementById('rev-preview-img');
-        if (img) {
-          if (r.img) { tempRevImg = r.img; img.src = r.img; img.style.display = 'block'; }
-          else { tempRevImg = ''; img.style.display = 'none'; }
-        }
-      } catch(e) {}
-    }
-    function saveReview() {
-      try {
-        const wk = document.getElementById('review-week-txt').value.trim();
-        if (!wk) { alert("请先填写周次！"); return; }
-        reviews[wk] = {
-          content: document.getElementById('rev-content').value.trim(),
-          goal: document.getElementById('rev-goal').value.trim(),
-          img: tempRevImg
-        };
-        localStorage.setItem('wk_v6_reviews', JSON.stringify(reviews));
-        alert(`🎉 【${wk}】 周复盘已妥善保存！`);
-      } catch(e) {}
-    }
-    loadReview();
-
-    // ================= 9. 水豚木鱼 =================
-    let muyuScore = 0;
-    try { muyuScore = Number(localStorage.getItem('wk_v6_muyu') || 0); } catch(e){}
-    const sEl = document.getElementById('muyu-score-txt');
-    if (sEl) sEl.innerText = `累计功德: ${muyuScore}`;
-
-    function openMuyu() { document.getElementById('muyu-modal').style.display = 'flex'; }
-    function closeMuyu() { document.getElementById('muyu-modal').style.display = 'none'; }
-    function hitMuyu() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) {
-          const ctx = new AudioCtx();
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(450, ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.1);
-          gain.gain.setValueAtTime(0.8, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start();
-          osc.stop(ctx.currentTime + 0.1);
-        }
-      } catch(e) {}
-
-      muyuScore++;
-      localStorage.setItem('wk_v6_muyu', muyuScore);
-      const txtEl = document.getElementById('muyu-score-txt');
-      if (txtEl) txtEl.innerText = `累计功德: ${muyuScore}`;
-      const c = document.getElementById('muyu-toast');
-      if (c) {
-        const t = document.createElement('div');
-        t.className = 'muyu-toast';
-        const tips = ['功德+1 ✨', '烦恼-1 🍃', '战力满格 🔥', '心平气和 🌸'];
-        t.innerText = tips[Math.floor(Math.random() * tips.length)];
-        c.appendChild(t);
-        setTimeout(() => t.remove(), 600);
-      }
-    }
-
-    // ================= 10. 设置 =================
-    function saveName() {
-      const v = document.getElementById('cfg-name').value.trim();
-      if (v) {
-        document.getElementById('home-greeting').innerText = `你好呀，${v} 🌸`;
-        document.title = v;
-        alert("名称修改成功！");
-      }
-    }
-    function resetAll() {
-      if (confirm("确定重置所有数据吗？")) {
-        localStorage.clear();
-        location.reload();
-      }
-    }
-  </script>
-</body>
-</html>
+    /* 扭蛋机与宠物特殊样式 */
+    .gacha-box {
+      background: linear-gradient(135deg, #FFF5F8 0%, #FFE8
